@@ -1,6 +1,6 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(&tft){
+Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(&tft, width, height){
 	ledcSetup(0, 2000, 8);
 	ledcAttachPin(21, 0);
 
@@ -9,22 +9,21 @@ Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(&tft){
 	tft.setRotation(3);
 	tft.fillScreen(TFT_PURPLE);
 
-	baseSprite.createSprite(168, 128);
-	baseSprite.fillSprite(TFT_GREEN);
+	baseSprite.clear(TFT_GREEN);
 }
 
 void Display::commit(){
-	baseSprite.pushSprite(0, 0);
+	baseSprite.push();
 }
 
 void Display::clear(uint32_t color){
-	baseSprite.fillSprite(color);
+	baseSprite.clear(color);
 }
 
 const TFT_eSPI& Display::getTft() const{
 	return tft;
 }
 
-TFT_eSprite& Display::getBaseSprite(){
+Sprite& Display::getBaseSprite(){
 	return baseSprite;
 }
