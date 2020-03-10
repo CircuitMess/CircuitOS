@@ -19,6 +19,8 @@ public:
 	Sprite& setTransparent(bool transparent);
 	Sprite& setChroma(uint32_t color);
 
+	void cleanup();
+
 private:
 	Sprite* parent;
 	TFT_eSPI* parentSPI = nullptr;
@@ -34,6 +36,7 @@ private:
 	 */
 	using TFT_eSprite::createSprite;
 	using TFT_eSprite::deleteSprite;
+	using TFT_eSprite::fillScreen;
 	using TFT_eSprite::fillSprite;
 	using TFT_eSprite::pushRotated;
 	using TFT_eSprite::pushRotatedHP;

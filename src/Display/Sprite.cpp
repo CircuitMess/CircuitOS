@@ -1,4 +1,6 @@
 #include "Display.h" // Sprite.h is included by Display.h
+#include "Sprite.h"
+
 
 Sprite::Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height) : TFT_eSprite(spi){
 	parent = nullptr;
@@ -14,6 +16,10 @@ Sprite::Sprite(Display& display, uint8_t width, uint8_t height) : TFT_eSprite(&d
 Sprite::Sprite(Sprite* sprite, uint8_t width, uint8_t height) : TFT_eSprite(sprite){
 	parent = sprite;
 	createSprite(width, height);
+}
+
+void Sprite::cleanup(){
+	deleteSprite();
 }
 
 Sprite& Sprite::push(){
