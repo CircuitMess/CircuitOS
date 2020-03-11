@@ -8,8 +8,8 @@ Sprite::Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height) : TFT_eSprite(spi){
 	createSprite(width, height);
 }
 
-Sprite::Sprite(Display& display, uint8_t width, uint8_t height) : TFT_eSprite(&display.getBaseSprite()) {
-	parent = &display.getBaseSprite();
+Sprite::Sprite(Display& display, uint8_t width, uint8_t height) : TFT_eSprite(display.getBaseSprite()) {
+	parent = display.getBaseSprite();
 	createSprite(width, height);
 }
 

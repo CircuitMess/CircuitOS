@@ -5,6 +5,8 @@
 #include <TFT_eSPI.h>
 #include "Sprite.h"
 
+class Sprite;
+
 class Display {
 public:
 	Display(uint8_t width, uint8_t height);
@@ -13,11 +15,11 @@ public:
 	void clear(uint32_t color);
 
 	const TFT_eSPI& getTft() const;
-	Sprite& getBaseSprite();
+	Sprite* getBaseSprite();
 
 private:
 	TFT_eSPI tft;
-	Sprite baseSprite;
+	Sprite* baseSprite;
 };
 
 
