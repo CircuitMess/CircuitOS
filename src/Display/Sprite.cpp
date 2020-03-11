@@ -81,11 +81,13 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 	if(xs + ws >= (int32_t) _iwidth) ws = _iwidth - xs;
 	if(ys + hs >= (int32_t) _iheight) hs = _iheight - ys;
 
+	chroma = (uint16_t) (chroma >> 8 | chroma << 8);
+
 	for(int32_t yp = yo; yp < yo + hs; yp++){
 		x = xs;
 		for(int32_t xp = xo; xp < xo + ws; xp++){
 			uint16_t color = data[xp + yp * w];
-			if(color == chroma) {
+			if(color == chroma){
 				x++;
 				continue;
 			}

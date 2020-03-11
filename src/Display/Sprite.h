@@ -26,7 +26,7 @@ private:
 	TFT_eSPI* parentSPI = nullptr;
 	uint16_t x = 0, y = 0;
 
-	bool chroma;
+	bool chroma = false;
 	uint32_t chromaKey;
 
 	void pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma);
