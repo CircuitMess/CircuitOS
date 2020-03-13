@@ -19,6 +19,8 @@ public:
 	Sprite& setTransparent(bool transparent);
 	Sprite& setChroma(uint32_t color);
 
+	void pushData(uint width, uint height, uint16_t* data);
+
 	void cleanup();
 
 private:

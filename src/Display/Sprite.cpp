@@ -62,6 +62,10 @@ Sprite& Sprite::setChroma(uint32_t color){
 	chroma = true;
 }
 
+void Sprite::pushData(uint width, uint height, uint16_t* data){
+	memcpy(_img, data, sizeof(uint16_t) * width * height);
+}
+
 void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma){
 	if((x >= _iwidth) || (y >= _iheight) || (w == 0) || (h == 0) || !_created || _bpp != 16) return;
 	if((x + w < 0) || (y + h < 0)) return;
