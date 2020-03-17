@@ -1,27 +1,60 @@
 #include <Arduino.h>
+#include "src/UI/Image.h"
+#include "src/UI/Screen.h"
 #include "src/CircuitOS.h"
+#include "src/Util/Vector.h"
+#include "src/UI/LinearLayout.h"
+
+const byte call_icon[] PROGMEM = { 24,22,
+   B00011100,B00000000,B00000000,
+   B00111110,B00000000,B00000000,
+   B01111111,B00000000,B00000000,
+   B11111111,B10000000,B00000000,
+   B11111111,B10000000,B00000000,
+   B11111111,B00000000,B00000000,
+   B11111110,B00000000,B00000000,
+   B11111110,B00000000,B00000000,
+   B11111110,B00000000,B00000000,
+   B01111111,B00000000,B00000000,
+   B01111111,B10000000,B00000000,
+   B00111111,B11000000,B00000000,
+   B00011111,B11100000,B00000000,
+   B00001111,B11110000,B01100000,
+   B00000111,B11111000,B11110000,
+   B00000011,B11111111,B11111000,
+   B00000001,B11111111,B11111100,
+   B00000000,B11111111,B11111100,
+   B00000000,B01111111,B11111100,
+   B00000000,B00111111,B11111000,
+   B00000000,B00011111,B11110000,
+   B00000000,B00000111,B11100000,
+};
+
 
 Display display(160, 128);
-Sprite sprite(display, 50, 50);
-Sprite sprite2(display, 20, 20);
-Sprite sprite3(display, 20, 20);
-Sprite sprite4(&sprite, 5, 5);
+Screen mainScreen(display);
+LinearLayout layout(&mainScreen, HORIZONTAL);
+
+Image image1(&layout, 24, 22);
+Image image2(&layout, 24, 22);
 unsigned i = 0;
-unsigned j = 0;
-unsigned k = 0;
 
 void setup(){
 	Serial.begin(115200);
 
 	display.clear(TFT_GREEN);
-	sprite.setPos(10, 10).clear(TFT_BLUE).push();
-	sprite2.setPos(10, 10).clear(TFT_RED).push();
-	sprite3.setPos(10, 10).clear(TFT_GOLD).push();
-	sprite4.setPos(5, 5).clear(TFT_OLIVE).push();
 
-	sprite.fillRect(10, 10, 30, 30, TFT_BLACK);
-	sprite.setChroma(TFT_BLACK);
-	sprite.push();
+	image1.sprite->clear(TFT_GREEN);
+	image2.sprite->clear(TFT_GREEN);
+
+	mainScreen.addChild(layout);
+	layout.addChild(&image1);
+	layout.addChild(&image2);
+	layout.setPadding(10);
+	layout.setGutter(15);
+	layout.reflow();
+
+	mainScreen.draw();
 
 	display.commit();
 }
@@ -29,23 +62,9 @@ void setup(){
 void loop(){
 	// push child sprite to parent sprite
 
-	sprite.setPos(10, 10 + i);
-	sprite2.setPos(10 + j, 10);
-	sprite3.setPos(10 + j, 10 + i);
-	sprite4.setPos(5 + k, 5 + k);
-
-	display.clear(TFT_GREEN);
-	sprite.clear(TFT_BLUE).fillRect(10, 10, 30, 30, TFT_BLACK);
-	sprite2.push();
-	sprite3.push();
-	sprite4.push();
-	sprite.push();
-
-	display.commit();
+	//display.commit();
 
 	delay(5);
 	if(i++ >= 60) i = 0;
-	if(j++ >= 120) j = 0;
-	if(k++ >= 35) k = 0;
 }
 

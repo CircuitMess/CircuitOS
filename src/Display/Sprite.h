@@ -15,6 +15,7 @@ public:
 	Sprite& push();
 	Sprite& clear(uint32_t color);
 	Sprite& setPos(uint16_t x, uint16_t y);
+	Sprite& resize(uint width, uint height);
 
 	Sprite& setTransparent(bool transparent);
 	Sprite& setChroma(uint32_t color);

@@ -1,6 +1,6 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(new Sprite(&tft, width, height)){
+Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(new Sprite(&tft, width, height)), width(width), height(height){
 	ledcSetup(0, 2000, 8);
 	ledcAttachPin(21, 0);
 
@@ -26,4 +26,12 @@ const TFT_eSPI& Display::getTft() const{
 
 Sprite* Display::getBaseSprite(){
 	return baseSprite;
+}
+
+uint Display::getWidth() const{
+	return width;
+}
+
+uint Display::getHeight() const{
+	return height;
 }

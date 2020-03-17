@@ -17,9 +17,16 @@ public:
 	const TFT_eSPI& getTft() const;
 	Sprite* getBaseSprite();
 
+	uint getWidth() const;
+
+	uint getHeight() const;
+
 private:
 	TFT_eSPI tft;
 	Sprite* baseSprite;
+
+	uint width;
+	uint height;
 };
 
 

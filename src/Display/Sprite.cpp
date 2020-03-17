@@ -30,6 +30,8 @@ Sprite& Sprite::push(){
 		return *this;
 	}
 
+	Serial.println("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
+
 	bool oldSwapBytes = parent->getSwapBytes();
 	parent->setSwapBytes(true);
 	if(chroma){
@@ -51,6 +53,11 @@ Sprite& Sprite::setPos(uint16_t x, uint16_t y){
 	this->x = x;
 	this->y = y;
 	return *this;
+}
+
+Sprite& Sprite::resize(uint width, uint height){
+	deleteSprite();
+	createSprite(width, height);
 }
 
 Sprite& Sprite::setTransparent(bool transparent){
