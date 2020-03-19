@@ -33,7 +33,7 @@ const byte call_icon[] PROGMEM = { 24,22,
 
 Display display(160, 128);
 Screen mainScreen(display);
-LinearLayout layout(&mainScreen, HORIZONTAL);
+LinearLayout layout(&mainScreen, VERTICAL);
 
 Image image1(&layout, 24, 22);
 Image image2(&layout, 24, 22);
@@ -47,8 +47,9 @@ void setup(){
 	image1.sprite->clear(TFT_GREEN);
 	image2.sprite->clear(TFT_GREEN);
 
-	mainScreen.addChild(layout);
+	mainScreen.addChild(&layout);
 	layout.addChild(&image1);
+	layout.addChild(&image2);
 	layout.addChild(&image2);
 	layout.setPadding(10);
 	layout.setGutter(15);

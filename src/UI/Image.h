@@ -6,13 +6,19 @@
 
 class Image : public Element {
 public:
-	using Element::Element;
+	Image(ElementContainer* parent, uint width, uint height);
 
 	void draw() override;
 
 	char* data;
 
+	uint getWidth() const override;
+
+	uint getHeight() const override;
+
 private:
+	uint width;
+	uint height;
 
 };
 

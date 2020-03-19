@@ -11,4 +11,4 @@ AUX_SOURCE_DIRECTORY(src/Display SOURCES)
 AUX_SOURCE_DIRECTORY(src/UI SOURCES)
 AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 
-add_executable(CircuitOS.elf ${SOURCES} OSTest.ino src/UI/Element.cpp src/UI/Element.h src/Display/Color.h src/UI/Image.cpp src/UI/Image.h src/UI/Screen.cpp src/UI/Screen.h src/Util/Vector.h src/UI/ElementContainer.h src/UI/Layout.cpp src/UI/Layout.h src/UI/LinearLayout.cpp src/UI/LinearLayout.h src/UI/ElementContainer.cpp)
+add_executable(CircuitOS ${SOURCES} CircuitOS.ino)

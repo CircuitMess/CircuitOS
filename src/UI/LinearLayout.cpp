@@ -1,7 +1,7 @@
 #include "LinearLayout.h"
 
-LinearLayout::LinearLayout(ElementContainer* parent, LayoutDirection direction) : Layout(parent, 1, 1), direction(direction){
-	reflow();
+LinearLayout::LinearLayout(ElementContainer* parent, LayoutDirection direction) : Layout(parent), direction(direction){
+
 }
 
 void LinearLayout::draw(){
@@ -18,9 +18,9 @@ void LinearLayout::draw(){
 		el->draw();
 
 		if(direction == VERTICAL){
-			y += gutter + el->height;
+			y += gutter + el->getHeight();
 		}else if(direction == HORIZONTAL){
-			x += gutter + el->width;
+			x += gutter + el->getWidth();
 		}
 	}
 
@@ -32,19 +32,19 @@ void LinearLayout::reflow(){
 	uint height = 0;
 
 	if(direction == VERTICAL){
-		width = getParent()->width;
+		width = getParent()->getWidth();
 
 		for(const Element* el : children){
-			height += el->height + gutter;
+			height += el->getHeight() + gutter;
 		}
 
 		height -= gutter;
 		height += padding * 2;
 	}else if(direction == HORIZONTAL){
-		height = getParent()->height;
+		height = getParent()->getHeight();
 
 		for(const Element* el : children){
-			width += el->width + gutter;
+			width += el->getWidth() + gutter;
 		}
 
 		width -= gutter;
@@ -62,5 +62,13 @@ uint LinearLayout::getAvailableWidth(){
 
 uint LinearLayout::getAvailableHeight(){
 	return 0;
+}
+
+uint LinearLayout::getWidth() const{
+	return 0; // TODO WHType
+}
+
+uint LinearLayout::getHeight() const{
+	return 0; // TODO WHType
 }
 

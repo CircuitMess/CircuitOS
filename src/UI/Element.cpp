@@ -1,11 +1,11 @@
 #include "ElementContainer.h"
 
-Element::Element(Sprite* parent, uint width, uint height) : width(width), height(height){
-	sprite = new Sprite(parent, width, height);
+Element::Element(Sprite* parent){
+	sprite = new Sprite(parent, 0, 0);
 }
 
-Element::Element(ElementContainer* parent, uint width, uint height) : width(width), height(height){
-	sprite = new Sprite(parent->sprite, width, height);
+Element::Element(ElementContainer* parent){
+	sprite = new Sprite(parent->sprite, 0, 0);
 	this->parent = parent;
 }
 

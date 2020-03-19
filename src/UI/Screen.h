@@ -11,11 +11,15 @@ public:
 
 	void draw() override;
 
-	Screen& addChild(Element& element);
+	Screen& addChild(Element* element);
 
 	uint getAvailableWidth() override;
 
 	uint getAvailableHeight() override;
+
+	uint getWidth() const override;
+
+	uint getHeight() const override;
 
 private:
 	Display* display;

@@ -14,6 +14,11 @@ public:
 	uint getAvailableHeight() override;
 
 	void reflow() override;
+
+	uint getWidth() const override;
+
+	uint getHeight() const override;
+
 private:
 
 	void draw() override;
