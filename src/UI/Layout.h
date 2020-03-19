@@ -17,20 +17,18 @@ public:
 	Layout& setGutter(uint gutter);
 
 	void setWidth(uint width);
-
 	void setHeight(uint height);
-
-private:
-
-	WHType hType;
-	WHType wType;
-
-	uint width;
-	uint height;
 
 protected:
 	uint gutter = 0;
 	uint padding = 0;
+	uint width = 0;
+	uint height = 0;
+
+private:
+	WHType hType;
+	WHType wType;
+
 };
 
 

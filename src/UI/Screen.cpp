@@ -15,6 +15,7 @@ void Screen::draw(){
 	Serial.println("Drawing screen");
 	sprite->clear(TFT_BLACK);
 	children[0]->draw();
+	Element::draw();
 	sprite->push();
 }
 

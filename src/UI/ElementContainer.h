@@ -9,7 +9,7 @@ class ElementContainer : public Element {
 public:
 	using Element::Element;
 
-	ElementContainer& addChild(Element* element);
+	virtual ElementContainer& addChild(Element* element);
 
 	virtual uint getAvailableWidth() = 0;
 	virtual uint getAvailableHeight() = 0;

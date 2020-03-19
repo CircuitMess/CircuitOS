@@ -55,6 +55,8 @@ void setup(){
 	layout.setGutter(15);
 	layout.reflow();
 
+	layout.setBorder(10, TFT_RED);
+
 	mainScreen.draw();
 
 	display.commit();

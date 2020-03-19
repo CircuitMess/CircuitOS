@@ -15,6 +15,10 @@ public:
 
 	void resize(uint width, uint height);
 
+	void setBorder(uint width, Color color);
+	void setBorderColor(Color borderColor);
+	void setBorderWidth(uint borderWidth);
+
 	Color background;
 	Color borderColor;
 	uint borderWidth;
@@ -27,7 +31,7 @@ public:
 	virtual uint getWidth() const = 0;
 	virtual uint getHeight() const = 0;
 
-	virtual void draw() = 0;
+	virtual void draw();
 	ElementContainer* getParent();
 
 private:

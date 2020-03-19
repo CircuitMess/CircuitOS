@@ -11,7 +11,7 @@ public:
 
 	void draw() override;
 
-	Screen& addChild(Element* element);
+	Screen& addChild(Element* element) override;
 
 	uint getAvailableWidth() override;
 

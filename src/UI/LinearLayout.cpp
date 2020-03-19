@@ -24,12 +24,16 @@ void LinearLayout::draw(){
 		}
 	}
 
+	Element::draw();
+
 	sprite->push();
 }
 
 void LinearLayout::reflow(){
 	uint width = 0;
 	uint height = 0;
+
+	// TODO WHType, current height: children, width: parent
 
 	if(direction == VERTICAL){
 		width = getParent()->getWidth();
@@ -53,6 +57,8 @@ void LinearLayout::reflow(){
 
 	Serial.println("Reflowing linear layout [" + String(width) + ", " + String(height) + "]");
 
+	setWidth(width);
+	setHeight(height);
 	resize(width, height);
 }
 
@@ -65,10 +71,10 @@ uint LinearLayout::getAvailableHeight(){
 }
 
 uint LinearLayout::getWidth() const{
-	return 0; // TODO WHType
+	return width;
 }
 
 uint LinearLayout::getHeight() const{
-	return 0; // TODO WHType
+	return height;
 }
 
