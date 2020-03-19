@@ -38,3 +38,19 @@ void Layout::setWType(WHType wType){
 void Layout::setHType(WHType hType){
 	Layout::hType = hType;
 }
+
+uint Layout::getAvailableWidth() const{
+	return width - 2 * padding;
+}
+
+uint Layout::getAvailableHeight() const{
+	return height - 2 * padding;
+}
+
+uint Layout::getWidth() const{
+	return width;
+}
+
+uint Layout::getHeight() const{
+	return height;
+}

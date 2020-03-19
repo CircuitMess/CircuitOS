@@ -25,6 +25,11 @@ public:
 	WHType getWType() const;
 	WHType getHType() const;
 
+	uint getAvailableWidth() const override;
+	uint getAvailableHeight() const override;
+	uint getWidth() const override;
+	uint getHeight() const override;
+
 protected:
 	uint gutter = 0;
 	uint padding = 0;

@@ -19,11 +19,11 @@ void Screen::draw(){
 	sprite->push();
 }
 
-uint Screen::getAvailableWidth(){
+uint Screen::getAvailableWidth() const{
 	return display->getWidth();
 }
 
-uint Screen::getAvailableHeight(){
+uint Screen::getAvailableHeight() const{
 	return display->getHeight();
 }
 

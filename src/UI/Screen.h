@@ -13,9 +13,9 @@ public:
 
 	Screen& addChild(Element* element) override;
 
-	uint getAvailableWidth() override;
+	uint getAvailableWidth() const override;
 
-	uint getAvailableHeight() override;
+	uint getAvailableHeight() const override;
 
 	uint getWidth() const override;
 

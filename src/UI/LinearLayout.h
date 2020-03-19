@@ -9,15 +9,9 @@ class LinearLayout : public Layout {
 public:
 	LinearLayout(ElementContainer* parent, LayoutDirection direction);
 
-	uint getAvailableWidth() override;
-
-	uint getAvailableHeight() override;
-
 	void reflow() override;
 
-	uint getWidth() const override;
 
-	uint getHeight() const override;
 
 private:
 
