@@ -17,3 +17,24 @@ void Layout::setWidth(uint width){
 void Layout::setHeight(uint height){
 	Layout::height = height;
 }
+
+WHType Layout::getHType() const{
+	return hType;
+}
+
+WHType Layout::getWType() const{
+	return wType;
+}
+
+void Layout::setWHType(WHType wType, WHType hType){
+	setWType(wType);
+	setHType(hType);
+}
+
+void Layout::setWType(WHType wType){
+	Layout::wType = wType;
+}
+
+void Layout::setHType(WHType hType){
+	Layout::hType = hType;
+}

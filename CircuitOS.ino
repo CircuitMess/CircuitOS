@@ -36,7 +36,7 @@ Screen mainScreen(display);
 LinearLayout layout(&mainScreen, VERTICAL);
 
 Image image1(&layout, 24, 22);
-Image image2(&layout, 24, 22);
+Image image2(&layout, 32, 22);
 unsigned i = 0;
 
 void setup(){
@@ -47,15 +47,16 @@ void setup(){
 	image1.sprite->clear(TFT_GREEN);
 	image2.sprite->clear(TFT_GREEN);
 
+	layout.setWHType(CHILDREN, PARENT);
+	layout.setBorder(1, TFT_RED);
+	layout.setPadding(10);
+	layout.setGutter(15);
+
 	mainScreen.addChild(&layout);
 	layout.addChild(&image1);
 	layout.addChild(&image2);
-	layout.addChild(&image2);
-	layout.setPadding(10);
-	layout.setGutter(15);
+	layout.addChild(&image1);
 	layout.reflow();
-
-	layout.setBorder(10, TFT_RED);
 
 	mainScreen.draw();
 

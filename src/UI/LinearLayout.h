@@ -21,10 +21,12 @@ public:
 
 private:
 
-	void draw() override;
-
 	LayoutDirection direction;
 
+	void draw() override;
+
+	void reflowHorizontal();
+	void reflowVertical();
 };
 
 

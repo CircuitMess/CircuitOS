@@ -19,15 +19,20 @@ public:
 	void setWidth(uint width);
 	void setHeight(uint height);
 
+	void setWHType(WHType wType, WHType hType);
+	void setWType(WHType wType);
+	void setHType(WHType hType);
+	WHType getWType() const;
+	WHType getHType() const;
+
 protected:
 	uint gutter = 0;
 	uint padding = 0;
 	uint width = 0;
 	uint height = 0;
 
-private:
-	WHType hType;
-	WHType wType;
+	WHType wType = FIXED;
+	WHType hType = FIXED;
 
 };
 

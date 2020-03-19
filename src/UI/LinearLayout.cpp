@@ -26,48 +26,95 @@ void LinearLayout::draw(){
 
 	Element::draw();
 
+	// TODO: overflow: draw over padding or erase?
+
 	sprite->push();
 }
 
 void LinearLayout::reflow(){
-	uint width = 0;
-	uint height = 0;
-
 	// TODO WHType, current height: children, width: parent
 
+	width = wType == FIXED ? width : 0;
+	height = hType == FIXED ? height : 0;
+
 	if(direction == VERTICAL){
-		width = getParent()->getWidth();
-
-		for(const Element* el : children){
-			height += el->getHeight() + gutter;
-		}
-
-		height -= gutter;
-		height += padding * 2;
+		reflowVertical();
 	}else if(direction == HORIZONTAL){
-		height = getParent()->getHeight();
-
-		for(const Element* el : children){
-			width += el->getWidth() + gutter;
-		}
-
-		width -= gutter;
-		width += padding * 2;
+		reflowHorizontal();
 	}
 
 	Serial.println("Reflowing linear layout [" + String(width) + ", " + String(height) + "]");
+	Serial.println("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
 
+	// call setWidth and setHeight for any potential future functionality
 	setWidth(width);
 	setHeight(height);
+
 	resize(width, height);
 }
 
+void LinearLayout::reflowHorizontal(){
+	if(hType == PARENT){
+		height = getParent()->getHeight();
+	}else if(hType == CHILDREN && !children.empty()){
+		uint maxHeight = 0;
+
+		for(const Element* el : children){
+			maxHeight = max(maxHeight, el->getHeight());
+		}
+
+		height = maxHeight + 2 * padding;
+	}
+
+	if(wType == PARENT){
+		width = getParent()->getAvailableWidth();
+	}else if(wType == CHILDREN){
+		width += 2 * padding;
+
+		if(!children.empty()){
+			for(const Element* el : children){
+				width += el->getWidth() + gutter;
+			}
+
+			width -= gutter;
+		}
+	}
+}
+
+void LinearLayout::reflowVertical(){
+	if(hType == PARENT){
+		height = getParent()->getHeight();
+	}else if(hType == CHILDREN){
+		height += 2 * padding;
+
+		if(!children.empty()){
+			for(const Element* el : children){
+				height += el->getHeight() + gutter;
+			}
+
+			height -= gutter;
+		}
+	}
+
+	if(wType == PARENT){
+		width = getParent()->getAvailableWidth();
+	}else if(wType == CHILDREN && !children.empty()){
+		uint maxWidth = 0;
+
+		for(const Element* el : children){
+			maxWidth = max(maxWidth, el->getWidth());
+		}
+
+		width = maxWidth + 2 * padding;
+	}
+}
+
 uint LinearLayout::getAvailableWidth(){
-	return 0;
+	return width - 2 * padding;
 }
 
 uint LinearLayout::getAvailableHeight(){
-	return 0;
+	return height - 2 * padding;
 }
 
 uint LinearLayout::getWidth() const{
