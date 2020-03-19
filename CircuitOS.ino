@@ -4,6 +4,7 @@
 #include "src/CircuitOS.h"
 #include "src/Util/Vector.h"
 #include "src/UI/LinearLayout.h"
+#include "src/UI/GridLayout.h"
 
 const byte call_icon[] PROGMEM = { 24,22,
    B00011100,B00000000,B00000000,
@@ -33,10 +34,10 @@ const byte call_icon[] PROGMEM = { 24,22,
 
 Display display(160, 128);
 Screen mainScreen(display);
-LinearLayout layout(&mainScreen, VERTICAL);
+GridLayout grid(&mainScreen, 3);
 
-Image image1(&layout, 24, 22);
-Image image2(&layout, 32, 22);
+Image image1(&grid, 24, 12);
+Image image2(&grid, 36, 20);
 unsigned i = 0;
 
 void setup(){
@@ -47,16 +48,20 @@ void setup(){
 	image1.sprite->clear(TFT_GREEN);
 	image2.sprite->clear(TFT_GREEN);
 
-	layout.setWHType(CHILDREN, PARENT);
-	layout.setBorder(1, TFT_RED);
-	layout.setPadding(10);
-	layout.setGutter(15);
+	grid.setWHType(CHILDREN, CHILDREN);
+	grid.setBorder(1, TFT_RED);
+	grid.setPadding(5);
+	grid.setGutter(2);
 
-	mainScreen.addChild(&layout);
-	layout.addChild(&image1);
-	layout.addChild(&image2);
-	layout.addChild(&image1);
-	layout.reflow();
+	mainScreen.addChild(&grid);
+	grid.addChild(&image1);
+	grid.addChild(&image2);
+	grid.addChild(&image1);
+	grid.addChild(&image2);
+	grid.addChild(&image1);
+	grid.addChild(&image2);
+	grid.addChild(&image1);
+	grid.reflow();
 
 	mainScreen.draw();
 
