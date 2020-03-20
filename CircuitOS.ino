@@ -5,6 +5,7 @@
 #include "src/Util/Vector.h"
 #include "src/UI/LinearLayout.h"
 #include "src/UI/GridLayout.h"
+#include "src/UI/ScrollLayout.h"
 
 const byte call_icon[] PROGMEM = { 24,22,
    B00011100,B00000000,B00000000,
@@ -34,13 +35,13 @@ const byte call_icon[] PROGMEM = { 24,22,
 
 Display display(160, 128);
 Screen mainScreen(display);
-LinearLayout layout(&mainScreen, HORIZONTAL);
+ScrollLayout scroll(&mainScreen);
+LinearLayout layout(&scroll, HORIZONTAL);
 GridLayout grid(&layout, 2);
 
 Image image0(&layout, 28, 33);
 Image image1(&grid, 24, 12);
 Image image2(&grid, 36, 20);
-unsigned i = 0;
 
 void setup(){
 	Serial.begin(115200);
@@ -50,6 +51,9 @@ void setup(){
 	image0.sprite->clear(TFT_GREEN);
 	image1.sprite->clear(TFT_GREEN);
 	image2.sprite->clear(TFT_GREEN);
+
+	scroll.setWHType(PARENT, CHILDREN);
+	scroll.setBorder(1, TFT_RED);
 
 	layout.setWHType(CHILDREN, CHILDREN);
 	layout.setBorder(1, TFT_RED);
@@ -61,7 +65,7 @@ void setup(){
 	grid.setPadding(5);
 	grid.setGutter(2);
 
-	mainScreen.addChild(&layout);
+
 	grid.addChild(&image1);
 	grid.addChild(&image2);
 	grid.addChild(&image2);
@@ -71,19 +75,32 @@ void setup(){
 	layout.addChild(&image0);
 	layout.addChild(&grid);
 	layout.addChild(&image0);
+	layout.addChild(&grid);
+	layout.addChild(&image0);
 	layout.reflow();
 
+	scroll.addChild(&layout);
+	scroll.reflow();
+
+	mainScreen.addChild(&scroll);
 	mainScreen.draw();
 
 	display.commit();
 }
+
+unsigned i = 0;
+bool direction = false;
 
 void loop(){
 	// push child sprite to parent sprite
 
 	//display.commit();
 
-	delay(5);
-	if(i++ >= 60) i = 0;
+	scroll.setScroll(i, 0);
+	layout.pushReverse();
+
+	i += pow(-1, direction);
+	delay(20);
+	if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
 }
 

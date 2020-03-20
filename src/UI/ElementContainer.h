@@ -14,6 +14,8 @@ public:
 	virtual uint getAvailableWidth() const = 0;
 	virtual uint getAvailableHeight() const = 0;
 
+	Element* getChild(int i) const;
+
 protected:
 	Vector<Element*> children;
 };

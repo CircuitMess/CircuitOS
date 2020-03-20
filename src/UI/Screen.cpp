@@ -13,10 +13,19 @@ Screen& Screen::addChild(Element* element){
 
 void Screen::draw(){
 	Serial.println("Drawing screen");
+
 	sprite->clear(TFT_BLACK);
 	children[0]->draw();
 	Element::draw();
 	sprite->push();
+}
+
+void Screen::pushReverse(){
+	Serial.println("Reverse pushing screen");
+
+	Element::draw();
+	sprite->push();
+	display->commit();
 }
 
 uint Screen::getAvailableWidth() const{

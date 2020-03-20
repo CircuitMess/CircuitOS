@@ -10,10 +10,10 @@ public:
 	void reflow() override;
 
 private:
-
 	uint cols;
 
 	void draw() override;
+
 };
 
 

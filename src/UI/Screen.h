@@ -10,6 +10,7 @@ public:
 	Screen(Display& display);
 
 	void draw() override;
+	void pushReverse() override;
 
 	Screen& addChild(Element* element) override;
 

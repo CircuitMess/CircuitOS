@@ -45,3 +45,9 @@ void Element::draw(){
 
 	Serial.println();
 }
+
+void Element::pushReverse(){
+	Element::draw();
+	sprite->push();
+	getParent()->pushReverse();
+}

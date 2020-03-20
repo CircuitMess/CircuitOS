@@ -32,6 +32,7 @@ public:
 	virtual uint getHeight() const = 0;
 
 	virtual void draw();
+	virtual void pushReverse();
 	ElementContainer* getParent();
 
 private:

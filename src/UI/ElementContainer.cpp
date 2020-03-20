@@ -5,3 +5,6 @@ ElementContainer& ElementContainer::addChild(Element* element){
 	return *this;
 }
 
+Element* ElementContainer::getChild(int i) const{
+	return children[i];
+}

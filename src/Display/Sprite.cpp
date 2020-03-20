@@ -49,7 +49,7 @@ Sprite& Sprite::clear(uint32_t color){
 	return *this;
 }
 
-Sprite& Sprite::setPos(uint16_t x, uint16_t y){
+Sprite& Sprite::setPos(int32_t x, int32_t y){
 	this->x = x;
 	this->y = y;
 	return *this;

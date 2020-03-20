@@ -14,7 +14,7 @@ public:
 	Sprite(Sprite* sprite, uint8_t width, uint8_t height);
 	Sprite& push();
 	Sprite& clear(uint32_t color);
-	Sprite& setPos(uint16_t x, uint16_t y);
+	Sprite& setPos(int32_t x, int32_t y);
 	Sprite& resize(uint width, uint height);
 
 	Sprite& setTransparent(bool transparent);
@@ -27,7 +27,7 @@ public:
 private:
 	Sprite* parent;
 	TFT_eSPI* parentSPI = nullptr;
-	uint16_t x = 0, y = 0;
+	int32_t x = 0, y = 0;
 
 	bool chroma = false;
 	uint32_t chromaKey;
