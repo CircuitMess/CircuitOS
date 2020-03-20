@@ -1,5 +1,6 @@
 #include "Display.h" // Sprite.h is included by Display.h
 #include "Sprite.h"
+#include "../Util/Debug.h"
 
 
 Sprite::Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height) : TFT_eSprite(spi){
@@ -30,7 +31,7 @@ Sprite& Sprite::push(){
 		return *this;
 	}
 
-	Serial.println("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
+	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
 	parent->setSwapBytes(true);

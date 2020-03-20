@@ -1,11 +1,12 @@
 #include "Image.h"
+#include "../Util/Debug.h"
 
 Image::Image(ElementContainer* parent, uint width, uint height) : Element(parent), width(width), height(height){
 	sprite->resize(width, height);
 }
 
 void Image::draw(){
-	Serial.println("Drawing image");
+	logln("Drawing image");
 	sprite->push();
 }
 

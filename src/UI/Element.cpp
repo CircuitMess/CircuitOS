@@ -1,5 +1,6 @@
 #include "ElementContainer.h"
 #include "Element.h"
+#include "../Util/Debug.h"
 
 
 Element::Element(Sprite* parent){
@@ -33,17 +34,17 @@ void Element::setBorderWidth(uint borderWidth){
 }
 
 void Element::draw(){
-	Serial.print("Drawing element: ");
+	logr("Drawing element: ");
 
 	if(borderWidth){
-		Serial.print("border ");
+		logr("border ");
 
 		for(int i = 0; i < borderWidth; i++){
 			sprite->drawRect(0 + i, 0 + i, getWidth() - 2*i, getHeight() - 2*i, borderColor);
 		}
 	}
 
-	Serial.println();
+	logln();
 }
 
 void Element::pushReverse(){

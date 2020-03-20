@@ -11,4 +11,6 @@ AUX_SOURCE_DIRECTORY(src/Display SOURCES)
 AUX_SOURCE_DIRECTORY(src/UI SOURCES)
 AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 
+add_definitions(-DDEBUG)
+
 add_executable(CircuitOS ${SOURCES} CircuitOS.ino)

@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include "../Util/Debug.h"
 
 Screen::Screen(Display& display) : ElementContainer(display.getBaseSprite()), display(&display){
 	sprite->resize(display.getWidth(), display.getHeight());
@@ -12,7 +13,7 @@ Screen& Screen::addChild(Element* element){
 }
 
 void Screen::draw(){
-	Serial.println("Drawing screen");
+	logln("Drawing screen");
 
 	sprite->clear(TFT_BLACK);
 	children[0]->draw();
@@ -22,7 +23,7 @@ void Screen::draw(){
 }
 
 void Screen::pushReverse(){
-	Serial.println("Reverse pushing screen");
+	logln("Reverse pushing screen");
 
 	Element::draw();
 	sprite->push();

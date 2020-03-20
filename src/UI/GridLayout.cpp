@@ -1,11 +1,12 @@
 #include "GridLayout.h"
+#include "../Util/Debug.h"
 
 GridLayout::GridLayout(ElementContainer* parent, uint cols) : Layout(parent), cols(cols){
 
 }
 
 void GridLayout::draw(){
-	Serial.println("Drawing grid layout");
+	logln("Drawing grid layout");
 
 	sprite->clear(TFT_BLACK);
 
@@ -91,8 +92,8 @@ void GridLayout::reflow(){
 	}
 
 
-	Serial.println("Reflowing grid layout [" + String(width) + ", " + String(height) + "]");
-	Serial.println("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
+	logln("Reflowing grid layout [" + String(width) + ", " + String(height) + "]");
+	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
 
 	// call setWidth and setHeight for any potential future functionality
 	setWidth(width);

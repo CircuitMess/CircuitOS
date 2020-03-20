@@ -1,4 +1,5 @@
 #include "ScrollLayout.h"
+#include "../Util/Debug.h"
 
 ScrollLayout::ScrollLayout(ElementContainer* parent) : Layout(parent){
 	children.resize(1);
@@ -48,12 +49,12 @@ void ScrollLayout::reflow(){
 
 	resize(width, height);
 
-	Serial.println("Reflowing scroll layout [" + String(width) + ", " + String(height) + "]");
-	Serial.println("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
+	logln("Reflowing scroll layout [" + String(width) + ", " + String(height) + "]");
+	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
 }
 
 void ScrollLayout::draw(){
-	Serial.println("Drawing scroll layout");
+	logln("Drawing scroll layout");
 
 	sprite->clear(TFT_BLACK);
 

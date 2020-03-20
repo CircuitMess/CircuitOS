@@ -1,11 +1,12 @@
 #include "LinearLayout.h"
+#include "../Util/Debug.h"
 
 LinearLayout::LinearLayout(ElementContainer* parent, LayoutDirection direction) : Layout(parent), direction(direction){
 
 }
 
 void LinearLayout::draw(){
-	Serial.println("Drawing linear layout");
+	logln("Drawing linear layout");
 
 	sprite->clear(TFT_BLACK);
 
@@ -40,8 +41,8 @@ void LinearLayout::reflow(){
 		reflowVertical();
 	}
 
-	Serial.println("Reflowing linear layout [" + String(width) + ", " + String(height) + "]");
-	Serial.println("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
+	logln("Reflowing linear layout [" + String(width) + ", " + String(height) + "]");
+	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
 
 	// call setWidth and setHeight for any potential future functionality
 	setWidth(width);
