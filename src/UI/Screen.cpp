@@ -18,6 +18,7 @@ void Screen::draw(){
 	children[0]->draw();
 	Element::draw();
 	sprite->push();
+	display->commit();
 }
 
 void Screen::pushReverse(){

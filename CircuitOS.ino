@@ -84,18 +84,12 @@ void setup(){
 
 	mainScreen.addChild(&scroll);
 	mainScreen.draw();
-
-	display.commit();
 }
 
 unsigned i = 0;
 bool direction = false;
 
 void loop(){
-	// push child sprite to parent sprite
-
-	//display.commit();
-
 	scroll.setScroll(i, 0);
 	layout.pushReverse();
 
