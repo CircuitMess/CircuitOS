@@ -34,8 +34,10 @@ const byte call_icon[] PROGMEM = { 24,22,
 
 Display display(160, 128);
 Screen mainScreen(display);
-GridLayout grid(&mainScreen, 3);
+LinearLayout layout(&mainScreen, HORIZONTAL);
+GridLayout grid(&layout, 2);
 
+Image image0(&layout, 28, 33);
 Image image1(&grid, 24, 12);
 Image image2(&grid, 36, 20);
 unsigned i = 0;
@@ -45,23 +47,31 @@ void setup(){
 
 	display.clear(TFT_GREEN);
 
+	image0.sprite->clear(TFT_GREEN);
 	image1.sprite->clear(TFT_GREEN);
 	image2.sprite->clear(TFT_GREEN);
+
+	layout.setWHType(CHILDREN, CHILDREN);
+	layout.setBorder(1, TFT_RED);
+	layout.setPadding(5);
+	layout.setGutter(5);
 
 	grid.setWHType(CHILDREN, CHILDREN);
 	grid.setBorder(1, TFT_RED);
 	grid.setPadding(5);
 	grid.setGutter(2);
 
-	mainScreen.addChild(&grid);
+	mainScreen.addChild(&layout);
 	grid.addChild(&image1);
 	grid.addChild(&image2);
-	grid.addChild(&image1);
-	grid.addChild(&image2);
-	grid.addChild(&image1);
 	grid.addChild(&image2);
 	grid.addChild(&image1);
 	grid.reflow();
+
+	layout.addChild(&image0);
+	layout.addChild(&grid);
+	layout.addChild(&image0);
+	layout.reflow();
 
 	mainScreen.draw();
 
