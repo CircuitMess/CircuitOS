@@ -23,6 +23,49 @@ void Sprite::cleanup(){
 	deleteSprite();
 }
 
+void Sprite::drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale){
+	for(int i = 0; i < width; i++){
+		for(int j = 0; j < height; j++){
+			uint32_t color = pgm_read_word(&icon[j * width + i]);
+
+			if(!chroma || chromaKey != color){
+				fillRect(x + i * scale, y + j * scale, scale, scale, color);
+			}
+		}
+	}
+}
+
+void Sprite::rotate(uint times){
+	if(width() != height()) return;
+	uint N = width();
+
+	for(int i = 0; i < times; i++){
+		// Courtesy of GeeksforGeeks https://www.geeksforgeeks.org/inplace-rotate-square-matrix-by-90-degrees/
+
+		// Consider all squares one by one
+		for(int x = 0; x < N / 2; x++){
+			// Consider elements in group of 4 in
+			// current square
+			for(int y = x; y < N - x - 1; y++){
+				// store current cell in temp variable
+				uint16_t temp = _img[x * N + y];
+
+				// move values from right to top
+				_img[x * N + y] = _img[y * N + N - 1 - x];
+
+				// move values from bottom to right
+				_img[y * N + N - 1 - x] = _img[N * (N - 1 - x) + N - 1 - y];
+
+				// move values from left to bottom
+				_img[N * (N - 1 - x) + N - 1 - y] = _img[N * (N - 1 - y) + x];
+
+				// assign temp to left
+				_img[N * (N - 1 - y) + x] = temp;
+			}
+		}
+	}
+}
+
 Sprite& Sprite::push(){
 	if(!_created || _bpp != 16) return *this;
 

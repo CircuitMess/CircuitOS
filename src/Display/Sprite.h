@@ -22,6 +22,9 @@ public:
 
 	void pushData(uint width, uint height, uint16_t* data);
 
+	void rotate(uint times);
+	void drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale);
+
 	void cleanup();
 
 private:
