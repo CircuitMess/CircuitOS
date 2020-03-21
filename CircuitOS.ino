@@ -6,6 +6,7 @@
 #include "src/UI/LinearLayout.h"
 #include "src/UI/GridLayout.h"
 #include "src/UI/ScrollLayout.h"
+#include "src/Util/Task.h"
 
 const byte call_icon[] PROGMEM = { 24,22,
    B00011100,B00000000,B00000000,
@@ -42,11 +43,23 @@ Image image0(&layout, 28, 33);
 Image image1(&grid, 24, 12);
 Image image2(&grid, 36, 20);
 
+void taskLoop(Task* task){
+	while(task->running){
+		Serial.println("FOO");
+	}
+
+	Serial.println("FOO STOP");
+}
+
+Task fooTask("fooTask", taskLoop);
+
 void setup(){
 	Serial.begin(115200);
 
 	setUI();
 	mainScreen.draw();
+
+	fooTask.start();
 }
 
 unsigned i = 0;
@@ -55,6 +68,10 @@ bool direction = false;
 void loop(){
 	scroll.setScroll(i, 0);
 	layout.pushReverse();
+
+	if(millis() >= 2000 && fooTask.running){
+		fooTask.stop();
+	}
 
 	i += pow(-1, direction);
 	//delay(20);
