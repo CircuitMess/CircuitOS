@@ -29,6 +29,13 @@ public:
 	 */
 	void remove(uint i);
 
+	/**
+	 * Find the index of an element.
+	 * @param element The element.
+	 * @return Index of the element. -1 (uint max) if element isn't in the array.
+	 */
+	uint indexOf(T element);
+
 };
 
 template<typename T>
@@ -58,6 +65,15 @@ void Vector<T>::swap(uint posA, uint posB){
 template<typename T>
 void Vector<T>::remove(uint i){
 	this->erase(this->begin() + i);
+}
+
+template<typename T>
+uint Vector<T>::indexOf(T element){
+	for(int i = 0; i < this->size(); i++){
+		if(this->data()[i] == element) return i;
+	}
+
+	return -1;
 }
 
 #endif //CIRCUITOS_VECTOR_H
