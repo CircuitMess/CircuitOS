@@ -32,13 +32,12 @@ const byte call_icon[] PROGMEM = { 24,22,
    B00000000,B00000111,B11100000,
 };
 
-
-Display display(160, 128);
+void setUI();
+Display display(128, 128, 18, 4);
 Screen mainScreen(display);
 ScrollLayout scroll(&mainScreen);
 LinearLayout layout(&scroll, HORIZONTAL);
 GridLayout grid(&layout, 2);
-
 Image image0(&layout, 28, 33);
 Image image1(&grid, 24, 12);
 Image image2(&grid, 36, 20);
@@ -46,6 +45,23 @@ Image image2(&grid, 36, 20);
 void setup(){
 	Serial.begin(115200);
 
+	setUI();
+	mainScreen.draw();
+}
+
+unsigned i = 0;
+bool direction = false;
+
+void loop(){
+	scroll.setScroll(i, 0);
+	layout.pushReverse();
+
+	i += pow(-1, direction);
+	//delay(20);
+	if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
+}
+
+void setUI(){
 	display.clear(TFT_GREEN);
 
 	image0.sprite->clear(TFT_GREEN);
@@ -83,18 +99,4 @@ void setup(){
 	scroll.reflow();
 
 	mainScreen.addChild(&scroll);
-	mainScreen.draw();
 }
-
-unsigned i = 0;
-bool direction = false;
-
-void loop(){
-	scroll.setScroll(i, 0);
-	layout.pushReverse();
-
-	i += pow(-1, direction);
-	delay(20);
-	if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
-}
-

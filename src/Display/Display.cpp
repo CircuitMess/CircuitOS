@@ -1,8 +1,11 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(new Sprite(&tft, width, height)), width(width), height(height){
+Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), baseSprite(new Sprite(&tft, width, height)), width(width), height(height), blPin(blPin){
 	ledcSetup(0, 2000, 8);
-	ledcAttachPin(21, 0);
+	//ledcAttachPin(blPin, 0);
+
+	pinMode(blPin, OUTPUT);
+	digitalWrite(blPin, 1);
 
 	tft.init();
 	tft.invertDisplay(0);
@@ -10,6 +13,10 @@ Display::Display(uint8_t width, uint8_t height) : tft(), baseSprite(new Sprite(&
 	tft.fillScreen(TFT_PURPLE);
 
 	baseSprite->clear(TFT_GREEN);
+}
+
+Display::Display(uint8_t width, uint8_t height, uint8_t blPin, uint8_t rotation) : Display(width, height, blPin){
+	tft.setRotation(rotation);
 }
 
 void Display::commit(){
@@ -20,8 +27,8 @@ void Display::clear(uint32_t color){
 	baseSprite->clear(color);
 }
 
-const TFT_eSPI& Display::getTft() const{
-	return tft;
+TFT_eSPI* Display::getTft(){
+	return &tft;
 }
 
 Sprite* Display::getBaseSprite(){
