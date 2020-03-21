@@ -21,7 +21,7 @@ public:
 
 	Color background;
 	Color borderColor;
-	uint borderWidth;
+	uint borderWidth = 0;
 
 	Color chromaKey = TFT_TRANSPARENT;
 	bool chroma = true;

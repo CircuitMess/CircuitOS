@@ -7,6 +7,7 @@ Image::Image(ElementContainer* parent, uint width, uint height) : Element(parent
 
 void Image::draw(){
 	logln("Drawing image");
+	Element::draw();
 	sprite->push();
 }
 
