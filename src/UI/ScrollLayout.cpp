@@ -58,7 +58,9 @@ void ScrollLayout::draw(){
 
 	sprite->clear(TFT_BLACK);
 
-	children[0]->draw();
+	if(children[0] != nullptr){
+		children[0]->draw();
+	}
 
 	Element::draw();
 	sprite->push();
