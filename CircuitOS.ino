@@ -7,31 +7,12 @@
 #include "src/UI/GridLayout.h"
 #include "src/UI/ScrollLayout.h"
 #include "src/Util/Task.h"
+#include "src/Input/Input.h"
 
-const byte call_icon[] PROGMEM = { 24,22,
-   B00011100,B00000000,B00000000,
-   B00111110,B00000000,B00000000,
-   B01111111,B00000000,B00000000,
-   B11111111,B10000000,B00000000,
-   B11111111,B10000000,B00000000,
-   B11111111,B00000000,B00000000,
-   B11111110,B00000000,B00000000,
-   B11111110,B00000000,B00000000,
-   B11111110,B00000000,B00000000,
-   B01111111,B00000000,B00000000,
-   B01111111,B10000000,B00000000,
-   B00111111,B11000000,B00000000,
-   B00011111,B11100000,B00000000,
-   B00001111,B11110000,B01100000,
-   B00000111,B11111000,B11110000,
-   B00000011,B11111111,B11111000,
-   B00000001,B11111111,B11111100,
-   B00000000,B11111111,B11111100,
-   B00000000,B01111111,B11111100,
-   B00000000,B00111111,B11111000,
-   B00000000,B00011111,B11110000,
-   B00000000,B00000111,B11100000,
-};
+#define BTN_A 32
+#define BTN_B 34
+#define BTN_C 39
+#define BTN_D 36
 
 void setUI();
 Display display(128, 128, 18, 4);
@@ -42,16 +23,27 @@ GridLayout grid(&layout, 2);
 Image image0(&layout, 28, 33);
 Image image1(&grid, 24, 12);
 Image image2(&grid, 36, 20);
+Input input;
 
-void taskLoop(Task* task){
-	while(task->running){
-		Serial.println("FOO");
-	}
-
-	Serial.println("FOO STOP");
+void btnAPress(){
+	Serial.println("Button A");
 }
 
-Task fooTask("fooTask", taskLoop);
+void btnBPress(){
+	Serial.println("Button B");
+}
+
+void btnCPress(){
+	Serial.println("Button C");
+}
+
+void btnDPress(){
+	Serial.println("Button D");
+}
+
+void btnDRelease(){
+	Serial.println("Button D release");
+}
 
 void setup(){
 	Serial.begin(115200);
@@ -59,19 +51,26 @@ void setup(){
 	setUI();
 	mainScreen.draw();
 
-	fooTask.start();
+	input.setBtnPressCallback(BTN_A, btnAPress);
+	input.setBtnPressCallback(BTN_B, btnBPress);
+	input.setBtnPressCallback(BTN_C, btnCPress);
+	input.setBtnPressCallback(BTN_D, btnDPress);
+	input.setBtnReleaseCallback(BTN_D, btnDRelease);
+
+	input.start();
 }
 
 unsigned i = 0;
 bool direction = false;
 
 void loop(){
+	scroll.sprite->setPos(0, 0);
 	scroll.setScroll(i, 0);
 	layout.pushReverse();
 
-	if(millis() >= 2000 && fooTask.running){
-		fooTask.stop();
-	}
+	scroll.sprite->setPos(0, 64);
+	scroll.setScroll(scroll.getMaxScrollX() - i, 0);
+	layout.pushReverse();
 
 	i += pow(-1, direction);
 	//delay(20);

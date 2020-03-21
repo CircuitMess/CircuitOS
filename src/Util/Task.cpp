@@ -11,7 +11,7 @@ Task::Task(String taskName, void (* fun)(Task*), void* arg) : taskName(taskName)
 void Task::taskFunc(void* arg){
 	Task* task = static_cast<Task*>(arg);
 	task->func(task);
-	vTaskDelete(NULL); // return when task/watchdog works
+	vTaskDelete(NULL);
 }
 
 void Task::start(){
