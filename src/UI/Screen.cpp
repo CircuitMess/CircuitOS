@@ -16,7 +16,11 @@ void Screen::draw(){
 	logln("Drawing screen");
 
 	sprite->clear(TFT_BLACK);
-	children[0]->draw();
+
+	if(children[0] != nullptr){
+		children[0]->draw();
+	}
+
 	Element::draw();
 	sprite->push();
 	display->commit();
@@ -31,11 +35,11 @@ void Screen::pushReverse(){
 }
 
 uint Screen::getAvailableWidth() const{
-	return display->getWidth();
+	return sprite->width();
 }
 
 uint Screen::getAvailableHeight() const{
-	return display->getHeight();
+	return sprite->height();
 }
 
 uint Screen::getWidth() const{
