@@ -4,6 +4,7 @@
 
 #include <TFT_eSPI.h>
 #include "Display.h"
+#include "Color.h"
 
 class Display;
 
@@ -12,13 +13,19 @@ public:
 	Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height);
 	Sprite(Display& display, uint8_t width, uint8_t height);
 	Sprite(Sprite* sprite, uint8_t width, uint8_t height);
+	virtual ~Sprite();
+
 	Sprite& push();
 	Sprite& clear(uint32_t color);
 	Sprite& setPos(int32_t x, int32_t y);
 	Sprite& resize(uint width, uint height);
 
+	int32_t getPosX() const;
+
+	int32_t getPosY() const;
+
 	Sprite& setTransparent(bool transparent);
-	Sprite& setChroma(uint32_t color);
+	Sprite& setChroma(Color color);
 
 	void pushData(uint width, uint height, uint16_t* data);
 
@@ -27,13 +34,19 @@ public:
 
 	void cleanup();
 
+	bool created();
+
+	void setParent(Sprite* parent);
+
+	Sprite* getParent() const;
+
 private:
 	Sprite* parent;
 	TFT_eSPI* parentSPI = nullptr;
 	int32_t x = 0, y = 0;
 
 	bool chroma = false;
-	uint32_t chromaKey;
+	Color chromaKey = TFT_TRANSPARENT;
 
 	void pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma);
 

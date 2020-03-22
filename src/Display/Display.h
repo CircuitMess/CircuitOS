@@ -18,6 +18,8 @@ public:
 	TFT_eSPI* getTft();
 	Sprite* getBaseSprite();
 
+	void setPower(bool power);
+
 	uint getWidth() const;
 
 	uint getHeight() const;

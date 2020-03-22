@@ -23,16 +23,25 @@ void Sprite::cleanup(){
 	deleteSprite();
 }
 
+bool Sprite::created(){
+	return _created;
+}
+
 void Sprite::drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale){
+	Color c = chroma;
+	setChroma(TFT_BLACK);
+
 	for(int i = 0; i < width; i++){
 		for(int j = 0; j < height; j++){
 			uint32_t color = pgm_read_word(&icon[j * width + i]);
 
-			if(!chroma || chromaKey != color){
+			if(!chroma || color != chromaKey){
 				fillRect(x + i * scale, y + j * scale, scale, scale, color);
 			}
 		}
 	}
+
+	setChroma(c);
 }
 
 void Sprite::rotate(uint times){
@@ -100,15 +109,27 @@ Sprite& Sprite::setPos(int32_t x, int32_t y){
 }
 
 Sprite& Sprite::resize(uint width, uint height){
+	if(!_created){
+		createSprite(width, height);
+		return *this;
+	}
+
 	deleteSprite();
-	createSprite(width, height);
+	logln("Resizing sprite to [" + String(width) + ", " + String(height) + "]");
+	if(createSprite(width, height, 1) == nullptr){
+		logln("CreateSprite failed");
+	}
+
+	if(_created == false){
+		logln("Sprite not cretaed");
+	}
 }
 
 Sprite& Sprite::setTransparent(bool transparent){
 	chroma = transparent;
 }
 
-Sprite& Sprite::setChroma(uint32_t color){
+Sprite& Sprite::setChroma(Color color){
 	chromaKey = color;
 	chroma = true;
 }
@@ -153,4 +174,24 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 		}
 		ys++;
 	}
+}
+
+int32_t Sprite::getPosX() const{
+	return x;
+}
+
+int32_t Sprite::getPosY() const{
+	return y;
+}
+
+void Sprite::setParent(Sprite* parent){
+	Sprite::parent = parent;
+}
+
+Sprite* Sprite::getParent() const{
+	return parent;
+}
+
+Sprite::~Sprite(){
+	deleteSprite();
 }

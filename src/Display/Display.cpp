@@ -5,7 +5,7 @@ Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), baseSpri
 	//ledcAttachPin(blPin, 0);
 
 	pinMode(blPin, OUTPUT);
-	digitalWrite(blPin, 1);
+	digitalWrite(blPin, HIGH);
 
 	tft.init();
 	tft.invertDisplay(0);
@@ -13,6 +13,10 @@ Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), baseSpri
 	tft.fillScreen(TFT_PURPLE);
 
 	baseSprite->clear(TFT_GREEN);
+}
+
+void Display::setPower(bool power){
+	digitalWrite(blPin, power ? HIGH : LOW);
 }
 
 Display::Display(uint8_t width, uint8_t height, uint8_t blPin, uint8_t rotation) : Display(width, height, blPin){
