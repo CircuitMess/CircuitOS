@@ -16,6 +16,10 @@ void Element::resize(uint width, uint height){
 	sprite->resize(width, height);
 }
 
+void Element::resizeSprite(){
+	resize(getWidth(), getHeight());
+}
+
 ElementContainer* Element::getParent(){
 	return parent;
 }
@@ -34,6 +38,10 @@ void Element::setBorderWidth(uint borderWidth){
 }
 
 void Element::draw(){
+	if(sprite->width() == 0 || sprite->height() == 0){
+		logln("[[[ --- sprite with size 0 being drawn --- ]]]");
+	}
+
 	logr("Drawing element: ");
 
 	if(borderWidth){
@@ -51,4 +59,8 @@ void Element::pushReverse(){
 	Element::draw();
 	sprite->push();
 	getParent()->pushReverse();
+}
+
+Element::~Element(){
+	delete sprite;
 }

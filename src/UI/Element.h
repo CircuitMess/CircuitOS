@@ -13,7 +13,10 @@ public:
 	Element(Sprite* parent);
 	Element(ElementContainer* parent);
 
+	virtual ~Element();
+
 	void resize(uint width, uint height);
+	void resizeSprite();
 
 	void setBorder(uint width, Color color);
 	void setBorderColor(Color borderColor);
