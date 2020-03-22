@@ -18,7 +18,9 @@ void Task::start(){
 	running = true;
 
 	/** task function, task name, stack size, parameter, priority, handle */
-	xTaskCreate(Task::taskFunc, taskName.c_str(), 20000, this, 0, &tHandle);
+	if(xTaskCreate(Task::taskFunc, taskName.c_str(), 2000, this, 0, &tHandle) != pdPASS){
+		Serial.println("Task " + taskName + " start failed");
+	}
 }
 
 void Task::stop(){

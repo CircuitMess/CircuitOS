@@ -16,8 +16,12 @@ public:
 	uint getMaxScrollX() const;
 	uint getMaxScrollY() const;
 
-private:
+	uint getScrollX() const;
+
+	uint getScrollY() const;
+
 	void draw() override;
+private:
 
 	uint scrollX = 0;
 	uint scrollY = 0;

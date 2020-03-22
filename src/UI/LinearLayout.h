@@ -11,13 +11,11 @@ public:
 
 	void reflow() override;
 
-
+	void draw() override;
 
 private:
 
 	LayoutDirection direction;
-
-	void draw() override;
 
 	void reflowHorizontal();
 	void reflowVertical();

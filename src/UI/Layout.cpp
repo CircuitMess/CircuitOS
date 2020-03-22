@@ -54,3 +54,11 @@ uint Layout::getWidth() const{
 uint Layout::getHeight() const{
 	return height;
 }
+
+uint Layout::getGutter() const{
+	return gutter;
+}
+
+uint Layout::getPadding() const{
+	return padding;
+}

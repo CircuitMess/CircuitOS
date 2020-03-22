@@ -6,6 +6,7 @@ Screen::Screen(Display& display) : ElementContainer(display.getBaseSprite()), di
 	sprite->setPos(0, 0);
 	sprite->clear(TFT_BLACK);
 	children.resize(1);
+	children[0] = nullptr;
 }
 
 Screen& Screen::addChild(Element* element){
@@ -48,4 +49,8 @@ uint Screen::getWidth() const{
 
 uint Screen::getHeight() const{
 	return sprite->height();
+}
+
+Display* Screen::getDisplay() const{
+	return display;
 }

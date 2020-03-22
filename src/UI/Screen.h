@@ -22,6 +22,8 @@ public:
 
 	uint getHeight() const override;
 
+	Display* getDisplay() const;
+
 private:
 	Display* display;
 

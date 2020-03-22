@@ -3,6 +3,7 @@
 
 ScrollLayout::ScrollLayout(ElementContainer* parent) : Layout(parent){
 	children.resize(1);
+	children[0] = nullptr;
 }
 
 ElementContainer& ScrollLayout::addChild(Element* element){
@@ -12,6 +13,8 @@ ElementContainer& ScrollLayout::addChild(Element* element){
 void ScrollLayout::setScroll(uint scrollX, uint scrollY){
 	ScrollLayout::scrollX = scrollX;
 	ScrollLayout::scrollY = scrollY;
+
+	if(children[0] == nullptr) return;
 
 	children[0]->sprite->setPos(padding - scrollX, padding - scrollY);
 }
@@ -64,4 +67,12 @@ void ScrollLayout::draw(){
 
 	Element::draw();
 	sprite->push();
+}
+
+uint ScrollLayout::getScrollX() const{
+	return scrollX;
+}
+
+uint ScrollLayout::getScrollY() const{
+	return scrollY;
 }

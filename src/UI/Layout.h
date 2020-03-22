@@ -16,8 +16,8 @@ public:
 	Layout& setPadding(uint padding);
 	Layout& setGutter(uint gutter);
 
-	void setWidth(uint width);
-	void setHeight(uint height);
+	uint getGutter() const;
+	uint getPadding() const;
 
 	void setWHType(WHType wType, WHType hType);
 	void setWType(WHType wType);
@@ -25,6 +25,8 @@ public:
 	WHType getWType() const;
 	WHType getHType() const;
 
+	void setWidth(uint width);
+	void setHeight(uint height);
 	uint getAvailableWidth() const override;
 	uint getAvailableHeight() const override;
 	uint getWidth() const override;
