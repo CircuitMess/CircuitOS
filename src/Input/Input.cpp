@@ -1,17 +1,19 @@
 #include "Input.h"
+#include "../Util/Debug.h"
 
 Input* Input::instance;
 
-Input::Input() : btnPressCallback(PIN_MAX, nullptr), btnReleaseCallback(PIN_MAX, nullptr), scanTask("InputScanTask", scanTaskFunction){
+Input::Input() : btnPressCallback(PIN_MAX, nullptr), btnReleaseCallback(PIN_MAX, nullptr), scanTask("InputScanTask", Input::scanTaskFunction){
 	instance = this;
 }
 
 void Input::start(){
+	logln("Starting input");
 	scanTask.start();
 }
 
 void Input::stop(){
-	Serial.println("Stopping input");
+	logln("Stopping input");
 	scanTask.stop();
 }
 
@@ -29,6 +31,17 @@ void Input::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
 	addPinListener(pin);
 }
 
+void Input::removeBtnPressCallback(uint8_t pin){
+	if(pin >= PIN_MAX) return;
+	btnPressCallback[pin] = nullptr;
+}
+
+void Input::removeBtnReleaseCallback(uint8_t pin){
+	if(pin >= PIN_MAX) return;
+	btnReleaseCallback[pin] = nullptr;
+
+}
+
 void Input::addPinListener(uint8_t pin){
 	if(buttons.indexOf(pin) != -1) return;
 
@@ -41,6 +54,8 @@ void Input::addPinListener(uint8_t pin){
 }
 
 void Input::scanTaskFunction(Task* task){
+	logln("Input task starting");
+
 	while(task->running){
 		vTaskDelay(1);
 
@@ -81,4 +96,8 @@ void Input::scanButtons(){
 
 
 	}
+}
+
+Input* Input::getInstance(){
+	return instance;
 }

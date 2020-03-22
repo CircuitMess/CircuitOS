@@ -20,7 +20,12 @@ public:
 	void setBtnPressCallback(uint8_t pin, void (*callback)());
 	void setBtnReleaseCallback(uint8_t pin, void (*callback)());
 
+	void removeBtnPressCallback(uint8_t pin);
+	void removeBtnReleaseCallback(uint8_t pin);
+
 	static void scanTaskFunction(Task* task);
+
+	static Input* getInstance();
 
 private:
 	std::vector<void(*)()> btnPressCallback;
