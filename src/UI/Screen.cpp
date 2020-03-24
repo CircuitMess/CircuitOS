@@ -18,12 +18,7 @@ void Screen::draw(){
 
 	sprite.clear(TFT_BLACK);
 
-	if(children[0] != nullptr){
-		children[0]->draw();
-	}
-
-	sprite.push();
-	display->commit();
+	ElementContainer::draw();
 }
 
 void Screen::commit(){

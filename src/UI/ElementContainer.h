@@ -16,6 +16,8 @@ public:
 
 	Element* getChild(int i) const;
 
+	void draw() override;
+
 protected:
 	Vector<Element*> children;
 };

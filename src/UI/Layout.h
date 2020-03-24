@@ -11,7 +11,7 @@ class Layout : public ElementContainer {
 public:
 	using ElementContainer::ElementContainer;
 
-	virtual void reflow() = 0;
+	virtual void reflow();
 
 	Layout& setPadding(uint padding);
 	Layout& setGutter(uint gutter);

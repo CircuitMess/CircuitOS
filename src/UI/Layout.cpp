@@ -1,5 +1,31 @@
 #include "Layout.h"
 
+void Layout::reflow(){
+	if(wType == CHILDREN){
+		uint width = 0;
+
+		for(Element* child : children){
+			width = max(width, child->getWidth());
+		}
+
+		setWidth(width);
+	}else if(wType == PARENT){
+		setWidth(getParent()->getWidth());
+	}
+
+	if(hType == CHILDREN){
+		uint height = 0;
+
+		for(Element* child : children){
+			height = max(height, child->getHeight());
+		}
+
+		setHeight(height);
+	}else if(hType == PARENT){
+		setHeight(getParent()->getHeight());
+	}
+}
+
 Layout& Layout::setPadding(uint padding){
 	Layout::padding = padding;
 	return *this;
