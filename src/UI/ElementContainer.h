@@ -11,8 +11,8 @@ public:
 
 	virtual ElementContainer& addChild(Element* element);
 
-	virtual uint getAvailableWidth() const = 0;
-	virtual uint getAvailableHeight() const = 0;
+	virtual uint getAvailableWidth() = 0;
+	virtual uint getAvailableHeight() = 0;
 
 	Element* getChild(int i) const;
 

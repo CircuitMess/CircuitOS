@@ -13,7 +13,7 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 	contextA->compress();
 
 	contextB->depress();
-	contextB->getScreen().sprite->setPos(0, display.getHeight());
+	contextB->getScreen().getSprite()->setPos(0, display.getHeight());
 	contextB->draw();
 
 	UpdateManager::addListener(this);
@@ -21,8 +21,8 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 
 void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos){
 	Sprite* oldParent = sprite->getParent();
-	uint oldX = sprite->getPosX();
-	uint oldY = sprite->getPosY();
+	uint oldX = sprite->getX();
+	uint oldY = sprite->getY();
 
 	sprite->setParent(targetSprite);
 	sprite->setPos(0, pos);
@@ -41,10 +41,10 @@ void ContextTransition::update(uint millis){
 
 		if(reverse){
 			//copySprite(display->getBaseSprite(), display->getBaseSprite(), 1);
-			copySprite(contextB->getScreen().sprite, display->getBaseSprite(), (int) scroll - (int) display->getHeight());
+			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), (int) scroll - (int) display->getHeight());
 		}else{
 			copySprite(display->getBaseSprite(), display->getBaseSprite(), -1);
-			copySprite(contextB->getScreen().sprite, display->getBaseSprite(), display->getHeight() - scroll);
+			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), display->getHeight() - scroll);
 		}
 
 		lastScroll = scroll;
@@ -52,8 +52,8 @@ void ContextTransition::update(uint millis){
 
 	if(scroll >= display->getHeight()){
 		Serial.println("Ending context switch");
-		contextB->getScreen().sprite->setPos(0, 0);
-		contextB->getScreen().pushReverse();
+		contextB->getScreen().setPos(0, 0);
+		contextB->getScreen().commit();
 		contextB->start();
 		delete this;
 	}else{

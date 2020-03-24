@@ -176,11 +176,11 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 	}
 }
 
-int32_t Sprite::getPosX() const{
+int32_t Sprite::getX() const{
 	return x;
 }
 
-int32_t Sprite::getPosY() const{
+int32_t Sprite::getY() const{
 	return y;
 }
 

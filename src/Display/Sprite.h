@@ -20,9 +20,9 @@ public:
 	Sprite& setPos(int32_t x, int32_t y);
 	Sprite& resize(uint width, uint height);
 
-	int32_t getPosX() const;
+	int32_t getX() const;
 
-	int32_t getPosY() const;
+	int32_t getY() const;
 
 	Sprite& setTransparent(bool transparent);
 	Sprite& setChroma(Color color);

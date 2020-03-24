@@ -10,23 +10,37 @@ public:
 	Screen(Display& display);
 
 	void draw() override;
-	void pushReverse() override;
 
 	Screen& addChild(Element* element) override;
 
-	uint getAvailableWidth() const override;
+	uint getAvailableWidth() override;
 
-	uint getAvailableHeight() const override;
+	uint getAvailableHeight() override;
 
-	uint getWidth() const override;
+	uint getWidth() override;
 
-	uint getHeight() const override;
+	uint getHeight() override;
 
 	Display* getDisplay() const;
 
+	Sprite* getSprite() override;
+
+	uint getX() const override;
+	uint getY() const override;
+	uint getTotalX() const override;
+	uint getTotalY() const override;
+
+	void setPos(uint x, uint y) override;
+
+	void commit();
+
 private:
 	Display* display;
+	Sprite sprite;
 
+	/** Hiding */
+	using Element::setX;
+	using Element::setY;
 };
 
 

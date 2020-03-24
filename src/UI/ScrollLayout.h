@@ -13,14 +13,15 @@ public:
 
 	void setScroll(uint scrollX, uint scrollY);
 
-	uint getMaxScrollX() const;
-	uint getMaxScrollY() const;
+	uint getMaxScrollX();
+	uint getMaxScrollY();
 
 	uint getScrollX() const;
 
 	uint getScrollY() const;
 
 	void draw() override;
+
 private:
 
 	uint scrollX = 0;

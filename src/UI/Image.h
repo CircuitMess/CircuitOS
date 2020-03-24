@@ -12,14 +12,17 @@ public:
 
 	char* data;
 
-	uint getWidth() const override;
+	uint getWidth() override;
 
-	uint getHeight() const override;
+	uint getHeight() override;
+
+	Sprite* getSprite() override;
 
 private:
 	uint width;
 	uint height;
 
+	Sprite sprite;
 };
 
 

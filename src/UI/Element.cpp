@@ -2,22 +2,12 @@
 #include "Element.h"
 #include "../Util/Debug.h"
 
-
-Element::Element(Sprite* parent){
-	sprite = new Sprite(parent, 0, 0);
+Element::Element(){
+	this->parent = nullptr;
 }
 
 Element::Element(ElementContainer* parent){
-	sprite = new Sprite(parent->sprite, 0, 0);
 	this->parent = parent;
-}
-
-void Element::resize(uint width, uint height){
-	sprite->resize(width, height);
-}
-
-void Element::resizeSprite(){
-	resize(getWidth(), getHeight());
 }
 
 ElementContainer* Element::getParent(){
@@ -38,29 +28,53 @@ void Element::setBorderWidth(uint borderWidth){
 }
 
 void Element::draw(){
-	if(sprite->width() == 0 || sprite->height() == 0){
-		logln("[[[ --- sprite with size 0 being drawn --- ]]]");
-	}
-
 	logr("Drawing element: ");
 
 	if(borderWidth){
 		logr("border ");
 
 		for(int i = 0; i < borderWidth; i++){
-			sprite->drawRect(0 + i, 0 + i, getWidth() - 2*i, getHeight() - 2*i, borderColor);
+			getParent()->getSprite()->drawRect(getTotalX() + i, getTotalY() + i, getWidth() - 2*i, getHeight() - 2*i, borderColor);
 		}
 	}
 
 	logln();
 }
 
-void Element::pushReverse(){
-	Element::draw();
-	sprite->push();
-	getParent()->pushReverse();
+uint Element::getX() const{
+	return x;
 }
 
-Element::~Element(){
-	delete sprite;
+uint Element::getY() const{
+	return y;
+}
+
+uint Element::getTotalX() const{
+	return x + parent->getTotalX();
+}
+
+uint Element::getTotalY() const{
+	return y + parent->getTotalY();
+}
+
+Sprite* Element::getSprite(){
+	return parent->getSprite();
+}
+
+void Element::setX(uint x){
+	Element::x = x;
+}
+
+void Element::setY(uint y){
+	Element::y = y;
+}
+
+void Element::setPos(uint x, uint y){
+	setX(x);
+	setY(y);
+}
+
+void Element::clear(){
+	Serial.println("Clearing element at [" + String(getTotalX()) + ", " + String(getTotalX()) + "] w/h [" + String(getWidth()) + ", " + String(getHeight()) + "]");
+	getSprite()->fillRect(getTotalX(), getTotalY(), getWidth(), getHeight(), TFT_BLACK);
 }

@@ -11,8 +11,6 @@ public:
 	void reflow() override;
 
 	void draw() override;
-
-	void pushReverse() override;
 };
 
 

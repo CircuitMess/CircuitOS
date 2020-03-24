@@ -8,6 +8,7 @@
 #include "src/UI/ScrollLayout.h"
 #include "src/Util/Task.h"
 #include "src/Input/Input.h"
+#include "src/Bitmaps/Bitmaps.h"
 
 #define BTN_A 32
 #define BTN_B 34
@@ -17,32 +18,89 @@
 void setUI();
 Display display(128, 128, 18, 4);
 Screen mainScreen(display);
-ScrollLayout scroll(&mainScreen);
-LinearLayout layout(&scroll, HORIZONTAL);
-GridLayout grid(&layout, 2);
-Image image0(&layout, 28, 33);
-Image image1(&grid, 24, 12);
-Image image2(&grid, 36, 20);
+LinearLayout screenLayout(&mainScreen, HORIZONTAL);
+LinearLayout btnLayout(&screenLayout, VERTICAL);
+Image imageR(&btnLayout, 18, 18);
+Image imageL(&btnLayout, 18, 18);
+Image imageY(&btnLayout, 18, 18);
+Image imageN(&btnLayout, 18, 18);
+ScrollLayout mainScroll(&screenLayout);
+GridLayout grid(&mainScroll, 2);
+
+#define ELEMENTS 7
+uint selected = 0;
+Color colors[ELEMENTS] = { TFT_GREEN, TFT_PURPLE, TFT_WHITE, TFT_YELLOW, TFT_BLUE, TFT_LIGHTGREY, TFT_OLIVE };
+
+Vector<Image*> gridImages;
+
 Input input;
 
-void btnAPress(){
-	Serial.println("Button A");
+void scroll();
+
+void selectElement(uint element){
+	gridImages[selected]->setBorderWidth(0);
+	gridImages[selected]->draw();
+
+	gridImages[element]->setBorderWidth(3);
+	gridImages[element]->draw();
+
+	selected = element;
+	scroll();
+	mainScreen.commit();
 }
 
-void btnBPress(){
-	Serial.println("Button B");
+void btnRPress(){
+	selectElement((selected + 1) % ELEMENTS);
 }
 
-void btnCPress(){
-	Serial.println("Button C");
+void btnLPress(){
+	if(selected == 0){
+		selectElement(ELEMENTS - 1);
+	}else{
+		selectElement(selected - 1);
+	}
 }
 
-void btnDPress(){
-	Serial.println("Button D");
-}
+void scroll(){
+	Image* gridImage = gridImages[selected];
 
-void btnDRelease(){
-	Serial.println("Button D release");
+	uint elStart = grid.getPadding() + (selected/2) * (gridImage->getHeight() + grid.getGutter());
+	uint elEnd = elStart + gridImage->getHeight();
+
+	uint screenStart = mainScroll.getScrollY();
+	uint screenEnd = screenStart + display.getHeight();
+
+	uint newScroll = mainScroll.getScrollY();
+	Serial.println("Element end / screen end: " + String(elEnd) + " / " + String(screenEnd));
+	if(elStart < screenStart){
+		newScroll = elStart;
+
+		if(newScroll == grid.getPadding()){
+			newScroll = 0;
+		}else{
+			newScroll -= grid.getGutter() / 2;
+		}
+	}else if(elEnd > screenEnd){
+		newScroll += elEnd - screenEnd;
+
+		Serial.println("A / B: " + String(newScroll + display.getHeight()) + " / " + String(grid.getHeight() - grid.getPadding()));
+		if(newScroll + display.getHeight() == grid.getHeight() - grid.getPadding()){
+			newScroll += grid.getPadding();
+		}else{
+			newScroll += grid.getGutter() / 2;
+		}
+	}
+
+	if(newScroll == mainScroll.getScrollY()){
+		return;
+	}
+
+	if(newScroll != mainScroll.getScrollY()){
+		mainScroll.setScroll(0, newScroll);
+
+		mainScroll.clear();
+		mainScroll.draw();
+	}
 }
 
 void setup(){
@@ -50,12 +108,10 @@ void setup(){
 
 	setUI();
 	mainScreen.draw();
+	mainScreen.commit();
 
-	input.setBtnPressCallback(BTN_A, btnAPress);
-	input.setBtnPressCallback(BTN_B, btnBPress);
-	input.setBtnPressCallback(BTN_C, btnCPress);
-	input.setBtnPressCallback(BTN_D, btnDPress);
-	input.setBtnReleaseCallback(BTN_D, btnDRelease);
+	input.setBtnReleaseCallback(BTN_A, btnRPress);
+	input.setBtnPressCallback(BTN_B, btnLPress);
 
 	input.start();
 }
@@ -64,55 +120,70 @@ unsigned i = 0;
 bool direction = false;
 
 void loop(){
-	scroll.sprite->setPos(0, 0);
-	scroll.setScroll(i, 0);
-	layout.pushReverse();
 
-	scroll.sprite->setPos(0, 64);
-	scroll.setScroll(scroll.getMaxScrollX() - i, 0);
-	layout.pushReverse();
 
 	i += pow(-1, direction);
 	//delay(20);
-	if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
+	//if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
 }
 
 void setUI(){
 	display.clear(TFT_GREEN);
 
-	image0.sprite->clear(TFT_GREEN);
-	image1.sprite->clear(TFT_GREEN);
-	image2.sprite->clear(TFT_GREEN);
+	/** Buttons */
+	imageR.getSprite()->clear(TFT_BLACK);
+	imageL.getSprite()->clear(TFT_BLACK);
+	imageY.getSprite()->clear(TFT_BLACK);
+	imageN.getSprite()->clear(TFT_BLACK);
 
-	scroll.setWHType(PARENT, CHILDREN);
-	scroll.setBorder(1, TFT_RED);
+	imageR.getSprite()->drawIcon(arrowRight, 0, 0, 18, 18, 1);
+	imageL.getSprite()->drawIcon(arrowRight, 0, 0, 18, 18, 1);
+	imageY.getSprite()->drawIcon(yes, 0, 0, 18, 18, 1);
+	imageN.getSprite()->drawIcon(cross, 0, 0, 18, 18, 1);
 
-	layout.setWHType(CHILDREN, CHILDREN);
-	layout.setBorder(1, TFT_RED);
-	layout.setPadding(5);
-	layout.setGutter(5);
+	imageL.getSprite()->rotate(2);
 
-	grid.setWHType(CHILDREN, CHILDREN);
-	grid.setBorder(1, TFT_RED);
-	grid.setPadding(5);
-	grid.setGutter(2);
+	btnLayout.setWHType(FIXED, PARENT);
+	btnLayout.setWidth(28);
+	btnLayout.setPadding(5);
+	btnLayout.setGutter(15);
+	//btnLayout.setBorder(1, TFT_RED);
 
+	btnLayout.addChild(&imageR);
+	btnLayout.addChild(&imageL);
+	btnLayout.addChild(&imageY);
+	btnLayout.addChild(&imageN);
 
-	grid.addChild(&image1);
-	grid.addChild(&image2);
-	grid.addChild(&image2);
-	grid.addChild(&image1);
+	/** Grid */
+
+	for(int i = 0; i < ELEMENTS; i++){
+		Image* gridImage = new Image(&grid, 35, 35);
+		gridImages.push_back(gridImage);
+
+		gridImage->getSprite()->clear(colors[i]);
+		gridImage->setBorderColor(TFT_RED);
+		grid.addChild(gridImage);
+	}
+
+	gridImages.front()->setBorderWidth(3);
+
+	grid.setWHType(PARENT, CHILDREN);
+	grid.setPadding(10).setGutter(10);
+
+	/** Layout */
+
+	mainScroll.setWHType(FIXED, PARENT);
+	mainScroll.setWidth(100);
+	//mainScroll.setBorder(1, TFT_RED);
+	mainScroll.addChild(&grid);
+
+	screenLayout.setWHType(PARENT, PARENT);
+	screenLayout.addChild(&mainScroll).addChild(&btnLayout);
+
+	screenLayout.reflow();
+	mainScroll.reflow();
 	grid.reflow();
+	btnLayout.reflow();
 
-	layout.addChild(&image0);
-	layout.addChild(&grid);
-	layout.addChild(&image0);
-	layout.addChild(&grid);
-	layout.addChild(&image0);
-	layout.reflow();
-
-	scroll.addChild(&layout);
-	scroll.reflow();
-
-	mainScreen.addChild(&scroll);
+	mainScreen.addChild(&screenLayout);
 }

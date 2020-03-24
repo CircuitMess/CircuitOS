@@ -10,13 +10,8 @@ class ElementContainer;
 
 class Element {
 public:
-	Element(Sprite* parent);
+	Element();
 	Element(ElementContainer* parent);
-
-	virtual ~Element();
-
-	void resize(uint width, uint height);
-	void resizeSprite();
 
 	void setBorder(uint width, Color color);
 	void setBorderColor(Color borderColor);
@@ -29,17 +24,29 @@ public:
 	Color chromaKey = TFT_TRANSPARENT;
 	bool chroma = true;
 
-	Sprite* sprite;
-
-	virtual uint getWidth() const = 0;
-	virtual uint getHeight() const = 0;
+	virtual uint getWidth() = 0;
+	virtual uint getHeight() = 0;
 
 	virtual void draw();
-	virtual void pushReverse();
 	ElementContainer* getParent();
+
+	virtual uint getTotalX() const;
+	virtual uint getTotalY() const;
+	virtual uint getX() const;
+	virtual uint getY() const;
+	virtual void setX(uint x);
+	virtual void setY(uint y);
+	virtual void setPos(uint x, uint y);
+
+	virtual Sprite* getSprite();
+
+	virtual void clear();
 
 private:
 	ElementContainer* parent = nullptr;
+
+	uint x = 0;
+	uint y = 0;
 
 };
 

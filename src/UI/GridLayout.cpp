@@ -8,15 +8,13 @@ GridLayout::GridLayout(ElementContainer* parent, uint cols) : Layout(parent), co
 void GridLayout::draw(){
 	logln("Drawing grid layout");
 
-	sprite->clear(TFT_BLACK);
-
 	uint x = padding;
 	uint y = padding;
 
 	uint col = 0;
 	uint maxHeight = 0;
 	for(Element* el : children){
-		el->sprite->setPos(x, y);
+		el->setPos(x, y);
 		el->draw();
 
 		x += el->getWidth() + gutter;
@@ -33,8 +31,6 @@ void GridLayout::draw(){
 	Element::draw();
 
 	// TODO: overflow: draw over padding or erase?
-
-	sprite->push();
 }
 
 void GridLayout::reflow(){
@@ -51,7 +47,7 @@ void GridLayout::reflow(){
 			uint rowWidth = 0;
 
 			uint i = 0;
-			for(const Element* el : children){
+			for(Element* el : children){
 				rowWidth += el->getWidth() + gutter;
 
 				if(++i % cols == 0){
@@ -75,7 +71,7 @@ void GridLayout::reflow(){
 		uint rowHeight = 0;
 
 		uint i = 0;
-		for(const Element* el : children){
+		for(Element* el : children){
 			rowHeight = max(rowHeight, el->getHeight());
 
 			if(++i % cols == 0){
@@ -99,5 +95,5 @@ void GridLayout::reflow(){
 	setWidth(width);
 	setHeight(height);
 
-	resize(width, height);
+	// resize(width, height); -- caching
 }

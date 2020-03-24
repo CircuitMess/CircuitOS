@@ -8,13 +8,11 @@ LinearLayout::LinearLayout(ElementContainer* parent, LayoutDirection direction) 
 void LinearLayout::draw(){
 	logln("Drawing linear layout");
 
-	sprite->clear(TFT_BLACK);
-
 	int x = padding;
 	int y = padding;
 
 	for(Element* el : children){
-		el->sprite->setPos(x, y);
+		el->setPos(x, y);
 		el->draw();
 
 		if(direction == VERTICAL){
@@ -27,8 +25,6 @@ void LinearLayout::draw(){
 	Element::draw();
 
 	// TODO: overflow: draw over padding or erase?
-
-	sprite->push();
 }
 
 void LinearLayout::reflow(){
@@ -48,7 +44,7 @@ void LinearLayout::reflow(){
 	setWidth(width);
 	setHeight(height);
 
-	resize(width, height);
+	// resize(width, height); -- caching
 }
 
 void LinearLayout::reflowHorizontal(){
@@ -58,7 +54,7 @@ void LinearLayout::reflowHorizontal(){
 		width += 2 * padding;
 
 		if(!children.empty()){
-			for(const Element* el : children){
+			for(Element* el : children){
 				width += el->getWidth() + gutter;
 			}
 
@@ -71,7 +67,7 @@ void LinearLayout::reflowHorizontal(){
 	}else if(hType == CHILDREN && !children.empty()){
 		uint maxHeight = 0;
 
-		for(const Element* el : children){
+		for(Element* el : children){
 			maxHeight = max(maxHeight, el->getHeight());
 		}
 
@@ -86,7 +82,7 @@ void LinearLayout::reflowVertical(){
 	}else if(wType == CHILDREN && !children.empty()){
 		uint maxWidth = 0;
 
-		for(const Element* el : children){
+		for(Element* el : children){
 			maxWidth = max(maxWidth, el->getWidth());
 		}
 
@@ -99,7 +95,7 @@ void LinearLayout::reflowVertical(){
 		height += 2 * padding;
 
 		if(!children.empty()){
-			for(const Element* el : children){
+			for(Element* el : children){
 				height += el->getHeight() + gutter;
 			}
 

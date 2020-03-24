@@ -27,10 +27,10 @@ public:
 
 	void setWidth(uint width);
 	void setHeight(uint height);
-	uint getAvailableWidth() const override;
-	uint getAvailableHeight() const override;
-	uint getWidth() const override;
-	uint getHeight() const override;
+	uint getAvailableWidth() override;
+	uint getAvailableHeight() override;
+	uint getWidth() override;
+	uint getHeight() override;
 
 protected:
 	uint gutter = 0;
