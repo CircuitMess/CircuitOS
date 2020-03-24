@@ -28,30 +28,21 @@ void LinearLayout::draw(){
 }
 
 void LinearLayout::reflow(){
-	width = wType == FIXED ? width : 0;
-	height = hType == FIXED ? height : 0;
-
 	if(direction == HORIZONTAL){
 		reflowHorizontal();
 	}else if(direction == VERTICAL){
 		reflowVertical();
 	}
 
-	logln("Reflowing linear layout [" + String(width) + ", " + String(height) + "]");
+	logln("Reflowing linear layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
 	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
-
-	// call setWidth and setHeight for any potential future functionality
-	setWidth(width);
-	setHeight(height);
-
-	// resize(width, height); -- caching
 }
 
 void LinearLayout::reflowHorizontal(){
 	if(wType == PARENT){
-		width = getParent()->getAvailableWidth();
+		setWidth(getParent()->getAvailableWidth());
 	}else if(wType == CHILDREN){
-		width += 2 * padding;
+		uint width = 2 * padding;
 
 		if(!children.empty()){
 			for(Element* el : children){
@@ -60,10 +51,12 @@ void LinearLayout::reflowHorizontal(){
 
 			width -= gutter;
 		}
+
+		setWidth(width);
 	}
 
 	if(hType == PARENT){
-		height = getParent()->getAvailableHeight();
+		setHeight(getParent()->getAvailableHeight());
 	}else if(hType == CHILDREN && !children.empty()){
 		uint maxHeight = 0;
 
@@ -71,14 +64,13 @@ void LinearLayout::reflowHorizontal(){
 			maxHeight = max(maxHeight, el->getHeight());
 		}
 
-		height = maxHeight + 2 * padding;
+		setHeight(maxHeight + 2 * padding);
 	}
-
 }
 
 void LinearLayout::reflowVertical(){
 	if(wType == PARENT){
-		width = getParent()->getAvailableWidth();
+		setWidth(getParent()->getAvailableWidth());
 	}else if(wType == CHILDREN && !children.empty()){
 		uint maxWidth = 0;
 
@@ -86,13 +78,13 @@ void LinearLayout::reflowVertical(){
 			maxWidth = max(maxWidth, el->getWidth());
 		}
 
-		width = maxWidth + 2 * padding;
+		setWidth(maxWidth + 2 * padding);
 	}
 
 	if(hType == PARENT){
-		height = getParent()->getAvailableHeight();
+		setHeight(getParent()->getAvailableHeight());
 	}else if(hType == CHILDREN){
-		height += 2 * padding;
+		uint height = 2 * padding;
 
 		if(!children.empty()){
 			for(Element* el : children){
@@ -101,6 +93,7 @@ void LinearLayout::reflowVertical(){
 
 			height -= gutter;
 		}
-	}
 
+		setHeight(height);
+	}
 }

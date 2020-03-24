@@ -56,7 +56,7 @@ void ScrollLayout::reflow(){
 
 	// resize(width, height); -- caching
 
-	logln("Reflowing scroll layout [" + String(width) + ", " + String(height) + "]");
+	logln("Reflowing scroll layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
 	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
 }
 

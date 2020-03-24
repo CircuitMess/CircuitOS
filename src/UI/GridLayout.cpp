@@ -34,13 +34,10 @@ void GridLayout::draw(){
 }
 
 void GridLayout::reflow(){
-	width = wType == FIXED ? width : 0;
-	height = hType == FIXED ? height : 0;
-
 	if(wType == PARENT){
-		width = getParent()->getAvailableWidth();
+		setWidth(getParent()->getAvailableWidth());
 	}else if(wType == CHILDREN){
-		width += 2 * padding;
+		uint width = 2 * padding;
 
 		if(!children.empty()){
 			uint maxRowWidth = 0;
@@ -60,14 +57,14 @@ void GridLayout::reflow(){
 				maxRowWidth = max(maxRowWidth, rowWidth - gutter);
 			}
 
-			width += maxRowWidth;
+			setWidth(width + maxRowWidth);
 		}
 	}
 
 	if(hType == PARENT){
-		height = getParent()->getAvailableHeight();
+		setHeight(getParent()->getAvailableHeight());
 	}else if(hType == CHILDREN && !children.empty()){
-		height += 2 * padding;
+		uint height = 2 * padding;
 		uint rowHeight = 0;
 
 		uint i = 0;
@@ -84,16 +81,10 @@ void GridLayout::reflow(){
 			rowHeight -= gutter;
 		}
 
-		height += rowHeight;
+		setHeight(height + rowHeight);
 	}
 
 
-	logln("Reflowing grid layout [" + String(width) + ", " + String(height) + "]");
+	logln("Reflowing grid layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
 	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
-
-	// call setWidth and setHeight for any potential future functionality
-	setWidth(width);
-	setHeight(height);
-
-	// resize(width, height); -- caching
 }

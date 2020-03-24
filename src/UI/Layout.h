@@ -35,12 +35,13 @@ public:
 protected:
 	uint gutter = 0;
 	uint padding = 0;
-	uint width = 0;
-	uint height = 0;
 
 	WHType wType = FIXED;
 	WHType hType = FIXED;
 
+private:
+	uint width = 0;
+	uint height = 0;
 };
 
 
