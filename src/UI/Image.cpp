@@ -2,21 +2,15 @@
 #include "../Util/Debug.h"
 
 Image::Image(ElementContainer* parent, uint width, uint height) :
-	Element(parent), width(width), height(height),
-	sprite(parent->getSprite(), width, height) {
+	Element(parent), SpriteElement(parent->getSprite(), width, height), width(width), height(height){
 
 }
 
 void Image::draw(){
-	logln("Drawing image");
-	sprite.setParent(Element::getSprite());
+	sprite.setParent(getParent()->getSprite());
 	sprite.setPos(getTotalX(), getTotalY());
 	sprite.push();
 	Element::draw();
-}
-
-Sprite* Image::getSprite(){
-	return &sprite;
 }
 
 uint Image::getWidth(){
@@ -25,4 +19,8 @@ uint Image::getWidth(){
 
 uint Image::getHeight(){
 	return height;
+}
+
+Sprite* Image::getSprite(){
+	return SpriteElement::getSprite();
 }

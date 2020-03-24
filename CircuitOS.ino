@@ -15,7 +15,6 @@
 #define BTN_C 39
 #define BTN_D 36
 
-void setUI();
 Display display(128, 128, 18, 4);
 Screen mainScreen(display);
 LinearLayout screenLayout(&mainScreen, HORIZONTAL);
@@ -35,19 +34,9 @@ Vector<Image*> gridImages;
 
 Input input;
 
+void setUI();
 void scroll();
-
-void selectElement(uint element){
-	gridImages[selected]->setBorderWidth(0);
-	gridImages[selected]->draw();
-
-	gridImages[element]->setBorderWidth(3);
-	gridImages[element]->draw();
-
-	selected = element;
-	scroll();
-	mainScreen.commit();
-}
+void selectElement(uint element);
 
 void btnRPress(){
 	selectElement((selected + 1) % ELEMENTS);
@@ -59,6 +48,43 @@ void btnLPress(){
 	}else{
 		selectElement(selected - 1);
 	}
+}
+
+
+void setup(){
+	Serial.begin(115200);
+
+	setUI();
+	mainScreen.draw();
+	mainScreen.commit();
+
+	input.setBtnReleaseCallback(BTN_A, btnRPress);
+	input.setBtnPressCallback(BTN_B, btnLPress);
+
+	input.start();
+}
+
+unsigned i = 0;
+bool direction = false;
+
+void loop(){
+
+
+	i += pow(-1, direction);
+	delay(20);
+	//if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
+}
+
+void selectElement(uint element){
+	gridImages[selected]->setBorderWidth(0);
+	gridImages[selected]->draw();
+
+	gridImages[element]->setBorderWidth(3);
+	gridImages[element]->draw();
+
+	selected = element;
+	scroll();
+	mainScreen.commit();
 }
 
 void scroll(){
@@ -101,30 +127,6 @@ void scroll(){
 		mainScroll.clear();
 		mainScroll.draw();
 	}
-}
-
-void setup(){
-	Serial.begin(115200);
-
-	setUI();
-	mainScreen.draw();
-	mainScreen.commit();
-
-	input.setBtnReleaseCallback(BTN_A, btnRPress);
-	input.setBtnPressCallback(BTN_B, btnLPress);
-
-	input.start();
-}
-
-unsigned i = 0;
-bool direction = false;
-
-void loop(){
-
-
-	i += pow(-1, direction);
-	//delay(20);
-	//if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
 }
 
 void setUI(){

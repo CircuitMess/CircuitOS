@@ -1,16 +1,17 @@
 #include "Screen.h"
 #include "../Util/Debug.h"
 
-Screen::Screen(Display& display) : display(&display), sprite(display.getBaseSprite(), display.getWidth(), display.getHeight()){
-	sprite.resize(display.getWidth(), display.getHeight());
+Screen::Screen(Display& display) : display(&display), SpriteElement(display.getBaseSprite(), display.getWidth(), display.getHeight()){
 	sprite.setPos(0, 0);
 	sprite.clear(TFT_BLACK);
-	children.resize(1);
-	children[0] = nullptr;
 }
 
 Screen& Screen::addChild(Element* element){
-	children[0] = element;
+	if(children.empty()){
+		children.push_back(element);
+	}else{
+		children[0] = element;
+	}
 }
 
 void Screen::draw(){
@@ -46,10 +47,6 @@ Display* Screen::getDisplay() const{
 	return display;
 }
 
-Sprite* Screen::getSprite(){
-	return &sprite;
-}
-
 uint Screen::getX() const{
 	return sprite.getX();
 }
@@ -68,4 +65,8 @@ uint Screen::getTotalY() const{
 
 void Screen::setPos(uint x, uint y){
 	sprite.setPos(x, y);
+}
+
+Sprite* Screen::getSprite(){
+	return SpriteElement::getSprite();
 }

@@ -3,26 +3,24 @@
 
 
 #include "ElementContainer.h"
+#include "SpriteElement.h"
 
-class Image : public Element {
+class Image : public Element, public SpriteElement {
 public:
 	Image(ElementContainer* parent, uint width, uint height);
 
-	void draw() override;
+	Sprite* getSprite() override;
 
-	char* data;
+	void draw() override;
 
 	uint getWidth() override;
 
 	uint getHeight() override;
 
-	Sprite* getSprite() override;
-
 private:
 	uint width;
 	uint height;
 
-	Sprite sprite;
 };
 
 

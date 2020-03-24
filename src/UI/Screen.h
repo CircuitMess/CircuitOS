@@ -4,10 +4,13 @@
 
 #include "ElementContainer.h"
 #include "Element.h"
+#include "SpriteElement.h"
 
-class Screen : public ElementContainer {
+class Screen : public ElementContainer, public SpriteElement {
 public:
 	Screen(Display& display);
+
+	Sprite* getSprite() override;
 
 	void draw() override;
 
@@ -23,8 +26,6 @@ public:
 
 	Display* getDisplay() const;
 
-	Sprite* getSprite() override;
-
 	uint getX() const override;
 	uint getY() const override;
 	uint getTotalX() const override;
@@ -36,7 +37,6 @@ public:
 
 private:
 	Display* display;
-	Sprite sprite;
 
 	/** Hiding */
 	using Element::setX;
