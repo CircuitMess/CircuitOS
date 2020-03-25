@@ -8,7 +8,7 @@
 #include "src/UI/ScrollLayout.h"
 #include "src/Util/Task.h"
 #include "src/Input/Input.h"
-#include "src/Bitmaps/Bitmaps.h"
+#include "src/Bitmaps/Bitmaps.hpp"
 
 #define BTN_A 32
 #define BTN_B 34

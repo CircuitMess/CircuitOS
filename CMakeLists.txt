@@ -7,12 +7,14 @@ include_directories(/home/cm/.arduino15/packages/cm/hardware/esp32/1.0.4/cores/e
 include_directories(~/Arduino/libraries/TFT_eSPI-master)
 
 AUX_SOURCE_DIRECTORY(src SOURCES)
+AUX_SOURCE_DIRECTORY(src/Bitmaps SOURCES)
 AUX_SOURCE_DIRECTORY(src/Display SOURCES)
-AUX_SOURCE_DIRECTORY(src/UI SOURCES)
-AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 AUX_SOURCE_DIRECTORY(src/Input SOURCES)
-AUX_SOURCE_DIRECTORY(src/Update SOURCES)
 AUX_SOURCE_DIRECTORY(src/Support SOURCES)
+AUX_SOURCE_DIRECTORY(src/UI SOURCES)
+AUX_SOURCE_DIRECTORY(src/Update SOURCES)
+AUX_SOURCE_DIRECTORY(src/Util SOURCES)
+
 
 add_definitions(-DDEBUG)
 
