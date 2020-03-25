@@ -9,12 +9,24 @@ Screen& Context::getScreen(){
 	return screen;
 }
 
-void Context::depress(){
-	depressed = true;
+void Context::addSprite(SpriteElement* sprite){
+	sprites.push_back(sprite);
 }
 
-void Context::compress(){
-	depressed = false;
+void Context::pack(){
+	for(SpriteElement* element : sprites){
+		element->pack();
+	}
+
+	packed = true;
+}
+
+void Context::unpack(){
+	for(SpriteElement* element : sprites){
+		element->unpack();
+	}
+
+	packed = false;
 }
 
 void Context::pop(){

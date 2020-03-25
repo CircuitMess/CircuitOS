@@ -11,12 +11,14 @@ class Context {
 public:
 	Context(Display& display);
 
-	virtual void start() = 0;
-	virtual void end() = 0;
-	virtual void depress();
-	virtual void compress();
-
 	virtual void draw() = 0;
+
+	virtual void start() = 0;
+	virtual void stop() = 0;
+
+	virtual void addSprite(SpriteElement* sprite);
+	virtual void pack();
+	virtual void unpack();
 
 	void pop();
 	void push(Context* parent);
@@ -27,7 +29,9 @@ protected:
 	Screen screen;
 	Context* parent = nullptr;
 
-	bool depressed = false;
+	bool packed = false;
+
+	Vector<SpriteElement*> sprites;
 
 };
 

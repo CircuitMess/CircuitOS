@@ -9,10 +9,10 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse)
 	: reverse(reverse), display(&display), contextA(contextA), contextB(contextB) {
 
-	contextA->end();
-	contextA->compress();
+	contextA->stop();
+	contextA->pack();
 
-	contextB->depress();
+	contextB->unpack();
 	contextB->getScreen().getSprite()->setPos(0, display.getHeight());
 	contextB->draw();
 

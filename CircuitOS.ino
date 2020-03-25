@@ -97,7 +97,7 @@ void scroll(){
 	uint screenEnd = screenStart + display.getHeight();
 
 	uint newScroll = mainScroll.getScrollY();
-	Serial.println("Element end / screen end: " + String(elEnd) + " / " + String(screenEnd));
+	Serial.println("Element end / screen stop: " + String(elEnd) + " / " + String(screenEnd));
 	if(elStart < screenStart){
 		newScroll = elStart;
 
