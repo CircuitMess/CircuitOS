@@ -12,6 +12,9 @@ public:
 	using ElementContainer::ElementContainer;
 
 	virtual void reflow();
+	virtual void repos() override;
+
+	void draw() override;
 
 	Layout& setPadding(uint padding);
 	Layout& setGutter(uint gutter);
@@ -32,6 +35,8 @@ public:
 	uint getWidth() override;
 	uint getHeight() override;
 
+	void setStrictPos(bool strictPos);
+
 protected:
 	uint gutter = 0;
 	uint padding = 0;
@@ -39,9 +44,13 @@ protected:
 	WHType wType = FIXED;
 	WHType hType = FIXED;
 
+	bool strictPos = false;
+
 private:
 	uint width = 0;
 	uint height = 0;
+
+	virtual void reposChildren();
 };
 
 

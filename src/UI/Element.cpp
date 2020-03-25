@@ -27,6 +27,10 @@ void Element::setBorderWidth(uint borderWidth){
 	Element::borderWidth = borderWidth;
 }
 
+void Element::repos(){
+
+}
+
 void Element::draw(){
 	logr("Drawing element: ");
 
@@ -39,21 +43,23 @@ void Element::draw(){
 	}
 
 	logln();
+
+	// TODO: overflow: draw over padding or erase?
 }
 
-uint Element::getX() const{
+int Element::getX() const{
 	return x;
 }
 
-uint Element::getY() const{
+int Element::getY() const{
 	return y;
 }
 
-uint Element::getTotalX() const{
+int Element::getTotalX() const{
 	return x + parent->getTotalX();
 }
 
-uint Element::getTotalY() const{
+int Element::getTotalY() const{
 	return y + parent->getTotalY();
 }
 
@@ -61,20 +67,19 @@ Sprite* Element::getSprite(){
 	return parent->getSprite();
 }
 
-void Element::setX(uint x){
+void Element::setX(int x){
 	Element::x = x;
 }
 
-void Element::setY(uint y){
+void Element::setY(int y){
 	Element::y = y;
 }
 
-void Element::setPos(uint x, uint y){
+void Element::setPos(int x, int y){
 	setX(x);
 	setY(y);
 }
 
 void Element::clear(){
-	Serial.println("Clearing element at [" + String(getTotalX()) + ", " + String(getTotalX()) + "] w/h [" + String(getWidth()) + ", " + String(getHeight()) + "]");
 	getSprite()->fillRect(getTotalX(), getTotalY(), getWidth(), getHeight(), TFT_BLACK);
 }

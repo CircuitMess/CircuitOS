@@ -5,14 +5,37 @@ LinearLayout::LinearLayout(ElementContainer* parent, LayoutDirection direction) 
 
 }
 
-void LinearLayout::draw(){
-	logln("Drawing linear layout");
+void LinearLayout::reposChildren(){
+	logln("Repositioning linear layout");
 
 	int x = padding;
 	int y = padding;
 
 	for(Element* el : children){
 		el->setPos(x, y);
+
+		if(direction == VERTICAL){
+			y += gutter + el->getHeight();
+		}else if(direction == HORIZONTAL){
+			x += gutter + el->getWidth();
+		}
+	}
+}
+
+void LinearLayout::draw(){
+	logln("Drawing linear layout");
+
+	if(!strictPos){
+		Layout::draw();
+		return;
+	}
+
+	int x = padding;
+	int y = padding;
+
+	for(Element* el : children){
+		el->setPos(x, y);
+		logln("LL Setting pos [" + String(x) + ", " + String(y) + "]");
 		el->draw();
 
 		if(direction == VERTICAL){
@@ -23,8 +46,6 @@ void LinearLayout::draw(){
 	}
 
 	Element::draw();
-
-	// TODO: overflow: draw over padding or erase?
 }
 
 void LinearLayout::reflow(){

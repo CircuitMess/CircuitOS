@@ -17,11 +17,11 @@ uint CacheLayout::getHeight(){
 	return Layout::getHeight();
 }
 
-uint CacheLayout::getTotalX() const{
+int CacheLayout::getTotalX() const{
 	return 0;
 }
 
-uint CacheLayout::getTotalY() const{
+int CacheLayout::getTotalY() const{
 	return 0;
 }
 

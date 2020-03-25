@@ -8,8 +8,8 @@ class SpriteElement {
 public:
 	SpriteElement(Sprite* parentSprite, uint width, uint height);
 
-	void pack();
-	void unpack();
+	virtual void pack();
+	virtual void unpack();
 
 	virtual uint getWidth() = 0;
 	virtual uint getHeight() = 0;

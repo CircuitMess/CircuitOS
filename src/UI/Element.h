@@ -27,16 +27,17 @@ public:
 	virtual uint getWidth() = 0;
 	virtual uint getHeight() = 0;
 
+	virtual void repos();
 	virtual void draw();
 	ElementContainer* getParent();
 
-	virtual uint getTotalX() const;
-	virtual uint getTotalY() const;
-	virtual uint getX() const;
-	virtual uint getY() const;
-	virtual void setX(uint x);
-	virtual void setY(uint y);
-	virtual void setPos(uint x, uint y);
+	virtual int getTotalX() const;
+	virtual int getTotalY() const;
+	virtual int getX() const;
+	virtual int getY() const;
+	virtual void setX(int x);
+	virtual void setY(int y);
+	virtual void setPos(int x, int y);
 
 	virtual Sprite* getSprite();
 
@@ -45,8 +46,8 @@ public:
 private:
 	ElementContainer* parent = nullptr;
 
-	uint x = 0;
-	uint y = 0;
+	int x = 0;
+	int y = 0;
 
 };
 

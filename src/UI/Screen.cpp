@@ -7,7 +7,9 @@ Screen::Screen(Display& display) : display(&display), SpriteElement(display.getB
 }
 
 Screen& Screen::addChild(Element* element){
-	if(children.empty()){
+	if(element == nullptr){
+		children.clear();
+	}else if(children.empty()){
 		children.push_back(element);
 	}else{
 		children[0] = element;
@@ -47,23 +49,23 @@ Display* Screen::getDisplay() const{
 	return display;
 }
 
-uint Screen::getX() const{
+int Screen::getX() const{
 	return sprite.getX();
 }
 
-uint Screen::getY() const{
+int Screen::getY() const{
 	return sprite.getY();
 }
 
-uint Screen::getTotalX() const{
+int Screen::getTotalX() const{
 	return 0;
 }
 
-uint Screen::getTotalY() const{
+int Screen::getTotalY() const{
 	return 0;
 }
 
-void Screen::setPos(uint x, uint y){
+void Screen::setPos(int x, int y){
 	sprite.setPos(x, y);
 }
 

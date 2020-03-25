@@ -26,12 +26,12 @@ public:
 
 	Display* getDisplay() const;
 
-	uint getX() const override;
-	uint getY() const override;
-	uint getTotalX() const override;
-	uint getTotalY() const override;
+	int getX() const override;
+	int getY() const override;
+	int getTotalX() const override;
+	int getTotalY() const override;
 
-	void setPos(uint x, uint y) override;
+	void setPos(int x, int y) override;
 
 	void commit();
 

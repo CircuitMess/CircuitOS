@@ -5,34 +5,6 @@ GridLayout::GridLayout(ElementContainer* parent, uint cols) : Layout(parent), co
 
 }
 
-void GridLayout::draw(){
-	logln("Drawing grid layout");
-
-	uint x = padding;
-	uint y = padding;
-
-	uint col = 0;
-	uint maxHeight = 0;
-	for(Element* el : children){
-		el->setPos(x, y);
-		el->draw();
-
-		x += el->getWidth() + gutter;
-		maxHeight = max(maxHeight, el->getHeight());
-
-		if(++col == cols){
-			y += maxHeight + gutter;
-			x = padding;
-			maxHeight = 0;
-			col = 0;
-		}
-	}
-
-	Element::draw();
-
-	// TODO: overflow: draw over padding or erase?
-}
-
 void GridLayout::reflow(){
 	if(wType == PARENT){
 		setWidth(getParent()->getAvailableWidth());
@@ -87,4 +59,55 @@ void GridLayout::reflow(){
 
 	logln("Reflowing grid layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
 	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
+}
+
+void GridLayout::reposChildren(){
+	logln("Repositioning grid layout");
+
+	uint x = padding;
+	uint y = padding;
+
+	uint col = 0;
+	uint maxHeight = 0;
+	for(Element* el : children){
+		el->setPos(x, y);
+
+		x += el->getWidth() + gutter;
+		maxHeight = max(maxHeight, el->getHeight());
+
+		if(++col == cols){
+			y += maxHeight + gutter;
+			x = padding;
+			maxHeight = 0;
+			col = 0;
+		}
+	}
+}
+
+void GridLayout::draw(){
+	if(!strictPos){
+		Layout::draw();
+		return;
+	}
+
+	uint x = padding;
+	uint y = padding;
+
+	uint col = 0;
+	uint maxHeight = 0;
+	for(Element* el : children){
+		el->setPos(x, y);
+		logln("GL Setting pos [" + String(x) + ", " + String(y) + "]");
+		el->draw();
+
+		x += el->getWidth() + gutter;
+		maxHeight = max(maxHeight, el->getHeight());
+
+		if(++col == cols){
+			y += maxHeight + gutter;
+			x = padding;
+			maxHeight = 0;
+			col = 0;
+		}
+	}
 }

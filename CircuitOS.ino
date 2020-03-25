@@ -188,4 +188,5 @@ void setUI(){
 	btnLayout.reflow();
 
 	mainScreen.addChild(&screenLayout);
+	mainScreen.repos();
 }

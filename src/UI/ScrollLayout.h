@@ -7,8 +7,6 @@
 class ScrollLayout : public Layout {
 public:
 	ScrollLayout(ElementContainer* parent);
-	void reflow() override;
-
 	ElementContainer& addChild(Element* element) override;
 
 	void setScroll(uint scrollX, uint scrollY);
@@ -19,6 +17,8 @@ public:
 	uint getScrollX() const;
 
 	uint getScrollY() const;
+
+	void reposChildren() override;
 
 	void draw() override;
 

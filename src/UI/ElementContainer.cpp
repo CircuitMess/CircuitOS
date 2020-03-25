@@ -10,8 +10,15 @@ Element* ElementContainer::getChild(int i) const{
 	return children[i];
 }
 
+void ElementContainer::repos(){
+	for(Element* element : children){
+		element->setPos(0, 0);
+		element->repos();
+	}
+}
+
 void ElementContainer::draw(){
-	logln("Drawing ElementContainer layout");
+	logln("Drawing container layout");
 
 	for(Element* el : children){
 		el->draw();

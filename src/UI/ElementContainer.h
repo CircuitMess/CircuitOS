@@ -16,6 +16,7 @@ public:
 
 	Element* getChild(int i) const;
 
+	void repos() override;
 	void draw() override;
 
 protected:

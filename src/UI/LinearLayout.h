@@ -10,6 +10,7 @@ public:
 	LinearLayout(ElementContainer* parent, LayoutDirection direction);
 
 	void reflow() override;
+	void reposChildren() override;
 
 	void draw() override;
 

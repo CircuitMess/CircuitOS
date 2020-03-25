@@ -1,4 +1,5 @@
 #include "Layout.h"
+#include "../Util/Debug.h"
 
 void Layout::reflow(){
 	if(wType == CHILDREN){
@@ -23,6 +24,33 @@ void Layout::reflow(){
 		setHeight(height);
 	}else if(hType == PARENT){
 		setHeight(getParent()->getHeight());
+	}
+
+	logln("Reflowing layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
+	logln("W/H Type " + String(wType) + ", " + String(hType) + " [ FIXED, CHILDREN, PARENT ]");
+}
+
+void Layout::repos(){
+	reposChildren();
+
+	for(Element* element : children){
+		element->repos();
+	}
+}
+
+void Layout::draw(){
+	logln("Drawing layout");
+
+	if(strictPos){
+		reposChildren();
+	}
+
+	ElementContainer::draw();
+}
+
+void Layout::reposChildren(){
+	for(Element* element : children){
+		element->repos();
 	}
 }
 
@@ -87,4 +115,8 @@ uint Layout::getGutter() const{
 
 uint Layout::getPadding() const{
 	return padding;
+}
+
+void Layout::setStrictPos(bool strictPos){
+	this->strictPos = strictPos;
 }

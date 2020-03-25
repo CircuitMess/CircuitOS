@@ -7,9 +7,10 @@ class GridLayout : public Layout {
 public:
 	GridLayout(ElementContainer* parent, uint cols);
 
+	void reposChildren() override;
 	void reflow() override;
-
 	void draw() override;
+
 private:
 
 	uint cols;

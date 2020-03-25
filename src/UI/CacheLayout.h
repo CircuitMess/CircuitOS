@@ -15,8 +15,8 @@ public:
 	uint getWidth() override;
 	uint getHeight() override;
 
-	uint getTotalX() const override;
-	uint getTotalY() const override;
+	int getTotalX() const override;
+	int getTotalY() const override;
 
 	void draw() override;
 	void reflow() override;
