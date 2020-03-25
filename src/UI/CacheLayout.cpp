@@ -1,11 +1,19 @@
 #include "CacheLayout.h"
 
-CacheLayout::CacheLayout(ElementContainer* parent) : Layout(parent), sprite(parent->getSprite(), 0, 0){
+CacheLayout::CacheLayout(ElementContainer* parent) : Layout(parent), SpriteElement(parent->getSprite(), 0, 0){
 
 }
 
 Sprite* CacheLayout::getSprite(){
-	return &sprite;
+	return SpriteElement::getSprite();
+}
+
+uint CacheLayout::getWidth(){
+	return Layout::getWidth();
+}
+
+uint CacheLayout::getHeight(){
+	return Layout::getHeight();
 }
 
 void CacheLayout::draw(){
@@ -22,3 +30,4 @@ void CacheLayout::reflow(){
 void CacheLayout::refresh(){
 	ElementContainer::draw();
 }
+

@@ -4,21 +4,20 @@
 
 #include "../Display/Sprite.h"
 #include "Layout.h"
+#include "SpriteElement.h"
 
-class CacheLayout : public Layout {
+class CacheLayout : public Layout, public SpriteElement {
 public:
 	CacheLayout(ElementContainer* parent);
 
 	Sprite* getSprite() override;
 
+	uint getWidth() override;
+	uint getHeight() override;
+
 	void draw() override;
-
 	void reflow() override;
-
 	void refresh();
-
-private:
-	Sprite sprite;
 };
 
 
