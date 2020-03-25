@@ -28,7 +28,7 @@ bool Sprite::created(){
 }
 
 void Sprite::drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale){
-	Color c = chroma;
+	Color c = chromaKey;
 	setChroma(TFT_BLACK);
 
 	for(int i = 0; i < width; i++){
