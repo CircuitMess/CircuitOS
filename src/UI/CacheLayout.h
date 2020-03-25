@@ -15,6 +15,9 @@ public:
 	uint getWidth() override;
 	uint getHeight() override;
 
+	uint getTotalX() const override;
+	uint getTotalY() const override;
+
 	void draw() override;
 	void reflow() override;
 	void refresh();

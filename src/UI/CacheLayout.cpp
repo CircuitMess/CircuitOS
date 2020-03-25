@@ -1,4 +1,5 @@
 #include "CacheLayout.h"
+#include "../Util/Debug.h"
 
 CacheLayout::CacheLayout(ElementContainer* parent) : Layout(parent), SpriteElement(parent->getSprite(), 0, 0){
 
@@ -16,8 +17,16 @@ uint CacheLayout::getHeight(){
 	return Layout::getHeight();
 }
 
+uint CacheLayout::getTotalX() const{
+	return 0;
+}
+
+uint CacheLayout::getTotalY() const{
+	return 0;
+}
+
 void CacheLayout::draw(){
-	sprite.setPos(getTotalX(), getTotalY());
+	sprite.setPos(Element::getTotalX(), Element::getTotalY());
 	sprite.setParent(getParent()->getSprite());
 	sprite.push();
 }
@@ -28,6 +37,7 @@ void CacheLayout::reflow(){
 }
 
 void CacheLayout::refresh(){
+	sprite.clear(TFT_BLACK);
 	ElementContainer::draw();
 }
 
