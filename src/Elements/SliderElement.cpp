@@ -5,7 +5,7 @@ SliderElement::SliderElement(ElementContainer* parent, uint width, uint height) 
 		Layout(parent){
 
 	image = new Image(this, width, height);
-	addChild(image);
+	children.push_back(image);
 }
 
 SliderElement::~SliderElement(){
