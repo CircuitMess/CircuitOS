@@ -24,6 +24,8 @@ public:
 	void setLongListener(void (* listener)());
 	void setCompleteListener(void (* listener)());
 
+	void setSpeed(uint speed);
+
 private:
 	Image* image;
 

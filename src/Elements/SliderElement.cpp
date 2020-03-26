@@ -78,3 +78,7 @@ void SliderElement::setLongListener(void (* listener)()){
 void SliderElement::setCompleteListener(void (* listener)()){
 	SliderElement::completeListener = listener;
 }
+
+void SliderElement::setSpeed(uint speed){
+	SliderElement::speed = speed;
+}
