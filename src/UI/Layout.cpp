@@ -11,7 +11,7 @@ void Layout::reflow(){
 
 		setWidth(width);
 	}else if(wType == PARENT){
-		setWidth(getParent()->getWidth());
+		setWidth(getParent()->getAvailableWidth());
 	}
 
 	if(hType == CHILDREN){
@@ -23,7 +23,7 @@ void Layout::reflow(){
 
 		setHeight(height);
 	}else if(hType == PARENT){
-		setHeight(getParent()->getHeight());
+		setHeight(getParent()->getAvailableWidth());
 	}
 
 	logln("Reflowing layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
