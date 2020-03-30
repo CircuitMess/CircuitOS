@@ -30,7 +30,7 @@ void GridMenu::draw(){
 void GridMenu::drawTitle(){
 	Sprite* sprite = title->getSprite();
 
-	sprite->clear(TFT_DARKGREEN);
+	sprite->clear(titleBgColor);
 	sprite->fillTriangle(0, 8, 0, 15, 8, 15, TFT_BLACK);
 
 	if(items.empty()) return;
@@ -38,7 +38,7 @@ void GridMenu::drawTitle(){
 	sprite->setCursor(10, 1);
 	sprite->setTextFont(1);
 	sprite->setTextSize(2);
-	sprite->setTextColor(TFT_BLACK);
+	sprite->setTextColor(titleFgColor);
 	sprite->print(items[selected].title);
 }
 
@@ -162,4 +162,9 @@ void GridMenu::setSelectedColor(Color selectedColor){
 	for(Element* el : grid->getChildren()){
 		el->setBorderColor(selectedColor);
 	}
+}
+
+void GridMenu::setTitleColor(Color titleBgColor, Color titleFgColor){
+	GridMenu::titleBgColor = titleBgColor;
+	GridMenu::titleFgColor = titleFgColor;
 }

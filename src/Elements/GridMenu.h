@@ -52,6 +52,8 @@ public:
 
 	void draw() override;
 
+	void setTitleColor(Color titleBgColor, Color titleFgColor);
+
 private:
 	Image* title;
 	ScrollLayout* scroller;
@@ -59,6 +61,8 @@ private:
 
 	Vector<GridMenuItem> items;
 	Color selectedColor = TFT_RED;
+	Color titleBgColor = TFT_DARKGREEN;
+	Color titleFgColor = TFT_BLACK;
 
 	uint selected = 0;
 	bool scroll();
