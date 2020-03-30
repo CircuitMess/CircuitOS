@@ -15,6 +15,7 @@ public:
 	virtual uint getAvailableHeight() = 0;
 
 	Element* getChild(int i) const;
+	Vector<Element*>& getChildren();
 
 	void repos() override;
 	void draw() override;

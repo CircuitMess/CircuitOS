@@ -26,3 +26,7 @@ void ElementContainer::draw(){
 
 	Element::draw();
 }
+
+Vector<Element*>& ElementContainer::getChildren(){
+	return children;
+}
