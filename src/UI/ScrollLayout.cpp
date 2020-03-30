@@ -44,7 +44,6 @@ void ScrollLayout::setScroll(uint scrollX, uint scrollY){
 	if(children.empty()) return;
 
 	children[0]->setPos(padding - scrollX, padding - scrollY);
-	children[0]->repos();
 }
 
 uint ScrollLayout::getMaxScrollX(){

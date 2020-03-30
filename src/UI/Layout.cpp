@@ -38,6 +38,10 @@ void Layout::repos(){
 	}
 }
 
+void Layout::reposChildren(){
+
+}
+
 void Layout::draw(){
 	logln("Drawing layout");
 
@@ -46,12 +50,6 @@ void Layout::draw(){
 	}
 
 	ElementContainer::draw();
-}
-
-void Layout::reposChildren(){
-	for(Element* element : children){
-		element->repos();
-	}
 }
 
 Layout& Layout::setPadding(uint padding){
