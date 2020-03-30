@@ -10,12 +10,14 @@ public:
 	Image(ElementContainer* parent, uint width, uint height);
 
 	Sprite* getSprite() override;
-
 	void draw() override;
 
 	uint getWidth() override;
-
 	uint getHeight() override;
+
+	void setWidth(uint width);
+	void setHeight(uint height);
+	void setSize(uint width, uint height);
 
 private:
 	uint width;

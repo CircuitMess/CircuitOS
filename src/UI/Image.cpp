@@ -24,3 +24,16 @@ uint Image::getHeight(){
 Sprite* Image::getSprite(){
 	return SpriteElement::getSprite();
 }
+
+void Image::setWidth(uint width){
+	Image::width = width;
+}
+
+void Image::setHeight(uint height){
+	Image::height = height;
+}
+
+void Image::setSize(uint width, uint height){
+	setWidth(width);
+	setHeight(height);
+}
