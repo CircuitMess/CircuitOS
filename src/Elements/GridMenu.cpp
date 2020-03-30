@@ -19,6 +19,7 @@ GridMenu::GridMenu(ElementContainer* parent, uint cols) : LinearLayout(parent, V
 GridMenu::~GridMenu(){
 	delete title;
 	delete grid;
+	delete scroller;
 }
 
 void GridMenu::draw(){
