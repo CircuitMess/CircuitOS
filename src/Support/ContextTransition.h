@@ -15,6 +15,8 @@ public:
 
 	void update(uint millis) override;
 
+	virtual ~ContextTransition();
+
 private:
 
 	Display* display;

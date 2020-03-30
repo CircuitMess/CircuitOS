@@ -19,6 +19,10 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 	UpdateManager::addListener(this);
 }
 
+ContextTransition::~ContextTransition(){
+	UpdateManager::removeListener(this);
+}
+
 void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos){
 	Sprite* oldParent = sprite->getParent();
 	uint oldX = sprite->getX();
