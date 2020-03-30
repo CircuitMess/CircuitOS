@@ -30,6 +30,7 @@ public:
 	virtual void repos();
 	virtual void draw();
 	ElementContainer* getParent();
+	void setParent(ElementContainer* parent);
 
 	virtual int getTotalX() const;
 	virtual int getTotalY() const;
