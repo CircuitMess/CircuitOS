@@ -31,7 +31,7 @@ void GridMenu::drawTitle(){
 	Sprite* sprite = title->getSprite();
 
 	sprite->clear(titleBgColor);
-	sprite->fillTriangle(0, 8, 0, 15, 8, 15, TFT_BLACK);
+	sprite->fillTriangle(0, 8, 0, 15, 8, 15, titleFgColor);
 
 	if(items.empty()) return;
 
