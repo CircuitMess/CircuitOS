@@ -78,7 +78,7 @@ void LinearLayout::reflowHorizontal(){
 
 	if(hType == PARENT){
 		setHeight(getParent()->getAvailableHeight());
-	}else if(hType == CHILDREN && !children.empty()){
+	}else if(hType == CHILDREN){
 		uint maxHeight = 0;
 
 		for(Element* el : children){
@@ -92,7 +92,7 @@ void LinearLayout::reflowHorizontal(){
 void LinearLayout::reflowVertical(){
 	if(wType == PARENT){
 		setWidth(getParent()->getAvailableWidth());
-	}else if(wType == CHILDREN && !children.empty()){
+	}else if(wType == CHILDREN){
 		uint maxWidth = 0;
 
 		for(Element* el : children){
