@@ -20,7 +20,7 @@ AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 add_definitions(-DDEBUG)
 add_executable(CircuitOS ${SOURCES} CircuitOS.ino)
 
-set(EXAMPLES ListMenu)
+set(EXAMPLES ListMenu Settings)
 
 foreach(EXAMPLE ${EXAMPLES})
     AUX_SOURCE_DIRECTORY(examples/${EXAMPLE} EXAMPLE_SOURCES)
