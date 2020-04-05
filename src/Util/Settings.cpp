@@ -2,7 +2,7 @@
 
 void* Settings::_data = nullptr;
 size_t Settings::dataSize = 0;
-uint Settings::handle = 0;
+nvs_handle_t Settings::handle = 0;
 
 void Settings::init(void* ptr, size_t size){
 	_data = ptr;
