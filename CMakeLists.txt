@@ -4,7 +4,7 @@ project(CircuitOS)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(/home/cm/.arduino15/packages/cm/hardware/esp32/1.0.4/cores/esp32)
-include_directories(~/Arduino/libraries/TFT_eSPI-master)
+include_directories(~/Arduino/libraries/TFT_eSPI)
 include_directories(~/Arduino/libraries/CircuitOS/src)
 
 AUX_SOURCE_DIRECTORY(src SOURCES)

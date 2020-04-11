@@ -58,7 +58,6 @@ private:
 	using TFT_eSprite::fillScreen;
 	using TFT_eSprite::fillSprite;
 	using TFT_eSprite::pushRotated;
-	using TFT_eSprite::pushRotatedHP;
 	using TFT_eSprite::pushImage;
 	using TFT_eSprite::setSwapBytes;
 	using TFT_eSprite::getSwapBytes;
