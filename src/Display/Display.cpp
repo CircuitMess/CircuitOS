@@ -1,6 +1,6 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), baseSprite(new Sprite(&tft, width, height)), width(width), height(height), blPin(blPin){
+Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), width(width), height(height), blPin(blPin), baseSprite(new Sprite(&tft, width, height)){
 	ledcSetup(0, 2000, 8);
 	//ledcAttachPin(blPin, 0);
 

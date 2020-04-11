@@ -1,8 +1,8 @@
 #include "Image.h"
 #include "../Util/Debug.h"
 
-Image::Image(ElementContainer* parent, uint width, uint height) :
-	Element(parent), SpriteElement(parent->getSprite(), width, height), width(width), height(height){
+Image::Image(ElementContainer* parent, uint width, uint height) : width(width), height(height),
+	Element(parent), SpriteElement(parent->getSprite(), width, height){
 
 }
 
