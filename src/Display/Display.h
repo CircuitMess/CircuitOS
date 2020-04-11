@@ -25,12 +25,12 @@ public:
 	uint getHeight() const;
 
 private:
-	TFT_eSPI tft;
-	Sprite* baseSprite;
 	uint8_t blPin;
-
 	uint width;
 	uint height;
+
+	TFT_eSPI tft;
+	Sprite* baseSprite;
 };
 
 

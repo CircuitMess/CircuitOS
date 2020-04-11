@@ -18,16 +18,15 @@ public:
 	virtual ~ContextTransition();
 
 private:
+	bool reverse = false;
 
 	Display* display;
-
 	Context* contextA;
+
 	Context* contextB;
-
 	uint time = 0;
-	uint lastScroll = 0;
 
-	bool reverse = false;
+	uint lastScroll = 0;
 
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int pos);
 
