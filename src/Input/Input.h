@@ -23,11 +23,7 @@ public:
 	void removeBtnPressCallback(uint8_t pin);
 	void removeBtnReleaseCallback(uint8_t pin);
 
-	static void scanTaskFunction(Task* task);
-
-	static Input* getInstance();
-
-private:
+protected:
 	std::vector<void(*)()> btnPressCallback;
 	std::vector<void(*)()> btnReleaseCallback;
 	Vector<uint8_t> buttons;
