@@ -1,22 +1,8 @@
 #include "InputGPIO.h"
 #include "../Util/Debug.h"
 
-InputGPIO* InputGPIO::instance;
-
-InputGPIO::InputGPIO() : scanTask("InputScanTask", InputGPIO::scanTaskFunction){
-	instance = this;
+InputGPIO::InputGPIO() : Input(PIN_MAX){
 }
-void InputGPIO::scanTaskFunction(Task* task){
-	logln("Input task starting");
-
-	while(task->running){
-		vTaskDelay(1);
-
-		if(instance == nullptr) continue;
-		instance->scanButtons();
-	}
-}
-
 void InputGPIO::scanButtons(){
 	for(unsigned char i = 0; i < buttons.size(); i++){
 		if(!digitalRead(buttons[i])){
@@ -49,8 +35,4 @@ void InputGPIO::scanButtons(){
 
 
 	}
-}
-
-InputGPIO* InputGPIO::getInstance(){
-	return instance;
 }

@@ -1,10 +1,7 @@
 #include "InputI2C.h"
 #include "../Util/Debug.h"
 
-InputI2C* InputI2C::instance;
-
-InputI2C::InputI2C(Keypad_I2Ca* _kpd) : scanTask("InputScanTask", InputI2C::scanTaskFunction), kpd(_kpd){
-	instance = this;
+InputI2C::InputI2C(Keypad_I2Ca* _kpd) : Input(I2C_PIN_MAX) , kpd(_kpd){
 }
 void InputI2C::start(){
 	logln("Starting I2C input");
@@ -18,17 +15,6 @@ void InputI2C::stop(){
 	scanTask.stop();
 	// Wire.endTransmission();
 }
-void InputI2C::scanTaskFunction(Task* task){
-	logln("I2C Input task starting");
-
-	while(task->running){
-		vTaskDelay(1);
-
-		if(instance == nullptr) continue;
-		instance->scanButtons();
-	}
-}
-
 void InputI2C::scanButtons(){
 	int portScan = kpd->port_read();
 	for(unsigned char i = 0; i < buttons.size(); i++){
@@ -73,8 +59,4 @@ void InputI2C::addPinListener(uint8_t pin){
 	buttons.push_back(pin);
 	btnCount.push_back(0);
 	btnState.push_back(0);
-}
-
-InputI2C* InputI2C::getInstance(){
-	return instance;
 }

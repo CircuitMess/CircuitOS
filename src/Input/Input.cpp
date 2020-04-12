@@ -3,7 +3,7 @@
 
 Input* Input::instance;
 
-Input::Input() : btnPressCallback(PIN_MAX, nullptr), btnReleaseCallback(PIN_MAX, nullptr), scanTask("InputScanTask", NULL){
+Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr), btnReleaseCallback(pinNumber, nullptr), scanTask("InputScanTask", NULL){
 	instance = this;
 }
 
@@ -18,37 +18,36 @@ void Input::stop(){
 }
 
 void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 
 	btnPressCallback[pin] = callback;
 	addPinListener(pin);
 }
 
 void Input::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 
 	btnReleaseCallback[pin] = callback;
 	addPinListener(pin);
 }
 
 void Input::removeBtnPressCallback(uint8_t pin){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 	btnPressCallback[pin] = nullptr;
 }
 
 void Input::removeBtnReleaseCallback(uint8_t pin){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 	btnReleaseCallback[pin] = nullptr;
 
 }
+void Input::scanTaskFunction(Task* task){
+	logln("Input task starting");
 
-void Input::addPinListener(uint8_t pin){
-	if(buttons.indexOf(pin) != -1) return;
+	while(task->running){
+		vTaskDelay(1);
 
-	pinMode(pin, INPUT_PULLUP);
-	digitalRead(pin);
-
-	buttons.push_back(pin);
-	btnCount.push_back(0);
-	btnState.push_back(0);
+		if(instance == nullptr) continue;
+		instance->scanButtons();
+	}
 }

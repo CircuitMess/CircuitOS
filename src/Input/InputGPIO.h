@@ -14,16 +14,10 @@ typedef uint8_t Button;
 class InputGPIO : public Input {
 public:
 	InputGPIO();
-	static void scanTaskFunction(Task* task);
-	static InputGPIO* getInstance();
 
 private:
-	Task scanTask;
-	static InputGPIO* instance;
-
-	void addPinListener(uint8_t pin);
-
-	void scanButtons();
+	void addPinListener(uint8_t pin) override;
+	void scanButtons() override;
 
 };
 
