@@ -9,8 +9,8 @@ class Sprite;
 
 class Display {
 public:
-	Display(uint8_t width, uint8_t height, uint8_t blPin);
-	Display(uint8_t width, uint8_t height, uint8_t blPin, uint8_t rotation);
+	Display(uint8_t width, uint8_t height, int8_t blPin = -1);
+	Display(uint8_t width, uint8_t height, int8_t blPin, uint8_t rotation);
 
 	void commit();
 	void clear(uint32_t color);
