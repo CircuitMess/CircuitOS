@@ -4,11 +4,8 @@
 #include "../Util/Vector.h"
 #include "../Util/Task.h"
 
-
 #define PIN_MAX 45
 #define DEBOUNCE_COUNT 1
-
-typedef uint8_t Button;
 
 class Input {
 public:
@@ -20,8 +17,8 @@ public:
 	virtual void setBtnPressCallback(uint8_t pin, void (*callback)());
 	virtual void setBtnReleaseCallback(uint8_t pin, void (*callback)());
 
-	void removeBtnPressCallback(uint8_t pin);
-	void removeBtnReleaseCallback(uint8_t pin);
+	virtual void removeBtnPressCallback(uint8_t pin);
+	virtual void removeBtnReleaseCallback(uint8_t pin);
 
 	static Input* getInstance();
 
@@ -30,16 +27,20 @@ protected:
 	
 	std::vector<void(*)()> btnPressCallback;
 	std::vector<void(*)()> btnReleaseCallback;
-	Vector<uint8_t> buttons;
-
-	std::vector<uint8_t> btnCount; // Read count per button
-	std::vector<uint8_t> btnState; // Button state, 0 - released, 1 - pressed
 
 	Task scanTask;
 	static Input* instance;
 	static void scanTaskFunction(Task* task);
 	virtual void scanButtons() = 0;
 
+	virtual void registerButton(uint8_t pin);
+
+	Vector<uint8_t> buttons;
+	std::vector<uint8_t> btnCount; // Read count per button
+	std::vector<uint8_t> btnState; // Button state, 0 - released, 1 - pressed
+
+	void btnPress(uint i);
+	void btnRelease(uint );
 };
 
 

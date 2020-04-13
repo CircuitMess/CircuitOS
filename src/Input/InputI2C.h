@@ -11,21 +11,15 @@
 #define I2C_PIN_MAX 15
 #define DEBOUNCE_COUNT 1
 
-
-
-typedef uint8_t Button;
-
 class InputI2C : public Input {
 public:
 	InputI2C(Keypad_I2Ca* kpd);
+
 	void start() override;
-	void stop() override;
-	void setBtnPressCallback(uint8_t pin, void (*callback)()) override;
-	void setBtnReleaseCallback(uint8_t pin, void (*callback)()) override;
 	
 private:
 	Keypad_I2Ca* kpd;
-	void addPinListener(uint8_t pin);
+	void registerButton(uint8_t pin) override;
 	void scanButtons() override;
 
 };
