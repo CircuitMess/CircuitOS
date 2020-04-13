@@ -6,7 +6,7 @@
 #include "../Util/Task.h"
 
 #include <Wire.h>
-#include <Keypad_I2Ca.h>
+#include "Keypad_I2Ca/Keypad_I2Ca.h"
 
 #define I2C_PIN_MAX 15
 #define DEBOUNCE_COUNT 1
