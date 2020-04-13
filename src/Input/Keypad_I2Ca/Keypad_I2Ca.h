@@ -33,7 +33,7 @@
 #ifndef KEYPAD_I2Ca_H
 #define KEYPAD_I2Ca_H
 
-#include "../Keypad/src/Keypad.h"
+#include <Keypad.h>
 
 // literals to use to define the width of the port--last parameter in constructors
 #define PCA9554 1	// PCA9554 I/O expander device is 1 byte wide
