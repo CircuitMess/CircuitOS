@@ -8,7 +8,7 @@
 #include <UI/GridLayout.h>
 #include <UI/ScrollLayout.h>
 #include <Util/Task.h>
-#include <Input/Input.h>
+#include <Input/InputGPIO.h>
 #include <Bitmaps/Bitmaps.hpp>
 #include <Elements/ListMenu.h>
 
@@ -23,7 +23,7 @@ ListMenu menu(&screen, "ListMenu");
 
 #define ELEMENTS 8
 
-Input input;
+Input* input;
 
 void setUI();
 void scroll();
@@ -42,15 +42,16 @@ void btnLPress(){
 
 void setup(){
 	Serial.begin(115200);
+	input = new InputGPIO();
 
 	setUI();
 	screen.draw();
 	screen.commit();
 
-	input.setBtnReleaseCallback(BTN_A, btnRPress);
-	input.setBtnPressCallback(BTN_B, btnLPress);
+	input->setBtnReleaseCallback(BTN_A, btnRPress);
+	input->setBtnPressCallback(BTN_B, btnLPress);
 
-	input.start();
+	input->start();
 }
 
 void loop(){

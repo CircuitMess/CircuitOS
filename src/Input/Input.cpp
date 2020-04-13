@@ -3,7 +3,8 @@
 
 Input* Input::instance;
 
-Input::Input() : btnPressCallback(PIN_MAX, nullptr), btnReleaseCallback(PIN_MAX, nullptr), scanTask("InputScanTask", Input::scanTaskFunction){
+Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
+								   btnReleaseCallback(pinNumber, nullptr), scanTask("InputScanTask", scanTaskFunction){
 	instance = this;
 }
 
@@ -18,39 +19,25 @@ void Input::stop(){
 }
 
 void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
-	if(pin >= PIN_MAX) return;
-
+	if(pin >= pinNumber) return;
 	btnPressCallback[pin] = callback;
-	addPinListener(pin);
+	registerButton(pin);
 }
 
 void Input::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
-	if(pin >= PIN_MAX) return;
-
+	if(pin >= pinNumber) return;
 	btnReleaseCallback[pin] = callback;
-	addPinListener(pin);
+	registerButton(pin);
 }
 
 void Input::removeBtnPressCallback(uint8_t pin){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 	btnPressCallback[pin] = nullptr;
 }
 
 void Input::removeBtnReleaseCallback(uint8_t pin){
-	if(pin >= PIN_MAX) return;
+	if(pin >= pinNumber) return;
 	btnReleaseCallback[pin] = nullptr;
-
-}
-
-void Input::addPinListener(uint8_t pin){
-	if(buttons.indexOf(pin) != -1) return;
-
-	pinMode(pin, INPUT_PULLUP);
-	digitalRead(pin);
-
-	buttons.push_back(pin);
-	btnCount.push_back(0);
-	btnState.push_back(0);
 }
 
 void Input::scanTaskFunction(Task* task){
@@ -64,40 +51,43 @@ void Input::scanTaskFunction(Task* task){
 	}
 }
 
-void Input::scanButtons(){
-	for(unsigned char i = 0; i < buttons.size(); i++){
-		if(!digitalRead(buttons[i])){
-			//pressed
-			if(btnCount[i] < DEBOUNCE_COUNT){
-				btnCount[i]++;
-
-				if(btnState[i] == 0 && btnCount[i] == DEBOUNCE_COUNT){
-					btnState[i] = 1;
-
-					if(btnPressCallback[buttons[i]] != nullptr){
-						btnPressCallback[buttons[i]]();
-					}
-				}
-			}
-		}else{
-			//released
-			if(btnCount[i] > 0){
-				btnCount[i]--;
-
-				if(btnState[i] == 1 && btnCount[i] == 0){
-					btnState[i] = 0;
-
-					if(btnReleaseCallback[buttons[i]] != nullptr){
-						btnReleaseCallback[buttons[i]]();
-					}
-				}
-			}
-		}
-
-
-	}
-}
-
 Input* Input::getInstance(){
 	return instance;
 }
+
+void Input::registerButton(uint8_t pin){
+	if(buttons.indexOf(pin) != -1) return;
+
+	buttons.push_back(pin);
+	btnCount.push_back(0);
+	btnState.push_back(0);
+}
+
+void Input::btnPress(uint i){
+	if(btnCount[i] < DEBOUNCE_COUNT){
+		btnCount[i]++;
+
+		if(btnState[i] == 0 && btnCount[i] == DEBOUNCE_COUNT){
+			btnState[i] = 1;
+
+			if(btnPressCallback[buttons[i]] != nullptr){
+				btnPressCallback[buttons[i]]();
+			}
+		}
+	}
+}
+
+void Input::btnRelease(uint i){
+	if(btnCount[i] > 0){
+		btnCount[i]--;
+
+		if(btnState[i] == 1 && btnCount[i] == 0){
+			btnState[i] = 0;
+
+			if(btnReleaseCallback[buttons[i]] != nullptr){
+				btnReleaseCallback[buttons[i]]();
+			}
+		}
+	}
+}
+
