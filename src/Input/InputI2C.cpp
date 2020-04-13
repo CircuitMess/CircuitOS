@@ -5,15 +5,21 @@ InputI2C::InputI2C(Keypad_I2Ca* _kpd) : Input(I2C_PIN_MAX) , kpd(_kpd){
 }
 void InputI2C::start(){
 	logln("Starting I2C input");
-	// Wire.begin(27, 14);
 	kpd->begin();
-	scanTask.start();
+	Input::start();
 }
 
 void InputI2C::stop(){
 	logln("Stopping input");
-	scanTask.stop();
-	// Wire.endTransmission();
+	Input::stop();
+}
+void InputI2C::setBtnPressCallback(uint8_t pin, void (* callback)()){
+	Input::setBtnPressCallback(pin, callback);
+	addPinListener(pin);
+}
+void InputI2C::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
+	Input::setBtnReleaseCallback(pin, callback);
+	addPinListener(pin);
 }
 void InputI2C::scanButtons(){
 	int portScan = kpd->port_read();

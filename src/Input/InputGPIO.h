@@ -14,9 +14,11 @@ typedef uint8_t Button;
 class InputGPIO : public Input {
 public:
 	InputGPIO();
+	void setBtnPressCallback(uint8_t pin, void (*callback)()) override;
+	void setBtnReleaseCallback(uint8_t pin, void (*callback)()) override;
 
 private:
-	void addPinListener(uint8_t pin) override;
+	void addPinListener(uint8_t pin);
 	void scanButtons() override;
 
 };

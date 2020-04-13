@@ -3,7 +3,7 @@
 
 Input* Input::instance;
 
-Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr), btnReleaseCallback(pinNumber, nullptr), scanTask("InputScanTask", NULL){
+Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr), btnReleaseCallback(pinNumber, nullptr), scanTask("InputScanTask", scanTaskFunction){
 	instance = this;
 }
 
@@ -21,14 +21,14 @@ void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
 	if(pin >= pinNumber) return;
 
 	btnPressCallback[pin] = callback;
-	addPinListener(pin);
+	// addPinListener(pin);
 }
 
 void Input::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
 	if(pin >= pinNumber) return;
 
 	btnReleaseCallback[pin] = callback;
-	addPinListener(pin);
+	// addPinListener(pin);
 }
 
 void Input::removeBtnPressCallback(uint8_t pin){
@@ -50,4 +50,7 @@ void Input::scanTaskFunction(Task* task){
 		if(instance == nullptr) continue;
 		instance->scanButtons();
 	}
+}
+Input* Input::getInstance(){
+	return instance;
 }

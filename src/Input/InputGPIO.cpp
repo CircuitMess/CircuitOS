@@ -3,6 +3,14 @@
 
 InputGPIO::InputGPIO() : Input(PIN_MAX){
 }
+void InputGPIO::setBtnPressCallback(uint8_t pin, void (* callback)()){
+	Input::setBtnPressCallback(pin, callback);
+	addPinListener(pin);
+}
+void InputGPIO::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
+	Input::setBtnReleaseCallback(pin, callback);
+	addPinListener(pin);
+}
 void InputGPIO::scanButtons(){
 	for(unsigned char i = 0; i < buttons.size(); i++){
 		if(!digitalRead(buttons[i])){
@@ -35,4 +43,12 @@ void InputGPIO::scanButtons(){
 
 
 	}
+}
+void InputGPIO::addPinListener(uint8_t pin){
+	if(buttons.indexOf(pin) != -1) return;
+	pinMode(pin, INPUT_PULLUP);
+	digitalRead(pin);
+	buttons.push_back(pin);
+	btnCount.push_back(0);
+	btnState.push_back(0);
 }

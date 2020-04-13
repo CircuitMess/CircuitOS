@@ -17,13 +17,17 @@ public:
 	virtual void start();
 	virtual void stop();
 
-	void setBtnPressCallback(uint8_t pin, void (*callback)());
-	void setBtnReleaseCallback(uint8_t pin, void (*callback)());
+	virtual void setBtnPressCallback(uint8_t pin, void (*callback)());
+	virtual void setBtnReleaseCallback(uint8_t pin, void (*callback)());
 
 	void removeBtnPressCallback(uint8_t pin);
 	void removeBtnReleaseCallback(uint8_t pin);
 
+	static Input* getInstance();
+
 protected:
+	uint8_t pinNumber = 0;
+	
 	std::vector<void(*)()> btnPressCallback;
 	std::vector<void(*)()> btnReleaseCallback;
 	Vector<uint8_t> buttons;
@@ -33,10 +37,8 @@ protected:
 
 	Task scanTask;
 	static Input* instance;
-	void scanTaskFunction(Task* task);
-	virtual void addPinListener(uint8_t pin) = 0;
+	static void scanTaskFunction(Task* task);
 	virtual void scanButtons() = 0;
-	uint8_t pinNumber;
 
 };
 

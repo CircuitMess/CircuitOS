@@ -20,10 +20,12 @@ public:
 	InputI2C(Keypad_I2Ca* kpd);
 	void start() override;
 	void stop() override;
+	void setBtnPressCallback(uint8_t pin, void (*callback)()) override;
+	void setBtnReleaseCallback(uint8_t pin, void (*callback)()) override;
 	
 private:
 	Keypad_I2Ca* kpd;
-	void addPinListener(uint8_t pin) override;
+	void addPinListener(uint8_t pin);
 	void scanButtons() override;
 
 };
