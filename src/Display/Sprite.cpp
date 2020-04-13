@@ -27,7 +27,7 @@ bool Sprite::created(){
 	return _created;
 }
 
-void Sprite::drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale){
+void Sprite::drawIcon(const unsigned short* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
 	Color c = chromaKey;
 	setChroma(TFT_BLACK);
 
@@ -35,15 +35,91 @@ void Sprite::drawIcon(const unsigned short* icon, uint x, uint y, uint width, ui
 		for(int j = 0; j < height; j++){
 			uint32_t color = pgm_read_word(&icon[j * width + i]);
 
-			if(!chroma || color != chromaKey){
+			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
 				fillRect(x + i * scale, y + j * scale, scale, scale, color);
 			}
 		}
 	}
-
 	setChroma(c);
 }
+void Sprite::drawMonochromeIcon(const byte* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+	Color c = chromaKey;
+	setChroma(_color);
 
+	uint16_t byteWidth = (width + 7) / 8;
+	uint16_t _x = x;
+	uint16_t dw = 8 - (width % 8);
+	for (uint16_t j = 0; j < height; j++) {
+		x = _x;
+		for (uint16_t i = 0; i < byteWidth;) {
+			uint16_t b = *(icon++);
+			i++;
+			for (uint16_t k = 0; k < 8; k++) {
+				if (i == byteWidth && k == dw) {
+					x += (width % 8);
+					break;
+				}
+				if (b & 0x80) {
+					fillRect(x, y, scale, scale, _color);
+				} 
+				b <<= 1;
+				x+=scale;
+			}
+		}
+		y+=scale;
+	}
+	setChroma(c);
+}
+void Sprite::printCenter(const char* text)
+{
+	int8_t cursorBuffer = cursor_y;
+	setCursor(-50, -50);
+	uint16_t textLength = cursor_x;
+	print(text);
+	textLength = cursor_x - textLength;
+	setCursor(int((width() - textLength) / 2), cursorBuffer);
+	print(text);
+}
+void Sprite::printCenter(String text)
+{
+	int8_t cursorBuffer = cursor_y;
+	setCursor(-50, -50);
+	uint16_t textLength = cursor_x;
+	print(text);
+	textLength = cursor_x - textLength;
+	setCursor(int((width() - textLength) / 2), cursorBuffer);
+	print(text);
+}
+void Sprite::printCenter(uint32_t text)
+{
+	int8_t cursorBuffer = cursor_y;
+	setCursor(-50, -50);
+	uint16_t textLength = cursor_x;
+	print(text);
+	textLength = cursor_x - textLength;
+	setCursor(int((width() - textLength) / 2), cursorBuffer);
+	print(text);
+}
+void Sprite::printCenter(int text)
+{
+	int8_t cursorBuffer = cursor_y;
+	setCursor(-50, -50);
+	uint16_t textLength = cursor_x;
+	print(text);
+	textLength = cursor_x - textLength;
+	setCursor(int((width() - textLength) / 2), cursorBuffer);
+	print(text);
+}
+void Sprite::printCenter(float text)
+{
+	int8_t cursorBuffer = cursor_y;
+	setCursor(-50, -50);
+	uint16_t textLength = cursor_x;
+	print(text);
+	textLength = cursor_x - textLength;
+	setCursor(int((width() - textLength) / 2), cursorBuffer);
+	print(text);
+}
 void Sprite::rotate(uint times){
 	if(width() != height()) return;
 	uint N = width();

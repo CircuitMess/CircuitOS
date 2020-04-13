@@ -1,11 +1,14 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height, uint8_t blPin) : tft(), width(width), height(height), blPin(blPin), baseSprite(new Sprite(&tft, width, height)){
-	ledcSetup(0, 2000, 8);
-	//ledcAttachPin(blPin, 0);
+Display::Display(uint8_t width, uint8_t height, int8_t blPin) : tft(), width(width), height(height), blPin(blPin), baseSprite(new Sprite(&tft, width, height)){
 
-	pinMode(blPin, OUTPUT);
-	digitalWrite(blPin, HIGH);
+	if(blPin != -1)
+	{
+		ledcSetup(0, 2000, 8);
+		//ledcAttachPin(blPin, 0);
+		pinMode(blPin, OUTPUT);
+		digitalWrite(blPin, HIGH);
+	}
 
 	tft.init();
 	tft.invertDisplay(0);
@@ -19,7 +22,7 @@ void Display::setPower(bool power){
 	digitalWrite(blPin, power ? HIGH : LOW);
 }
 
-Display::Display(uint8_t width, uint8_t height, uint8_t blPin, uint8_t rotation) : Display(width, height, blPin){
+Display::Display(uint8_t width, uint8_t height, int8_t blPin, uint8_t rotation) : Display(width, height, blPin){
 	tft.setRotation(rotation);
 }
 
