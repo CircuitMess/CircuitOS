@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh 'mkdir -p build'
-                sh 'mv JenkinsTest.ino ${PWD##*/}.ino'
+                sh 'mv CircuitOS.ino ${PWD##*/}.ino'
                 sh '~/.arduino/arduino-cli compile -b cm:esp32:ringo -o build ${PWD##*/}.ino'
             }
         }
