@@ -19,7 +19,8 @@ Display::Display(uint8_t width, uint8_t height, int8_t blPin) : tft(), width(wid
 }
 
 void Display::setPower(bool power){
-	digitalWrite(blPin, power ? HIGH : LOW);
+	if(blPin != -1)
+		digitalWrite(blPin, power ? HIGH : LOW);
 }
 
 Display::Display(uint8_t width, uint8_t height, int8_t blPin, uint8_t rotation) : Display(width, height, blPin){
