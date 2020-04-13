@@ -9,6 +9,7 @@
 #include "src/Util/Task.h"
 #include "src/Input/Input.h"
 #include "src/Bitmaps/Bitmaps.hpp"
+#include "src/Input/InputGPIO.h"
 
 #define BTN_A 32
 #define BTN_B 34
@@ -32,7 +33,7 @@ Color colors[ELEMENTS] = { TFT_GREEN, TFT_PURPLE, TFT_WHITE, TFT_YELLOW, TFT_BLU
 
 Vector<Image*> gridImages;
 
-Input input;
+Input* input = nullptr;
 
 void setUI();
 void scroll();
@@ -53,26 +54,20 @@ void btnLPress(){
 
 void setup(){
 	Serial.begin(115200);
+	input = new InputGPIO();
 
 	setUI();
 	mainScreen.draw();
 	mainScreen.commit();
 
-	input.setBtnReleaseCallback(BTN_A, btnRPress);
-	input.setBtnPressCallback(BTN_B, btnLPress);
+	input->setBtnReleaseCallback(BTN_A, btnRPress);
+	input->setBtnPressCallback(BTN_B, btnLPress);
 
-	input.start();
+	input->start();
 }
 
-unsigned i = 0;
-bool direction = false;
-
 void loop(){
-
-
-	i += pow(-1, direction);
 	delay(20);
-	//if(i > scroll.getMaxScrollX() || i == 0) direction = !direction;
 }
 
 void selectElement(uint element){
