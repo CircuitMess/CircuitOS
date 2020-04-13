@@ -1,6 +1,15 @@
 #include <CircuitOS.h>
 #include <Util/Settings.h>
-#include "Settings.h"
+
+struct SettingsStruct {
+	int foo;
+	bool bar;
+	long long unsigned chungus;
+};
+
+SettingsStruct* settings(){
+	return static_cast<SettingsStruct*>(Settings::data());
+}
 
 void setup(){
 	Serial.begin(115200);
