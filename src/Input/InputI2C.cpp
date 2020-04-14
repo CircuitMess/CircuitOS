@@ -7,8 +7,7 @@ InputI2C::InputI2C(Keypad_I2Ca* _kpd) : Input(I2C_PIN_MAX) , kpd(_kpd){
 
 void InputI2C::start(){
 	Input::start();
-	logln("Starting I2C input");
-	kpd->begin();
+	logln("Started I2C input");
 }
 
 void InputI2C::scanButtons(){
@@ -24,8 +23,6 @@ void InputI2C::scanButtons(){
 }
 
 void InputI2C::registerButton(uint8_t pin){
-	Input::registerButton(pin);
-
 	kpd->pin_mode(pin, INPUT_PULLUP);
-	kpd->pin_read(pin);
+	Input::registerButton(pin);
 }

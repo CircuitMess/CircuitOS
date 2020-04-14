@@ -17,8 +17,6 @@ void InputGPIO::scanButtons(){
 }
 
 void InputGPIO::registerButton(uint8_t pin){
-	Input::registerButton(pin);
-
 	pinMode(pin, INPUT_PULLUP);
-	digitalRead(pin);
+	Input::registerButton(pin);
 }
