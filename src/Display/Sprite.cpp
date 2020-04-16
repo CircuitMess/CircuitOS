@@ -70,6 +70,19 @@ void Sprite::drawMonochromeIcon(const byte* icon, uint16_t x, uint16_t y, uint16
 	}
 	setChroma(c);
 }
+void Sprite::drawMonochromeIcon(bool* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+	Color c = chromaKey;
+	setChroma(_color);
+
+	for(int i = 0; i < width; i++){
+		for(int j = 0; j < height; j++){
+			if(icon[j * width + i]){
+				fillRect(x + i * scale, y + j * scale, scale, scale, _color);
+			}
+		}
+	}
+	setChroma(c);
+}
 void Sprite::printCenter(const char* text)
 {
 	int8_t cursorBuffer = cursor_y;
