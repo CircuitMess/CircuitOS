@@ -6,19 +6,19 @@
 #include "../Util/Task.h"
 
 #include <Wire.h>
-#include "Keypad_I2Ca/Keypad_I2Ca.h"
+#include "I2cExpander.h"
 
 #define I2C_PIN_MAX 15
 #define DEBOUNCE_COUNT 1
 
 class InputI2C : public Input {
 public:
-	InputI2C(Keypad_I2Ca* kpd);
+	InputI2C(I2cExpander* _i2c);
 
 	void start() override;
 	
 private:
-	Keypad_I2Ca* kpd;
+	I2cExpander* i2c;
 	void registerButton(uint8_t pin) override;
 	void scanButtons() override;
 

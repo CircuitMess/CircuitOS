@@ -1,7 +1,7 @@
 #include "InputI2C.h"
 #include "../Util/Debug.h"
 
-InputI2C::InputI2C(Keypad_I2Ca* _kpd) : Input(I2C_PIN_MAX) , kpd(_kpd){
+InputI2C::InputI2C(I2cExpander* _i2c) : Input(I2C_PIN_MAX) , i2c(_i2c){
 
 }
 
@@ -11,7 +11,8 @@ void InputI2C::start(){
 }
 
 void InputI2C::scanButtons(){
-	int portScan = kpd->port_read();
+	int portScan = i2c->portRead();
+	// Serial.println(portScan, BIN);
 
 	for(uint i = 0; i < buttons.size(); i++){
 		if(!bitRead(portScan, buttons[i])){
@@ -23,6 +24,6 @@ void InputI2C::scanButtons(){
 }
 
 void InputI2C::registerButton(uint8_t pin){
-	kpd->pin_mode(pin, INPUT_PULLUP);
+	i2c->pinMode(pin, INPUT_PULLUP);
 	Input::registerButton(pin);
 }
