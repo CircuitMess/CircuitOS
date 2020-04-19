@@ -9,7 +9,7 @@ BinarySemaphore::~BinarySemaphore(){
 }
 
 bool BinarySemaphore::wait(){
-	xSemaphoreTake(mutex, portMAX_DELAY); // TODO: INCLUDE_vTaskSuspend to be set to 1
+	return xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE; // TODO: INCLUDE_vTaskSuspend to be set to 1
 }
 
 void BinarySemaphore::signal(){
