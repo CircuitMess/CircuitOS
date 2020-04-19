@@ -1,7 +1,6 @@
 #ifndef CIRCUITOS_MUTEX_H
 #define CIRCUITOS_MUTEX_H
 
-#define INCLUDE_vTaskSuspend 1
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 
@@ -10,7 +9,7 @@ public:
 	Mutex();
 	~Mutex();
 
-	bool lock();
+	void lock();
 	void unlock();
 
 private:

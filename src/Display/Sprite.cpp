@@ -172,7 +172,7 @@ Sprite& Sprite::push(){
 		return *this;
 	}
 
-	// logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
+	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
 	parent->setSwapBytes(true);
