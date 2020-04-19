@@ -8,8 +8,8 @@ Mutex::~Mutex(){
 	vSemaphoreDelete(mutex);
 }
 
-void Mutex::lock(){
-	xSemaphoreTake(mutex, portMAX_DELAY); // TODO: INCLUDE_vTaskSuspend to be set to 1
+bool Mutex::lock(){
+	return xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE; // TODO: INCLUDE_vTaskSuspend to be set to 1
 }
 
 void Mutex::unlock(){
