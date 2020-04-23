@@ -8,8 +8,8 @@ BinarySemaphore::~BinarySemaphore(){
 	vSemaphoreDelete(mutex);
 }
 
-void BinarySemaphore::wait(){
-	xSemaphoreTake(mutex, portMAX_DELAY); // TODO: INCLUDE_vTaskSuspend to be set to 1
+bool BinarySemaphore::wait(){
+	return xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE; // TODO: INCLUDE_vTaskSuspend to be set to 1
 }
 
 void BinarySemaphore::signal(){
