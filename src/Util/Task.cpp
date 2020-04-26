@@ -1,10 +1,8 @@
 #include "Task.h"
 
-Task::Task(String taskName, void (* fun)(Task*)) : taskName(taskName), func(fun){
+#include <utility>
 
-}
-
-Task::Task(String taskName, void (* fun)(Task*), void* arg) : taskName(taskName), func(fun), arg(arg){
+Task::Task(std::string  taskName, void (* fun)(Task*), size_t stackSize, void* arg) : taskName(std::move(taskName)), func(fun), stackSize(stackSize), arg(arg){
 
 }
 
@@ -18,8 +16,8 @@ void Task::start(){
 	running = true;
 
 	/** task function, task name, stack size, parameter, priority, handle */
-	if(xTaskCreate(Task::taskFunc, taskName.c_str(), 2000, this, 0, &tHandle) != pdPASS){
-		Serial.println("Task " + taskName + " start failed");
+	if(xTaskCreate(Task::taskFunc, taskName.c_str(), stackSize, this, 0, &tHandle) != pdPASS){
+		Serial.printf("Task %s start failed\n", taskName.c_str());
 	}
 }
 

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <freertos/task.h>
+#include <string>
 
 class Task {
 public:
@@ -12,8 +13,7 @@ public:
 	 * @param taskName For debugging purposes
 	 * @param fun Task function
 	 */
-	Task(String taskName, void (*fun)(Task*));
-	Task(String taskName, void (*fun)(Task*), void* arg);
+	Task(std::string  taskName, void (*fun)(Task*), size_t stackSize = 2048, void* arg = nullptr);
 
 	/**
 	 * Start the task.
@@ -31,9 +31,10 @@ public:
 	static void taskFunc(void* arg);
 
 private:
-
-	String taskName;
+	std::string taskName;
 	void (*func)(Task*) = nullptr;
+	size_t stackSize = 2048;
+
 	TaskHandle_t tHandle;
 };
 
