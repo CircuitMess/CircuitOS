@@ -5,32 +5,25 @@
 #include <Motion/MPU9250.h>
 #include <Util/Settings.h>
 #include <Input/InputGPIO.h>
+#include <Wire.h>
+#include "src/ICMU20948.h"
 
 #define BTN_A 32
 #define BTN_B 34
 #define BTN_C 39
 #define BTN_D 36
 
-MPU* mpu;
-Display display(128, 128, 18, 4);
+Display display(128, 128, 18, 2);
 Sprite* sprite = display.getBaseSprite();
 
-struct MagCal {
-	vec3f bias;
-	vec3f scale;
-};
-
-MagCal* settings(){
-	return static_cast<MagCal*>(Settings::data());
-}
+ICMU20948 mpu;
 
 void btnA(){
-	mpu->resetVelocity();
+
 };
 
 void setup(){
 	Serial.begin(115200);
-	Settings::init(new MagCal(), sizeof(MagCal));
 
 	new InputGPIO();
 	Input::getInstance()->setBtnPressCallback(BTN_A, btnA);
@@ -44,30 +37,15 @@ void setup(){
 	sprite->println("\n Calibrating...\n");
 	display.commit();
 
-	MPU9250* _mpu = new MPU9250();
-	mpu = _mpu;
-	mpu->begin();
-	_mpu->calibrateAK();
-
 	Input::getInstance()->start();
 
-	return;
-
-	MagCal* cal = settings();
-	if(cal->scale.x == 0){
-		_mpu->calibrateAK();
-		*cal = { _mpu->getMagBias(), _mpu->getMagScale() };
-		Settings::store();
-	}else{
-		_mpu->setMag(cal->bias, cal->scale);
-	}
+	mpu.begin();
 }
 
 void loop(){
-	mpu->readSensor();
-	vec3f euler = mpu->getEuler();
-	vec3f accel = mpu->getAccel();
-	vec3f vel = mpu->getVelocity();
+	vec3f euler;
+	vec3f accel;
+	vec3f vel;
 
 	sprite->clear(TFT_BLACK);
 	sprite->setCursor(0, 0);
@@ -88,4 +66,5 @@ void loop(){
 	sprite->printf(" Z:  %c%.2f m/s\n", vel.z < 0 ? '-' : ' ', fabs(vel.z * 2000));
 
 	display.commit();
+	usleep(50 * 1000);
 }
