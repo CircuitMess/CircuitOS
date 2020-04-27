@@ -30,19 +30,19 @@ void Screen::commit(){
 }
 
 uint Screen::getAvailableWidth(){
-	return sprite.width();
+	return getWidth();
 }
 
 uint Screen::getAvailableHeight(){
-	return sprite.height();
+	return getHeight();
 }
 
 uint Screen::getWidth(){
-	return sprite.width();
+	return display->getWidth();
 }
 
 uint Screen::getHeight(){
-	return sprite.height();
+	return display->getHeight();
 }
 
 Display* Screen::getDisplay() const{
