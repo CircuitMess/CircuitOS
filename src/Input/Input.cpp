@@ -112,7 +112,6 @@ void Input::update(uint _millis)
 			btnHoldTime[buttons[i]]+=_millis;
 			if(btnHoldTime[buttons[i]] >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]])
 			{
-				Serial.println("checking if callback is null");
 				if(btnHoldCallback[buttons[i]] != nullptr)
 				{
 					btnHoldCallback[buttons[i]]();
