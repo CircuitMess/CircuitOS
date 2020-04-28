@@ -16,14 +16,12 @@ void InputI2C::scanButtons(){
 	int portScan = i2c->portRead();
 	if(mutex != nullptr)
 		mutex->unlock();
-	for(uint i = 0; i < buttons.size(); i++)
-	{
-		if(bitRead(portScan, buttons[i]))
+	for(uint i = 0; i < buttons.size(); i++){
+		if(bitRead(portScan, buttons[i])){
 			Input::btnRelease(i);
-		else
-		{
+		}
+		else{
 			Input::btnPress(i);
-			Input::btnHeld(i, millis());
 		}
 		
 	}

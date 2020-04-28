@@ -12,7 +12,6 @@ void InputGPIO::scanButtons(){
 			Input::btnRelease(i);
 		}else{
 			Input::btnPress(i);
-			Input::btnHeld(i, millis());
 		}
 	}
 }

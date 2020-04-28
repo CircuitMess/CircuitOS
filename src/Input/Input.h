@@ -36,6 +36,7 @@ protected:
 	Task scanTask;
 	static Input* instance;
 	static void scanTaskFunction(Task* task);
+	static uint32_t scanTaskMillis;
 	virtual void scanButtons() = 0;
 
 	virtual void registerButton(uint8_t pin);
@@ -43,10 +44,9 @@ protected:
 	Vector<uint8_t> buttons;
 	std::vector<uint8_t> btnCount; // Read count per button
 	std::vector<uint8_t> btnState; // Button state, 0 - released, 1 - pressed
-	std::vector<uint32_t> btnHoldCounter; //Counter in ms when a button is held
+	std::vector<uint32_t> btnHoldTime; //Counter in ms when a button is held
 	std::vector<uint32_t> btnHoldValue; //Value in ms that the callback will be triggered after
 	std::vector<uint32_t> btnHoldRepeatValue; //Value in ms that the callback will be triggered after periodically
-	std::vector<uint32_t> btnHoldStartMillis;
 	std::vector<uint32_t> btnHoldRepeatCounter;
 	std::vector<bool> btnHoldOver;
 
@@ -54,6 +54,7 @@ protected:
 	void btnRelease(uint );
 	void update(uint millis) override;
 	void btnHeld(uint8_t i, uint32_t millis);
+
 };
 
 
