@@ -7,7 +7,7 @@ uint32_t Input::scanTaskMillis;
 Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
 								   btnReleaseCallback(pinNumber, nullptr),
 								   btnHoldCallback(pinNumber, nullptr), btnHoldRepeatCallback(pinNumber, nullptr),
-								   btnHoldTime(pinNumber, 0), btnHoldRepeatCounter(pinNumber, 0),
+								   btnHoldStart(pinNumber, 0), btnHoldRepeatCounter(pinNumber, 0),
 								   btnHoldValue(pinNumber, 0), btnHoldRepeatValue(pinNumber, 0),
 								   btnHoldOver(pinNumber, 0), scanTask("InputScanTask", scanTaskFunction){
 	instance = this;
@@ -77,7 +77,7 @@ void Input::btnPress(uint i){
 			btnState[i] = 1;
 			if(!btnHoldOver[buttons[i]])
 			{
-				btnHoldTime[buttons[i]] = 0;
+				btnHoldStart[buttons[i]] = millis();
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
 				btnPressCallback[buttons[i]]();
@@ -93,7 +93,7 @@ void Input::btnRelease(uint i){
 		if(btnState[i] == 1 && btnCount[i] == 0){
 			btnState[i] = 0;
 			btnHoldOver[buttons[i]] = 0;
-			btnHoldTime[buttons[i]] = 0;
+			btnHoldStart[buttons[i]] = millis();
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
 			if(btnReleaseCallback[buttons[i]] != nullptr){
@@ -107,10 +107,11 @@ void Input::update(uint _millis)
 	scanButtons();
 	for(uint8_t i = 0; i < buttons.size(); i++)
 	{
+		uint32_t holdTime = getButtonHeldMillis(buttons[i]);
 		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr))
 		{
-			btnHoldTime[buttons[i]]+=_millis;
-			if(btnHoldTime[buttons[i]] >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]])
+			
+			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]])
 			{
 				if(btnHoldCallback[buttons[i]] != nullptr)
 				{
@@ -118,13 +119,13 @@ void Input::update(uint _millis)
 				}
 				btnHoldOver[buttons[i]] = 1;
 			}
-			if(btnHoldTime[buttons[i]] >= (btnHoldRepeatCounter[buttons[i]] + 1)*btnHoldRepeatValue[buttons[i]])
+			if(holdTime >= (btnHoldRepeatCounter[buttons[i]] + 1)*btnHoldRepeatValue[buttons[i]])
 			{
+				btnHoldRepeatCounter[buttons[i]]++;
 				if(btnHoldRepeatCallback[buttons[i]] != nullptr)
 				{
-					btnHoldRepeatCallback[buttons[i]]();
+					btnHoldRepeatCallback[buttons[i]](btnHoldRepeatCounter[buttons[i]]);
 				}
-				btnHoldRepeatCounter[buttons[i]]++;
 			}
 		}
 	}
@@ -136,7 +137,7 @@ void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callbac
 	btnHoldCallback[pin] = callback;
 	btnHoldValue[pin] = holdTime;
 }
-void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)())
+void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint))
 {
 	if(pin >= pinNumber) return;
 	registerButton(pin);
@@ -146,5 +147,5 @@ void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (
 uint32_t Input::getButtonHeldMillis(uint8_t pin)
 {
 	if(pin >= pinNumber) return 0;
-	return btnHoldTime[pin];
+	return millis() - btnHoldStart[pin];
 }
