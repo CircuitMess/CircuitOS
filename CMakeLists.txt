@@ -25,7 +25,7 @@ AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 add_definitions(-DDEBUG)
 add_executable(CircuitOS ${SOURCES} CircuitOS.ino)
 
-set(EXAMPLES ListMenu Settings Mutex)
+set(EXAMPLES ListMenu Settings Mutex Queue)
 
 foreach(EXAMPLE ${EXAMPLES})
     AUX_SOURCE_DIRECTORY(examples/${EXAMPLE} EXAMPLE_SOURCES)
