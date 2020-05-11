@@ -7,11 +7,11 @@ InputGPIO::InputGPIO() : Input(PIN_MAX){
 
 void InputGPIO::scanButtons(){
 	for(uint i = 0; i < buttons.size(); i++){
-		if(!digitalRead(buttons[i])){
-			Input::btnPress(i);
-		}else{
+		if(digitalRead(buttons[i])){
 			//released
 			Input::btnRelease(i);
+		}else{
+			Input::btnPress(i);
 		}
 	}
 }

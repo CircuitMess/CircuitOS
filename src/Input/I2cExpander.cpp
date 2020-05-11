@@ -41,8 +41,6 @@ uint16_t I2cExpander::portRead()
 }
 void I2cExpander::portConfig(uint16_t _portData)
 {
-	// Serial.print("Current port: ");
-	// Serial.println(configState, BIN);
 	configState = _portData;
 	_write(configState, CONFIG_REG);
 }
