@@ -42,10 +42,11 @@ public:
 	/**
 	 * Sets a callback to be executed when a button is held for a certain ammount of time, periodically.
 	 * The callback will be executed periodically, every time the specified ammount of time expires.
-	 * For example, if periodTime is set to 100, the callback will be called at 100ms
+	 * For example, if periodTime is set to 100 and the button is held, the callback will be called at 100ms, 200ms and so on.
 	 * @param pin Input pin of the button.
 	 * @param periodTime Ammount of time the callback will be executed periodically.
-	 * @param callback Callback to be executed.
+	 * @param callback Callback to be executed. The callback also receives an uint parameter with the number of repetitions.
+	 * The first time it's called, (uint)1 will be passed, the 2nd time (uint)2 and so on.
 	 */
 	virtual void setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint));
 	virtual uint32_t getButtonHeldMillis(uint8_t pin);
