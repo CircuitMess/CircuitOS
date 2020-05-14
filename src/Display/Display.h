@@ -9,9 +9,8 @@ class Sprite;
 
 class Display {
 public:
-	Display(uint8_t width, uint8_t height, int8_t blPin = -1);
-	Display(uint8_t width, uint8_t height, int8_t blPin, uint8_t rotation);
-
+	Display(uint8_t width, uint8_t height, int8_t blPin = -1, int8_t rotation = -1);
+	void begin();
 	void commit();
 	void clear(uint32_t color);
 
@@ -25,11 +24,12 @@ public:
 	uint getHeight() const;
 
 private:
-	uint8_t blPin;
+	TFT_eSPI tft; 
 	uint width;
 	uint height;
+	int8_t blPin;
+	int8_t rotation;
 
-	TFT_eSPI tft;
 	Sprite* baseSprite;
 };
 
