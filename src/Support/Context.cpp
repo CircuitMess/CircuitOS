@@ -34,7 +34,17 @@ void Context::pop(){
 	parent = nullptr;
 }
 
+void Context::pop(void* data){
+	parent->returned(data);
+	new ContextTransition(*screen.getDisplay(), this, parent, true);
+	parent = nullptr;
+}
+
 void Context::push(Context* parent){
 	this->parent = parent;
 	new ContextTransition(*screen.getDisplay(), parent, this);
+}
+
+void Context::returned(void* data){
+
 }
