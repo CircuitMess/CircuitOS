@@ -16,14 +16,25 @@ public:
 	Task(std::string  taskName, void (*fun)(Task*), size_t stackSize = 2048, void* arg = nullptr);
 
 	/**
-	 * Start the task.
+	 * Start the task with optional priority. When a CPU sore becomes available, and more than one task is waiting, the
+	 * one with higher priority will be picked. This can to starvation if there are more tasks waiting for execution.
+	 *
+	 * @see configUSETIMESLICING prevents the scheduler switching between tasks of equal priority when a tick interrupt fires (every 1ms by default - FreeRTOS tick rate)
+	 *
+	 * @param priority
 	 */
-	void start();
+	void start(byte priority = 0 /*(1 | portPRIVILEGE_BIT)*/);
 
 	/**
 	 * Terminate the task.
 	 */
 	void stop();
+
+	/**
+	 * Core pinning. If set to true, each new task will be pinned to a new core. Call again to reset assignment.
+	 * @param pinned
+	 */
+	static void setPinned(bool pinned);
 
 	bool running = false;
 	void* arg = nullptr;
@@ -36,6 +47,9 @@ private:
 	size_t stackSize = 2048;
 
 	TaskHandle_t tHandle;
+
+	static bool pinnedTasks;
+	static uint8_t usedCores;
 };
 
 
