@@ -1,5 +1,12 @@
 #include <Arduino.h>
-#include "MPU.h"
+
+/**
+ * Courtesy of SparkFun, Jim Lindblom @ SparkFun Electronics, and @kriswiner
+ *
+ * https://github.com/sparkfun/LSM9DS0_Breakout
+ * https://github.com/kriswiner/LSM9DS0
+ * */
+
 
 // Implementation of Sebastian Madgwick's "...efficient orientation filter for... inertial/magnetic sensor arrays"
 // (see http://www.x-io.co.uk/category/open-source/ for examples and more details)

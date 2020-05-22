@@ -1,0 +1,158 @@
+#include "MPU6050_CM.h"
+#include <cmath>
+#include <Wire.h>
+
+/**
+ * Requires I2C dev library: https://github.com/jrowberg/i2cdevlib
+ * MPU6050_CM doesn't work out of the box with the lib, slight modification of the i2cdevlib file structure is
+ * required. Used is only the MPU6050 part with MotionApps v6.12
+ */
+#include <MPU6050.h>
+
+#include "img_dmp_mpu6050.h"
+
+MPU6050_CM::MPU6050_CM(int sda, int scl) : sda(sda), scl(scl), mpu(new MPU6050(0x69)){ }
+
+void MPU6050_CM::begin(){
+	Wire.begin(sda, scl);
+	Wire.setClock(400000);
+	mpu->testConnection();
+	mpu->initialize();
+	uint8_t devStatus = mpu->dmpInitialize();
+
+	// supply your own gyro offsets here, scaled for min sensitivity
+	mpu->setXGyroOffset(51);
+	mpu->setYGyroOffset(8);
+	mpu->setZGyroOffset(21);
+	mpu->setXAccelOffset(1150);
+	mpu->setYAccelOffset(-50);
+	mpu->setZAccelOffset(1060);
+	// make sure it worked (returns 0 if so)
+	if (devStatus == 0) {
+		// Calibration Time: generate offsets and calibrate our MPU6050
+		mpu->CalibrateAccel(6);
+		mpu->CalibrateGyro(6);
+		Serial.println();
+		mpu->PrintActiveOffsets();
+		// turn on the DMP, now that it's ready
+		Serial.println(F("Enabling DMP..."));
+		mpu->setDMPEnabled(true);
+
+		// enable Arduino interrupt detection
+		/*Serial.print(F("Enabling interrupt detection (Arduino external interrupt "));
+		Serial.print(digitalPinToInterrupt(INTERRUPT_PIN));
+		Serial.println(F(")..."));
+		attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
+		mpuIntStatus = mpu->getIntStatus();*/
+
+		// set our DMP Ready flag so the main loop() function knows it's okay to use it
+		Serial.println(F("DMP ready! Waiting for first interrupt..."));
+	} else {
+		// ERROR!
+		// 1 = initial memory load failed
+		// 2 = DMP configuration updates failed
+		// (if it's going to break, usually the code will be 1)
+		Serial.print(F("DMP Initialization failed (code "));
+		Serial.print(devStatus);
+		Serial.println(F(")"));
+	}
+}
+
+void MPU6050_CM::calibrate(){
+	MPU::calibrate();
+	return;
+	calibrateGyro(100);
+	calibrateAccel(100);
+}
+
+bool MPU6050_CM::readSensor(){
+	return readData(true, true);
+}
+
+uint8_t fifoBuffer[64];
+
+bool MPU6050_CM::readData(bool waitReady, bool adjust){
+	if(!mpu->dmpGetCurrentFIFOPacket(fifoBuffer)){
+		if(!waitReady) return false;
+
+		while(!mpu->dmpGetCurrentFIFOPacket(fifoBuffer)){
+			delay(10); // sleep 10ms
+		}
+	}
+
+	Quaternion q;
+	mpu->dmpGetQuaternion(&q, fifoBuffer);
+	quatRot = { q.w, q.x, q.y, q.z };
+
+	float quat[4] = { quatRot.w, quatRot.x, quatRot.y, quatRot.z };
+
+	euler.pitch  = -atan2(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]), quat[0] * quat[0] - quat[1] * quat[1] - quat[2] * quat[2] + quat[3] * quat[3]);
+	euler.yaw = atan2(2.0f * (quat[1] * quat[2] + quat[0] * quat[3]), quat[0] * quat[0] + quat[1] * quat[1] - quat[2] * quat[2] - quat[3] * quat[3]);
+	euler.roll = -asin(2.0f * (quat[1] * quat[3] - quat[0] * quat[2]));
+
+	VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+	VectorInt16 gy;         // [x, y, z]            gyro sensor measurements
+	VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+	VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
+	VectorFloat gravity;    // [x, y, z]            gravity vector
+
+	mpu->dmpGetAccel(&aa, fifoBuffer);
+	mpu->dmpGetGravity(&gravity, &q);
+	mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
+	mpu->dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+
+	accel = { (float) aaWorld.x / 1000.0f, (float) aaWorld.y / 1000.0f, (float) aaWorld.z / 1000.0f };
+
+	/*int16_t data[3];
+	mpu->dmpGetLAccel(data, fifoBuffer);
+
+	accel = { (float) data[0], (float) data[1], (float) data[2] };*/
+
+	if(false && adjust){
+		gyro.x = (gyro.x - gyroBias.x) * gyroScale;
+		gyro.y = (gyro.y - gyroBias.y) * gyroScale;
+		gyro.z = (gyro.z - gyroBias.z) * gyroScale;
+		accel.x *= accelScale;
+		accel.y *= accelScale;
+		accel.z *= accelScale;
+	}
+
+	return true;
+}
+
+void MPU6050_CM::calibrateGyro(uint8_t loops){
+	Serial.println("Calibrating gyro");
+
+	gyroScale = 0;
+	gyroBias = { 0, 0, 0 };
+	for(size_t i = 0; i < loops; i++){
+		readData(true, false);
+		for(int j = 0; j < 3; j++){
+			gyroBias[j] += gyro[j] / (float) loops;
+			gyroScale = max(fabs(gyroScale), fabs(gyro[j]));
+		}
+		delay(1);
+	}
+
+	gyroScale = 1.0f / (250.0f/32767.5f * (float) M_PI / 180.0f);
+
+	Serial.printf("Bias: [ %.2f %.2f %.2f ]\n", gyroBias.x, gyroBias.y, gyroBias.z);
+	Serial.printf("Scale: %.2f\n", gyroScale);
+	gyroScale = 1.0f / gyroScale;
+}
+
+void MPU6050_CM::calibrateAccel(uint8_t loops){
+	Serial.println("Calibrating accel");
+
+	accelScale = 0;
+
+	for(int i = 0; i < loops; i++){
+		readData(true, false);
+		for(int j = 0; j < 3; j++){
+			accelScale = max(fabs(accelScale), fabs(accel[j]));
+		}
+	}
+
+	Serial.printf("Scale: %.2f\n", accelScale);
+	accelScale = 1.0f / accelScale;
+}
