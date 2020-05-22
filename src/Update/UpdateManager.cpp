@@ -30,7 +30,7 @@ void UpdateManager::taskFunc(Task* task){
 }
 
 void UpdateManager::update(){
-	uint m = millis();
+	uint m = micros();
 	uint delta = m - lastMillis;
 
 	for(UpdateListener* listener : listeners){
