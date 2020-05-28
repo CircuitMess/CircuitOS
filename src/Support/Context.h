@@ -21,7 +21,9 @@ public:
 	virtual void unpack();
 
 	void pop();
+	void pop(void* data);
 	void push(Context* parent);
+	virtual void returned(void* data);
 
 	Screen& getScreen();
 

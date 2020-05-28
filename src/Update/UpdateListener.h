@@ -8,7 +8,7 @@ public:
 	UpdateListener();
 	virtual ~UpdateListener();
 
-	virtual void update(uint millis) = 0;
+	virtual void update(uint micros) = 0;
 };
 
 

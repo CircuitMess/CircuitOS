@@ -8,7 +8,7 @@
 #include <Wire.h>
 #include "I2cExpander.h"
 
-#define I2C_PIN_MAX 15
+#define I2C_PIN_MAX 16
 #define DEBOUNCE_COUNT 1
 
 class InputI2C : public Input {

@@ -2,6 +2,9 @@
 
 #include <utility>
 
+bool Task::pinnedTasks = false;
+uint8_t Task::usedCores = 0;
+
 Task::Task(std::string  taskName, void (* fun)(Task*), size_t stackSize, void* arg) : taskName(std::move(taskName)), func(fun), stackSize(stackSize), arg(arg){
 
 }
@@ -12,15 +15,29 @@ void Task::taskFunc(void* arg){
 	vTaskDelete(NULL);
 }
 
-void Task::start(){
+void Task::start(byte priority){
 	running = true;
 
-	/** task function, task name, stack size, parameter, priority, handle */
-	if(xTaskCreate(Task::taskFunc, taskName.c_str(), stackSize, this, 0, &tHandle) != pdPASS){
-		Serial.printf("Task %s start failed\n", taskName.c_str());
+	if(pinnedTasks){
+		Serial.printf("Creating task on proc %d\n", usedCores);
+		xTaskCreatePinnedToCore(Task::taskFunc, taskName.c_str(), stackSize, this, priority, &tHandle, usedCores++);
+	}else{
+		/** task function, task name, stack size, parameter, priority, handle */
+		if(xTaskCreate(Task::taskFunc, taskName.c_str(), stackSize, this, priority, &tHandle) != pdPASS){
+			Serial.printf("Task %s start failed\n", taskName.c_str());
+		}
 	}
 }
 
 void Task::stop(){
 	running = false;
+
+	if(pinnedTasks){
+		usedCores--;
+	}
+}
+
+void Task::setPinned(bool pinned){
+	Task::pinnedTasks = pinned;
+	usedCores = 0;
 }
