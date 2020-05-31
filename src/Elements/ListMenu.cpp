@@ -106,6 +106,10 @@ uint ListMenu::getSelected() const{
 	return selected;
 }
 
+ListMenuItem& ListMenu::getSelectedItem(){
+	return items[selected];
+}
+
 bool ListMenu::scroll(){
 	Element* listImage = items[selected].image;
 
@@ -144,7 +148,7 @@ bool ListMenu::scroll(){
 	return true;
 }
 
-void ListMenu::addItem(String title){
+void ListMenu::addItem(const char* title){
 	Image* image = new Image(list, list->getAvailableWidth(), 16);
 	items.push_back({ title, image });
 
@@ -178,6 +182,10 @@ void ListMenu::reflow(){
 void ListMenu::relocate(uint oldPos, uint newPos){
 	items.relocate(oldPos, newPos);
 	list->getChildren().relocate(oldPos, newPos);
+
+	if(selected == oldPos || selected == newPos){
+		setSelected(selected == oldPos ? newPos : oldPos);
+	}
 }
 
 Color ListMenu::getSelectedColor() const{

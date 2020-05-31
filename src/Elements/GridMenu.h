@@ -10,7 +10,7 @@
 #include "../Util/Vector.h"
 
 struct GridMenuItem {
-	String title;
+	const char* title;
 	Element* icon;
 };
 
@@ -45,6 +45,7 @@ public:
 	 */
 	bool setSelected(uint element);
 	uint getSelected() const;
+	GridMenuItem& getSelectedItem();
 
 	Color getSelectedColor() const;
 
