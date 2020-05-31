@@ -86,6 +86,10 @@ uint GridMenu::getSelected() const{
 	return selected;
 }
 
+GridMenuItem& GridMenu::getSelectedItem(){
+	return items[selected];
+}
+
 bool GridMenu::scroll(){
 	Element* gridImage = items[selected].icon;
 
@@ -150,6 +154,12 @@ void GridMenu::reflow(){
 void GridMenu::relocate(uint oldPos, uint newPos){
 	items.relocate(oldPos, newPos);
 	grid->getChildren().relocate(oldPos, newPos);
+
+	if(selected == oldPos || selected == newPos){
+		items[oldPos].icon->setBorderWidth(0);
+		items[newPos].icon->setBorderWidth(0);
+		setSelected(selected == oldPos ? newPos : oldPos);
+	}
 }
 
 Color GridMenu::getSelectedColor() const{
