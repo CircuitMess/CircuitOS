@@ -27,7 +27,7 @@ bool Sprite::created(){
 	return _created;
 }
 
-void Sprite::drawIcon(const unsigned short* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
+void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
 	Color c = chromaKey;
 	setChroma(TFT_BLACK);
 
@@ -42,7 +42,7 @@ void Sprite::drawIcon(const unsigned short* icon, uint16_t x, uint16_t y, uint16
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(const byte* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
@@ -70,7 +70,7 @@ void Sprite::drawMonochromeIcon(const byte* icon, uint16_t x, uint16_t y, uint16
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(bool* icon, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
