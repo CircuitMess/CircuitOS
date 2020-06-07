@@ -23,7 +23,7 @@ void Layout::reflow(){
 
 		setHeight(height);
 	}else if(hType == PARENT){
-		setHeight(getParent()->getAvailableWidth());
+		setHeight(getParent()->getAvailableHeight());
 	}
 
 	logln("Reflowing layout [" + String(getWidth()) + ", " + String(getHeight()) + "]");
