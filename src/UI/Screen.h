@@ -8,7 +8,8 @@
 
 class Screen : public ElementContainer, public SpriteElement {
 public:
-	Screen(Display& display);
+	explicit Screen(Display& display);
+	Screen(Display& display, uint width, uint height);
 
 	Sprite* getSprite() override;
 

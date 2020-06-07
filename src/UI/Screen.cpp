@@ -1,7 +1,11 @@
 #include "Screen.h"
 #include "../Util/Debug.h"
 
-Screen::Screen(Display& display) : display(&display), SpriteElement(display.getBaseSprite(), display.getWidth(), display.getHeight()){
+Screen::Screen(Display& display) : Screen(display, display.getWidth(), display.getHeight()){
+
+}
+
+Screen::Screen(Display& display, uint width, uint height) : display(&display), SpriteElement(display.getBaseSprite(), width, height){
 	sprite.setPos(0, 0);
 	sprite.clear(TFT_BLACK);
 }
@@ -38,11 +42,11 @@ uint Screen::getAvailableHeight(){
 }
 
 uint Screen::getWidth(){
-	return display->getWidth();
+	return sprite.width();
 }
 
 uint Screen::getHeight(){
-	return display->getHeight();
+	return sprite.height();
 }
 
 Display* Screen::getDisplay() const{
@@ -58,11 +62,11 @@ int Screen::getY() const{
 }
 
 int Screen::getTotalX() const{
-	return 0;
+	return 0; // getX();
 }
 
 int Screen::getTotalY() const{
-	return 0;
+	return 0; // getY();
 }
 
 void Screen::setPos(int x, int y){
