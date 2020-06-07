@@ -13,7 +13,7 @@ public:
 	ContextTransition(Display& display, Context* contextA, Context* contextB);
 	ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse);
 
-	void update(uint millis) override;
+	void update(uint micros) override;
 
 	virtual ~ContextTransition();
 

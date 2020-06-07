@@ -14,6 +14,8 @@ void Context::addSprite(SpriteElement* sprite){
 }
 
 void Context::pack(){
+	if(packed) return;
+
 	for(SpriteElement* element : sprites){
 		element->pack();
 	}
@@ -22,6 +24,8 @@ void Context::pack(){
 }
 
 void Context::unpack(){
+	if(!packed) return;
+
 	for(SpriteElement* element : sprites){
 		element->unpack();
 	}
@@ -36,8 +40,7 @@ void Context::pop(){
 
 void Context::pop(void* data){
 	parent->returned(data);
-	new ContextTransition(*screen.getDisplay(), this, parent, true);
-	parent = nullptr;
+	pop();
 }
 
 void Context::push(Context* parent){
