@@ -14,7 +14,7 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 
 	contextB->unpack();
 	contextB->getScreen().getSprite()->setPos(0, display.getHeight());
-	contextB->draw();
+	contextB->getScreen().draw();
 
 	UpdateManager::addListener(this);
 }
@@ -37,10 +37,10 @@ void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos
 	sprite->setPos(oldX, oldY);
 }
 
-void ContextTransition::update(uint millis){
-	time += millis;
+void ContextTransition::update(uint micros){
+	time += micros;
 
-	uint scroll = time / 1.5;
+	uint scroll = time / (1.5 * 1000.0);
 	if(lastScroll < scroll){
 
 		if(reverse){
