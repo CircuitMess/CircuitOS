@@ -46,14 +46,13 @@ public:
 	bool setSelected(uint element);
 	uint getSelected() const;
 	GridMenuItem& getSelectedItem();
+	void clearItems();
 
 	Color getSelectedColor() const;
-
 	void setSelectedColor(Color selectedColor);
+	void setTitleColor(Color titleBgColor, Color titleFgColor);
 
 	void draw() override;
-
-	void setTitleColor(Color titleBgColor, Color titleFgColor);
 
 private:
 	Image* title;

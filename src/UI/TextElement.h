@@ -29,9 +29,9 @@ private:
 	uint width;
 	uint height;
 
-	uint textFont;
-	uint textSize;
-	Color textColor;
+	uint textFont = 0;
+	uint textSize = 1;
+	Color textColor = TFT_DARKGREY;
 
 	std::string text = "";
 
