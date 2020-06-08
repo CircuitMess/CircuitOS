@@ -63,7 +63,7 @@ void setUI(){
 
 	menu.setWHType(PARENT, PARENT);
 	for(int i = 0; i < ELEMENTS; i++){
-		menu.addItem("Foo " + String(i+1));
+		menu.addItem("Foo ");
 	}
 	menu.reflow();
 

@@ -15,11 +15,17 @@ public:
 	uint getMaxScrollY();
 
 	uint getScrollX() const;
-
 	uint getScrollY() const;
 
-	void reposChildren() override;
+	/**
+	 * Scroll a child of the containing element into view. Causes unexpected behaviour if the child of this element
+	 * isn't an ElementContainer.
+	 * @param child
+	 * @param over How much to scroll past the element
+	 */
+	void scrollIntoView(uint child, int over = 0);
 
+	void reposChildren() override;
 	void draw() override;
 
 private:

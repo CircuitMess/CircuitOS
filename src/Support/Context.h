@@ -9,7 +9,7 @@
 
 class Context {
 public:
-	Context(Display& display);
+	explicit Context(Display& display);
 
 	virtual void draw() = 0;
 
@@ -20,9 +20,9 @@ public:
 	virtual void pack();
 	virtual void unpack();
 
-	void pop();
-	void pop(void* data);
-	void push(Context* parent);
+	virtual void pop();
+	virtual void pop(void* data);
+	virtual void push(Context* parent);
 	virtual void returned(void* data);
 
 	Screen& getScreen();

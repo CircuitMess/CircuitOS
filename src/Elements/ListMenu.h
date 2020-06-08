@@ -6,6 +6,11 @@
 #include "../UI/ScrollLayout.h"
 #include "../UI/Image.h"
 
+struct ListMenuItem {
+	const char* title;
+	Image* image;
+};
+
 class ListMenu : public LinearLayout {
 public:
 	ListMenu(ElementContainer* parent, String title);
@@ -13,7 +18,7 @@ public:
 
 	void reflow() override;
 
-	void addItem(String title);
+	void addItem(const char* title);
 
 	/**
 	 * Relocate a menu item. See Vector::relocate
@@ -37,6 +42,8 @@ public:
 	 */
 	bool setSelected(uint element);
 	uint getSelected() const;
+	ListMenuItem& getSelectedItem();
+	void clearItems();
 
 	Color getSelectedColor() const;
 	void setSelectedBgColor(Color selectedBgColor);
@@ -46,11 +53,6 @@ public:
 	void draw() override;
 
 private:
-	struct ListMenuItem {
-		String title;
-		Image* image;
-	};
-
 	Image* titleImage;
 	ScrollLayout* scroller;
 	LinearLayout* list;

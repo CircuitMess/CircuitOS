@@ -7,6 +7,7 @@
 template<typename T>
 class Vector : public std::vector<T> {
 public:
+	using std::vector<T>::vector;
 
 	/**
 	 * Change the position of of an element. All elements after the new position, including the element that was

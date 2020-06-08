@@ -12,6 +12,7 @@ class Element {
 public:
 	Element();
 	Element(ElementContainer* parent);
+	virtual ~Element();
 
 	void setBorder(uint width, Color color);
 	void setBorderColor(Color borderColor);

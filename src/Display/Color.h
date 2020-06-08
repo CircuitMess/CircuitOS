@@ -5,4 +5,8 @@
 
 typedef uint16_t Color;
 
+Color C_RGB(uint8_t r, uint8_t g, uint8_t b);
+
+Color C_HEX(uint32_t hex);
+
 #endif //CIRCUITOS_COLOR_H
