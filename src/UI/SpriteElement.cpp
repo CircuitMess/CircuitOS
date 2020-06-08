@@ -4,6 +4,8 @@ SpriteElement::SpriteElement(Sprite* parentSprite, uint width, uint height) : sp
 
 }
 
+SpriteElement::~SpriteElement(){ }
+
 Sprite* SpriteElement::getSprite(){
 	return &sprite;
 }

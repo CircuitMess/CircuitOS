@@ -10,6 +10,10 @@ Element::Element(ElementContainer* parent){
 	this->parent = parent;
 }
 
+Element::~Element(){
+
+}
+
 ElementContainer* Element::getParent(){
 	return parent;
 }

@@ -7,6 +7,7 @@
 class SpriteElement {
 public:
 	SpriteElement(Sprite* parentSprite, uint width, uint height);
+	virtual ~SpriteElement();
 
 	virtual void pack();
 	virtual void unpack();
