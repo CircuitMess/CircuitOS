@@ -1,3 +1,4 @@
+#include <search.h>
 #include "ListMenu.h"
 #include "../Util/Debug.h"
 
@@ -208,4 +209,18 @@ void ListMenu::setItemColor(Color itemBgColor, Color itemFgColor){
 void ListMenu::setTitleColor(Color titleBgColor, Color titleFgColor){
 	ListMenu::titleBgColor = titleBgColor;
 	ListMenu::titleFgColor = titleFgColor;
+}
+
+void ListMenu::clearItems(){
+	int i = 0;
+	for(Element* child : list->getChildren()){
+		delete child;
+		// TODO: use stdstring
+		// delete items[i].title;
+		i++;
+	}
+
+	list->getChildren().clear();
+	items.clear();
+	selected = 0;
 }

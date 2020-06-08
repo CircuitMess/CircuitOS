@@ -139,6 +139,20 @@ void GridMenu::addItem(const GridMenuItem& item){
 	}
 }
 
+void GridMenu::clearItems(){
+	int i = 0;
+	for(Element* child : grid->getChildren()){
+		delete child;
+		// TODO: use stdstring
+		// delete items[i].title;
+		i++;
+	}
+
+	grid->getChildren().clear();
+	items.clear();
+	selected = 0;
+}
+
 void GridMenu::reflow(){
 	LinearLayout::reflow();
 

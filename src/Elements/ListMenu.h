@@ -43,6 +43,7 @@ public:
 	bool setSelected(uint element);
 	uint getSelected() const;
 	ListMenuItem& getSelectedItem();
+	void clearItems();
 
 	Color getSelectedColor() const;
 	void setSelectedBgColor(Color selectedBgColor);
