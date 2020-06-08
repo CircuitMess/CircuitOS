@@ -1,7 +1,9 @@
 #include "TextElement.h"
 
 TextElement::TextElement(ElementContainer* parent, uint width, uint height) :
-	Element(parent), width(width), height(height){ }
+	Element(parent), width(width), height(height){
+
+}
 
 TextElement& TextElement::setFont(uint font){
 	TextElement::textFont = font;
