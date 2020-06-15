@@ -1,13 +1,6 @@
 #ifndef MOTION_VEC_H
 #define MOTION_VEC_H
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_CXX14
-#undef radians
-#undef degrees
-#include <glm.hpp>
-#include <gtc/quaternion.hpp>
-
 /** ### vec3 ### */
 
 template<typename T>
