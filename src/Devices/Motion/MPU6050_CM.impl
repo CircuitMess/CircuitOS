@@ -1,5 +1,4 @@
 #include "MPU6050_CM.h"
-#include <cmath>
 #include <Wire.h>
 
 /**

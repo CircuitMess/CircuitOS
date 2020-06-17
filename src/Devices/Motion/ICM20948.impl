@@ -1,5 +1,4 @@
 #include "ICM20948.h"
-#include <cmath>
 
 /**
  * SparkFun's ICM20948 library: https://github.com/sparkfun/SparkFun_ICM-20948_ArduinoLibrary/

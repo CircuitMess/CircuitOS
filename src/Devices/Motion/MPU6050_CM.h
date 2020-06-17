@@ -1,8 +1,7 @@
 #ifndef CIRCUITOS_MPU6050_CM_H
 #define CIRCUITOS_MPU6050_CM_H
 
-
-#include "MPU.h"
+#include "../../Motion/MPU.h"
 
 class MPU6050;
 

@@ -1,8 +1,7 @@
 #ifndef CIRCUITOS_ICM20948_H
 #define CIRCUITOS_ICM20948_H
 
-
-#include "MPU.h"
+#include "../../Motion/MPU.h"
 
 class ICM_20948_I2C;
 
