@@ -1,13 +1,21 @@
 #include "UpdateManager.h"
+#include "UpdateListener.h"
 #include "../Util/Debug.h"
 
-Task UpdateManager::task("UpdateManager", UpdateManager::taskFunc);
+Task UpdateManager::task("UpdateManager", UpdateManager::taskFunc, 10000);
 Vector<UpdateListener*> UpdateManager::listeners;
 uint UpdateManager::lastMillis = millis();
 
-void UpdateManager::startTask(){
-	task.start();
-	logln("UpdateManager started in task mode");
+void UpdateManager::startTask(byte priority){
+	task.start(priority);
+}
+
+void UpdateManager::setStackSize(size_t size){
+	if(task.running){
+		task.stop(true);
+	}
+
+	task = Task("UpdateManager", UpdateManager::taskFunc, size);
 }
 
 void UpdateManager::addListener(UpdateListener* listener){
@@ -21,11 +29,14 @@ void UpdateManager::removeListener(UpdateListener* listener){
 }
 
 void UpdateManager::taskFunc(Task* task){
-	logln("UpdateManager started");
+	logln("UpdateManager started in task mode");
 
 	while(task->running){
-		vTaskDelay(1);
-		update();
+		if(listeners.empty()){
+			vTaskDelay(1);
+		}else{
+			update();
+		}
 	}
 }
 
