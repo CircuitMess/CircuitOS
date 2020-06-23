@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // should be set with compiler parameters
-#define DEBUG
+#define NDEBUG
 
 #ifdef DEBUG
 	#define logln(msg) Debug::println(msg)
