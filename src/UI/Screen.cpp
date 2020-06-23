@@ -5,7 +5,7 @@ Screen::Screen(Display& display) : Screen(display, display.getWidth(), display.g
 
 }
 
-Screen::Screen(Display& display, uint width, uint height) : display(&display), SpriteElement(display.getBaseSprite(), width, height){
+Screen::Screen(Display& display, uint width, uint height) : display(&display), SpriteElement(display.getBaseSprite(), width, height), width(width), height(height){
 	sprite.setPos(0, 0);
 	sprite.clear(TFT_BLACK);
 }
@@ -42,11 +42,11 @@ uint Screen::getAvailableHeight(){
 }
 
 uint Screen::getWidth(){
-	return sprite.width();
+	return width;
 }
 
 uint Screen::getHeight(){
-	return sprite.height();
+	return height;
 }
 
 Display* Screen::getDisplay() const{
