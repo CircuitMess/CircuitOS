@@ -1,14 +1,15 @@
 #include "Display.h"
 
-Display::Display(uint8_t width, uint8_t height, int8_t blPin, int8_t rotation) : tft(), width(width), height(height), blPin(blPin), baseSprite(new Sprite(&tft, width, height)), rotation(rotation){
+Display::Display(uint8_t width, uint8_t height, int8_t blPin, int8_t rotation, bool mirror) : tft(), blPin(blPin),
+		width(width), height(height), baseSprite(new Sprite(&tft, width, height)), rotation(rotation), mirror(mirror){
 
-	
 }
+
 void Display::begin()
 {
 	if(blPin != -1)
 	{
-		ledcSetup(0, 2000, 8);
+		//ledcSetup(0, 2000, 8);
 		//ledcAttachPin(blPin, 0);
 		pinMode(blPin, OUTPUT);
 		digitalWrite(blPin, HIGH);
@@ -21,6 +22,10 @@ void Display::begin()
 	}
 	tft.fillScreen(TFT_PURPLE);
 	baseSprite->clear(TFT_GREEN);
+
+	if(mirror){
+		mirrorBuffer = static_cast<uint16_t*>(ps_malloc(sizeof(uint16_t) * getWidth() * getHeight()));
+	}
 }
 void Display::setPower(bool power){
 	if(blPin != -1){
@@ -29,6 +34,16 @@ void Display::setPower(bool power){
 }
 
 void Display::commit(){
+	if(mirror){
+		for(int i = 0; i < getWidth(); i++){
+			for(int j = 0; j < getHeight(); j++){
+				mirrorBuffer[j * getWidth() + i] = baseSprite->readPixel(getWidth() - i - 1, j);
+			}
+		}
+
+		baseSprite->drawIcon(mirrorBuffer, 0, 0, getWidth(), getHeight());
+	}
+
 	baseSprite->push();
 }
 
