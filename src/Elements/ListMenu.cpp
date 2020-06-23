@@ -53,6 +53,18 @@ void ListMenu::drawItem(uint index){
 	Sprite* image = item.image->getSprite();
 
 	image->clear(index == selected ? selectedBgColor : itemBgColor);
+
+	if(index == selected && selectedFill){
+		float phase = micros() / 1000;
+		for(int j = 0; j < image->height(); j++){
+			int i = image->height() - j - 1;
+			const float addition = 2.0 * cos((float) i / 5 + (float) phase / 200)
+					+ 1.0 * cos((float) i / 2 + (float) -phase / 70)
+					+ 1.0 * cos((float) i / 3 + (float) phase / 60);
+			image->drawFastHLine(0, i, (image->width() + 5) * ((float) selectedFill / 255) + addition, TFT_RED);
+		}
+	}
+
 	image->fillTriangle(0, 0, 0, 15, 6, 16, TFT_BLACK);
 	image->fillTriangle(0, 0, 3, 0, 0, 5, TFT_BLACK);
 	image->fillRect(6, 15, 1, 1, TFT_BLACK);
@@ -223,4 +235,8 @@ void ListMenu::clearItems(){
 	list->getChildren().clear();
 	items.clear();
 	selected = 0;
+}
+
+void ListMenu::setSelectedFill(uint8_t selectedFill){
+	ListMenu::selectedFill = selectedFill;
 }

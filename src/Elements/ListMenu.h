@@ -50,6 +50,8 @@ public:
 	void setItemColor(Color titleBgColor, Color titleFgColor);
 	void setTitleColor(Color titleBgColor, Color titleFgColor);
 
+	void setSelectedFill(uint8_t selectedFill);
+
 	void draw() override;
 
 private:
@@ -65,6 +67,7 @@ private:
 	Color titleFgColor = TFT_BLACK;
 
 	String title = "";
+	uint8_t selectedFill = 0;
 
 	uint selected = 0;
 	bool scroll();
