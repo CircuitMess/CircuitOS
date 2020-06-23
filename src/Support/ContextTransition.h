@@ -2,11 +2,9 @@
 #define CIRCUITOS_CONTEXTTRANSITION_H
 
 #include "../Update/UpdateListener.h"
-#include "../UI/ElementContainer.h"
-#include "../UI/LinearLayout.h"
-#include "../UI/ScrollLayout.h"
-#include "../UI/Image.h"
-#include "Context.h"
+#include "../Display/Display.h"
+
+class Context;
 
 class ContextTransition : public UpdateListener {
 public:

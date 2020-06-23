@@ -1,5 +1,7 @@
 #include "ContextTransition.h"
+#include "Context.h"
 #include "../Update/UpdateManager.h"
+#include "../UI/Screen.h"
 
 ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB) :
 		ContextTransition(display, contextA, contextB, false){
