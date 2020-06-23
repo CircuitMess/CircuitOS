@@ -26,9 +26,10 @@ public:
 	void start(byte priority = 0 /*(1 | portPRIVILEGE_BIT)*/);
 
 	/**
-	 * Terminate the task.
+	 * Stop the task gracefully. The task will stop when the current iteration of the loop finishes.
+	 * @param wait Whether to wait for the task to finish.
 	 */
-	void stop();
+	void stop(bool wait = false);
 
 	/**
 	 * Core pinning. If set to true, each new task will be pinned to a new core. Call again to reset assignment.
@@ -41,6 +42,12 @@ public:
 
 	static void taskFunc(void* arg);
 
+	/**
+	 * Whether the task is stopped.
+	 * @return
+	 */
+	bool isStopped() const;
+
 private:
 	std::string taskName;
 	void (*func)(Task*) = nullptr;
@@ -50,6 +57,8 @@ private:
 
 	static bool pinnedTasks;
 	static uint8_t usedCores;
+
+	bool stopped = true;
 };
 
 
