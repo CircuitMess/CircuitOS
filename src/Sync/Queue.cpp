@@ -1,6 +1,6 @@
 #include "Queue.h"
 
-Queue::Queue(size_t queueSize, size_t msgSize){
+Queue::Queue(size_t queueSize, size_t msgSize) : queueSize(queueSize), msgSize(msgSize){
 	queue = xQueueCreate(queueSize, msgSize);
 }
 
