@@ -8,7 +8,7 @@
  */
 #include <MPU6050.h>
 
-#include "img_dmp_mpu6050.h"
+#include "img_dmp_mpu6050.hpp"
 
 MPU6050_CM::MPU6050_CM(int sda, int scl) : sda(sda), scl(scl), mpu(new MPU6050(0x69)){ }
 

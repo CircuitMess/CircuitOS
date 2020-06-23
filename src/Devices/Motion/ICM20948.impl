@@ -7,7 +7,7 @@
  * https://github.com/sparkfun/SparkFun_ICM-20948_ArduinoLibrary/issues/16
  */
 #include <ICM_20948.h>
-#include "img_dmp3a_icm20948.h"
+#include "img_dmp3a_icm20948.hpp"
 
 ICM20948::ICM20948(int sda, int scl) : sda(sda), scl(scl){ }
 
