@@ -35,9 +35,9 @@ void GridMenu::drawTitle(){
 
 	if(items.empty()) return;
 
-	sprite->setCursor(10, 1);
+	sprite->setCursor(10, 5);
 	sprite->setTextFont(1);
-	sprite->setTextSize(2);
+	sprite->setTextSize(1);
 	sprite->setTextColor(titleFgColor);
 	sprite->print(items[selected].title);
 }

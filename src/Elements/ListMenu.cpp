@@ -35,9 +35,9 @@ void ListMenu::drawTitle(){
 	sprite->clear(titleBgColor);
 	sprite->fillTriangle(0, 8, 0, 15, 8, 15, TFT_BLACK);
 
-	sprite->setCursor(10, 1);
+	sprite->setCursor(10, 6);
 	sprite->setTextFont(1);
-	sprite->setTextSize(2);
+	sprite->setTextSize(1);
 	sprite->setTextColor(titleFgColor);
 	sprite->print(title);
 }
@@ -69,9 +69,9 @@ void ListMenu::drawItem(uint index){
 	image->fillTriangle(0, 0, 3, 0, 0, 5, TFT_BLACK);
 	image->fillRect(6, 15, 1, 1, TFT_BLACK);
 
-	image->setCursor(9, 1);
+	image->setCursor(9, 6);
 	image->setTextFont(0);
-	image->setTextSize(2);
+	image->setTextSize(1);
 	image->setTextColor(titleFgColor);
 	image->print(item.title);
 }
