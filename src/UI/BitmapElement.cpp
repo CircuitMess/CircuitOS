@@ -13,4 +13,5 @@ uint BitmapElement::getHeight(){
 
 void BitmapElement::draw(){
 	getSprite()->drawIcon(bitmap, getTotalX(), getTotalY(), width, height, 1, TFT_TRANSPARENT);
+	Element::draw();
 }

@@ -39,6 +39,9 @@ public:
 private:
 	Display* display;
 
+	uint width;
+	uint height;
+
 	/** Hiding */
 	using Element::setX;
 	using Element::setY;

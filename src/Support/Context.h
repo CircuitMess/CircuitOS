@@ -1,11 +1,7 @@
 #ifndef CIRCUITOS_CONTEXT_H
 #define CIRCUITOS_CONTEXT_H
 
-
 #include "../UI/Screen.h"
-#include "../Input/Input.h"
-
-
 
 class Context {
 public:
