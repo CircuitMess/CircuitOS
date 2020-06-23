@@ -17,9 +17,9 @@ void SliderElement::reposChildren(){
 	children[0]->setPos(newPos, 0);
 }
 
-void SliderElement::update(uint millis){
+void SliderElement::update(uint micros){
 	if(started){
-		progress += millis;
+		progress += micros / 1000;
 		reposChildren();
 	}
 
