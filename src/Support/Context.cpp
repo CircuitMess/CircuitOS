@@ -2,7 +2,7 @@
 #include "ContextTransition.h"
 
 Context::Context(Display& display) : screen(display){
-
+	addSprite(&screen);
 }
 
 Screen& Context::getScreen(){
