@@ -32,6 +32,11 @@ public:
 	void stop(bool wait = false);
 
 	/**
+	 * Stops the task immediately. In other words, kills it.
+	 */
+	void kill();
+
+	/**
 	 * Core pinning. If set to true, each new task will be pinned to a new core. Call again to reset assignment.
 	 * @param pinned
 	 */

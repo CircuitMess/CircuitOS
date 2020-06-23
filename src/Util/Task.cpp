@@ -46,6 +46,17 @@ void Task::stop(bool wait){
 	}
 }
 
+void Task::kill(){
+	if(pinnedTasks){
+		usedCores--;
+	}
+
+	vTaskDelete(NULL);
+
+	running = false;
+	stopped = true;
+}
+
 void Task::setPinned(bool pinned){
 	Task::pinnedTasks = pinned;
 	usedCores = 0;
