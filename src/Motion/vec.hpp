@@ -1,6 +1,9 @@
 #ifndef MOTION_VEC_H
 #define MOTION_VEC_H
 
+#define die() exit(1)
+// #define die() throw std::exception()
+
 /** ### vec3 ### */
 
 template<typename T>
@@ -12,7 +15,7 @@ union vec3 {
 	vec3<T>(T x, T y, T z) : x(x), y(y), z(z){ }
 	vec3<T>() : x(0), y(0), z(0){ }
 	vec3<T>(std::initializer_list<T> data){
-		if(data.size() > 3) throw std::exception();
+		if(data.size() > 3) die();
 		int i = 0;
 		for(T d : data){
 			reinterpret_cast<T*>(this)[i++] = d;
@@ -20,7 +23,7 @@ union vec3 {
 	}
 
 	T& operator[](int i){
-		if(i > 2) throw std::exception();
+		if(i > 2) die();
 		return reinterpret_cast<T*>(this)[i];
 	}
 
@@ -121,7 +124,7 @@ union vec4 {
 	vec4<T>() : x(0), y(0), z(0), w(0){ }
 
 	T& operator[](int i){
-		if(i > 3) throw std::exception();
+		if(i > 3) die();
 		return reinterpret_cast<T*>(this)[i];
 	}
 };
