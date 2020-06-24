@@ -1,9 +1,9 @@
 #ifndef CIRCUITOS_INPUT_H
 #define CIRCUITOS_INPUT_H
 
-#include "../Util/Vector.h"
-#include "../Util/Task.h"
 #include "../Update/UpdateListener.h"
+#include "../Util/Vector.h"
+
 #define PIN_MAX 45
 #define DEBOUNCE_COUNT 1
 
@@ -11,8 +11,6 @@ class Input : public UpdateListener {
 public:
 	Input(uint8_t _pinNumber);
 
-	virtual void start();
-	virtual void stop();
 	/**
 	 * Sets a callback to be executed when a button press is detected.
 	 * @param pin Input pin of the button.
@@ -60,10 +58,7 @@ protected:
 	std::vector<void(*)()> btnHoldCallback;
 	std::vector<void(*)(uint)> btnHoldRepeatCallback;
 
-	Task scanTask;
 	static Input* instance;
-	static void scanTaskFunction(Task* task);
-	static uint32_t scanTaskMillis;
 	virtual void scanButtons() = 0;
 
 	virtual void registerButton(uint8_t pin);
