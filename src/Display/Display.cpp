@@ -24,7 +24,7 @@ void Display::begin()
 	baseSprite->clear(TFT_GREEN);
 
 	if(mirror){
-		mirrorBuffer = static_cast<uint16_t*>(ps_malloc(sizeof(uint16_t) * getWidth() * getHeight()));
+		mirrorBuffer = static_cast<uint16_t*>(malloc(sizeof(uint16_t) * getWidth() * getHeight()));
 	}
 }
 void Display::setPower(bool power){
