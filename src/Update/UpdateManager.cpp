@@ -1,22 +1,15 @@
 #include "UpdateManager.h"
 #include "UpdateListener.h"
+
+#ifdef CIRCUITOS_TASK
+#include <Util/Task.h>
 #include "../Util/Debug.h"
 
-Task UpdateManager::task("UpdateManager", UpdateManager::taskFunc, 10000);
+Task* UpdateManager::task = nullptr;
+#endif
+
 Vector<UpdateListener*> UpdateManager::listeners;
-uint UpdateManager::lastMillis = millis();
-
-void UpdateManager::startTask(byte priority){
-	task.start(priority);
-}
-
-void UpdateManager::setStackSize(size_t size){
-	if(task.running){
-		task.stop(true);
-	}
-
-	task = Task("UpdateManager", UpdateManager::taskFunc, size);
-}
+uint UpdateManager::lastMicros = micros();
 
 void UpdateManager::addListener(UpdateListener* listener){
 	listeners.push_back(listener);
@@ -28,25 +21,47 @@ void UpdateManager::removeListener(UpdateListener* listener){
 	listeners.remove(index);
 }
 
-void UpdateManager::taskFunc(Task* task){
-	logln("UpdateManager started in task mode");
-
-	while(task->running){
-		if(listeners.empty()){
-			vTaskDelay(1);
-		}else{
-			update();
-		}
-	}
-}
-
 void UpdateManager::update(){
 	uint m = micros();
-	uint delta = m - lastMillis;
+	uint delta = m - lastMicros;
 
 	for(UpdateListener* listener : listeners){
 		listener->update(delta);
 	}
 
-	lastMillis = m;
+	lastMicros = m;
 }
+
+#ifdef CIRCUITOS_TASK
+void UpdateManager::startTask(byte priority){
+	if(task == nullptr){
+		task = new Task("UpdateManager", UpdateManager::taskFunc, 10000);
+	}
+
+	task->start(priority);
+}
+
+void UpdateManager::stopTask(){
+	if(task == nullptr) return;
+	task->stop(true);
+
+}
+
+void UpdateManager::setStackSize(size_t size){
+	if(task != nullptr){
+		task->stop(true);
+		delete task;
+	}
+
+	task = new Task("UpdateManager", UpdateManager::taskFunc, size);
+}
+
+void UpdateManager::taskFunc(Task* task){
+	logln("UpdateManager started in task mode");
+
+	while(task->running){
+		vTaskDelay(1);
+		update();
+	}
+}
+#endif

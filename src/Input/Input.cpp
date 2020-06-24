@@ -2,26 +2,14 @@
 #include "../Util/Debug.h"
 
 Input* Input::instance;
-uint32_t Input::scanTaskMillis;
 
 Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
 								   btnReleaseCallback(pinNumber, nullptr),
 								   btnHoldCallback(pinNumber, nullptr), btnHoldRepeatCallback(pinNumber, nullptr),
 								   btnHoldStart(pinNumber, 0), btnHoldRepeatCounter(pinNumber, 0),
 								   btnHoldValue(pinNumber, 0), btnHoldRepeatValue(pinNumber, 0),
-								   btnHoldOver(pinNumber, 0), scanTask("InputScanTask", scanTaskFunction){
+								   btnHoldOver(pinNumber, 0){
 	instance = this;
-}
-
-void Input::start(){
-	logln("Starting input");
-	// scanTaskMillis = millis();
-	scanTask.start();
-}
-
-void Input::stop(){
-	logln("Stopping input");
-	scanTask.stop();
 }
 
 void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
@@ -44,18 +32,6 @@ void Input::removeBtnPressCallback(uint8_t pin){
 void Input::removeBtnReleaseCallback(uint8_t pin){
 	if(pin >= pinNumber) return;
 	btnReleaseCallback[pin] = nullptr;
-}
-
-void Input::scanTaskFunction(Task* task){
-	logln("Input task starting");
-	while(task->running){
-		vTaskDelay(1);
-		if(instance == nullptr) continue;
-
-		scanTaskMillis = millis() - scanTaskMillis;
-		instance->update(scanTaskMillis);
-		scanTaskMillis = millis();
-	}
 }
 
 Input* Input::getInstance(){

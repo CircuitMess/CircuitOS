@@ -1,7 +1,7 @@
 #include "MPUFusion.h"
 #include "Fusion.hpp"
 
-MPUFusion::MPUFusion(MPU* mpu, Mutex& mutex) : mpu(mpu), mutex(mutex){ }
+MPUFusion::MPUFusion(MPU* mpu) : mpu(mpu){ }
 
 void MPUFusion::begin(){
 	mpu->begin();
@@ -54,12 +54,12 @@ void MPUFusion::poll(){
 		calc();
 	}
 
-	mutex.lock();
+	// mutex.lock();
 	accel = tmpAccel;
 	gyro = tmpGyro;
 	magn = tmpMagn;
 	euler = tmpEuler;
-	mutex.unlock();
+	// mutex.unlock();
 }
 
 void MPUFusion::calc(){

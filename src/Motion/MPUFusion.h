@@ -2,13 +2,12 @@
 #define CIRCUITOS_MPUFUSION_H
 
 
-#include "../Sync/Mutex.h"
-#include "MPU.h"
 #include "../Update/UpdateListener.h"
+#include "MPU.h"
 
 class MPUFusion : public MPU, public UpdateListener {
 public:
-	explicit MPUFusion(MPU* mpu, Mutex& mutex);
+	explicit MPUFusion(MPU* mpu);
 
 	void update(uint millis) override;
 
@@ -18,7 +17,6 @@ public:
 
 private:
 	MPU* mpu = nullptr;
-	Mutex& mutex;
 
 	const uint pollT = 1000 / 500; // in ms
 	const uint stepRate = 2;

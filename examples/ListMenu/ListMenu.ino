@@ -7,10 +7,10 @@
 #include <UI/LinearLayout.h>
 #include <UI/GridLayout.h>
 #include <UI/ScrollLayout.h>
-#include <Util/Task.h>
 #include <Input/InputGPIO.h>
 #include <Bitmaps/Bitmaps.hpp>
 #include <Elements/ListMenu.h>
+#include <Update/UpdateManager.h>
 
 #define BTN_A 32
 #define BTN_B 34
@@ -51,11 +51,11 @@ void setup(){
 	input->setBtnReleaseCallback(BTN_A, btnRPress);
 	input->setBtnPressCallback(BTN_B, btnLPress);
 
-	input->start();
+	UpdateManager::addListener(input);
 }
 
 void loop(){
-	delay(20);
+	UpdateManager::update();
 }
 
 void setUI(){
