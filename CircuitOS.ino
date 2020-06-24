@@ -6,10 +6,10 @@
 #include "src/UI/LinearLayout.h"
 #include "src/UI/GridLayout.h"
 #include "src/UI/ScrollLayout.h"
-#include "src/Util/Task.h"
 #include "src/Input/Input.h"
 #include "src/Bitmaps/Bitmaps.hpp"
 #include "src/Input/InputGPIO.h"
+#include "src/Update/UpdateManager.h"
 
 #define BTN_A 32
 #define BTN_B 34
@@ -63,11 +63,11 @@ void setup(){
 	input->setBtnReleaseCallback(BTN_A, btnRPress);
 	input->setBtnPressCallback(BTN_B, btnLPress);
 
-	input->start();
+	UpdateManager::addListener(input);
 }
 
 void loop(){
-	delay(20);
+	UpdateManager::update();
 }
 
 void selectElement(uint element){
