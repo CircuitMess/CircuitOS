@@ -34,11 +34,13 @@ void Context::unpack(){
 }
 
 void Context::pop(){
+	if(parent == nullptr) return;
 	new ContextTransition(*screen.getDisplay(), this, parent, true);
 	parent = nullptr;
 }
 
 void Context::pop(void* data){
+	if(parent == nullptr) return;
 	parent->returned(data);
 	pop();
 }

@@ -16,11 +16,13 @@ void Modal::push(Context* parent){
 }
 
 void Modal::pop(){
+	if(parent == nullptr) return;
 	new ModalTransition(*screen.getDisplay(), parent, this, true);
 	parent = nullptr;
 }
 
 void Modal::pop(void* data){
+	if(parent == nullptr) return;
 	parent->returned(data);
 	pop();
 }
