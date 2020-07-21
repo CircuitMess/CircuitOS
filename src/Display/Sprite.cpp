@@ -1,6 +1,7 @@
 #include "Display.h" // Sprite.h is included by Display.h
 #include "Sprite.h"
 #include "../Util/Debug.h"
+#include <pgmspace.h>
 
 
 Sprite::Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height) : TFT_eSprite(spi){
@@ -52,7 +53,8 @@ void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t
 	for (uint16_t j = 0; j < height; j++) {
 		x = _x;
 		for (uint16_t i = 0; i < byteWidth;) {
-			uint16_t b = *(icon++);
+			
+			uint16_t b = pgm_read_byte(icon++);
 			i++;
 			for (uint16_t k = 0; k < 8; k++) {
 				if (i == byteWidth && k == dw) {
