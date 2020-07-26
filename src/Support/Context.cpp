@@ -35,7 +35,11 @@ void Context::unpack(){
 
 void Context::pop(){
 	if(parent == nullptr) return;
-	new ContextTransition(*screen.getDisplay(), this, parent, true);
+	this->pack();
+	this->stop();
+	parent->unpack();
+	parent->start();
+	// new ContextTransition(*screen.getDisplay(), this, parent, true);
 	parent = nullptr;
 }
 
@@ -47,7 +51,11 @@ void Context::pop(void* data){
 
 void Context::push(Context* parent){
 	this->parent = parent;
-	new ContextTransition(*screen.getDisplay(), parent, this);
+	// new ContextTransition(*screen.getDisplay(), parent, this);
+	parent->stop();
+	parent->pack();
+	this->unpack();
+	// this->start();
 }
 
 void Context::returned(void* data){
