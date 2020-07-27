@@ -13,6 +13,9 @@
 /** Whether NVS (non-volatile storage) is present in the core. Required for Settings */
 // #define CIRCUITOS_NVS
 
+/** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
+// #define CIRCUITOS_LOWRAM
+
 /** ### Device drivers ### */
 // #define CIRCUITOS_ICM20948
 // #define CIRCUITOS_MPU6050
