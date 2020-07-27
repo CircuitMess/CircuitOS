@@ -5,8 +5,11 @@
 #define INVERT_REG 0x04	// polarity inversion register location
 #define CONFIG_REG 0x06	// configuration register location
 
+I2cExpander* I2cExpander::instance = nullptr;
+
 I2cExpander::I2cExpander()
 {
+	instance = this;
 }
 I2cExpander::~I2cExpander()
 {
@@ -72,4 +75,8 @@ void I2cExpander::pinWrite(uint8_t pin, bool state)
 	else
 		outputState &= ~outputMask;
 	portWrite(outputState);
+}
+I2cExpander* I2cExpander::getInstance()
+{
+	return instance;
 }
