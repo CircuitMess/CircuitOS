@@ -123,7 +123,7 @@ void Input::update(uint _time)
 	if(inactivityCheck)
 	{
 		inactivityTime+=_time;
-		if(inactivityTime >= inactivityCallbackTime)
+		if(inactivityTime >= inactivityCallbackTime && inactivityCallback != nullptr)
 		{
 			inactivityCallback();
 		}
