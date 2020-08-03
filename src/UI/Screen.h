@@ -11,6 +11,9 @@ public:
 	explicit Screen(Display& display);
 	Screen(Display& display, uint width, uint height);
 
+	void pack() override;
+	void unpack() override;
+
 	Sprite* getSprite() override;
 
 	void draw() override;
