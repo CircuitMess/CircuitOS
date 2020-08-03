@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <CircuitOS.h>
 #include <UI/Image.h>
 #include <UI/Screen.h>
 #include <CircuitOS.h>
