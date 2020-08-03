@@ -8,8 +8,7 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 								   btnHoldCallback(pinNumber, nullptr), btnHoldRepeatCallback(pinNumber, nullptr),
 								   btnHoldStart(pinNumber, 0), btnHoldRepeatCounter(pinNumber, 0),
 								   btnHoldValue(pinNumber, 0), btnHoldRepeatValue(pinNumber, 0),
-								   btnHoldOver(pinNumber, 0), inactivityTime(0), inactivityCallback(nullptr),
-								   inactivityCheck(1), activityWakeCallback(nullptr){
+								   btnHoldOver(pinNumber, 0), anyKeyCallback(nullptr), anyKeyCallbackReturn(0){
 	instance = this;
 }
 
@@ -51,11 +50,17 @@ void Input::btnPress(uint i){
 		btnCount[i]++;
 
 		if(btnState[i] == 0 && btnCount[i] == DEBOUNCE_COUNT){
-			inactivityCheck = 0;
-			if(activityWakeCallback != nullptr)
+			if(anyKeyCallback != nullptr)
 			{
-				activityWakeCallback();
-				return;
+				if(anyKeyCallbackReturn)
+				{
+					anyKeyCallback();
+					return;
+				}
+				else
+				{
+					anyKeyCallback();
+				}
 			}
 			btnState[i] = 1;
 			if(!btnHoldOver[buttons[i]])
@@ -74,11 +79,17 @@ void Input::btnRelease(uint i){
 		btnCount[i]--;
 
 		if(btnState[i] == 1 && btnCount[i] == 0){
-			inactivityCheck = 0;
-			if(activityWakeCallback != nullptr)
+			if(anyKeyCallback != nullptr)
 			{
-				activityWakeCallback();
-				return;
+				if(anyKeyCallbackReturn)
+				{
+					anyKeyCallback();
+					return;
+				}
+				else
+				{
+					anyKeyCallback();
+				}
 			}
 			btnState[i] = 0;
 			btnHoldOver[buttons[i]] = 0;
@@ -94,7 +105,6 @@ void Input::btnRelease(uint i){
 
 void Input::update(uint _time)
 {
-	inactivityCheck = 1;
 	scanButtons();
 	for(uint8_t i = 0; i < buttons.size(); i++)
 	{
@@ -120,16 +130,6 @@ void Input::update(uint _time)
 			}
 		}
 	}
-	if(inactivityCheck)
-	{
-		inactivityTime+=_time;
-		if(inactivityTime >= inactivityCallbackTime && inactivityCallback != nullptr)
-		{
-			inactivityCallback();
-		}
-	}else{
-		inactivityTime = 0;
-	}
 }
 
 void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callback)())
@@ -154,13 +154,10 @@ uint32_t Input::getButtonHeldMillis(uint8_t pin)
 	return millis() - btnHoldStart[pin];
 }
 
-void Input::setInactivityCallback(uint _time, void (*callback)())
+void Input::setAnyKeyCallback(void (*callback)(), bool returnAfterCallback)
 {
-	inactivityCallback = callback;
-	inactivityCallbackTime = _time;
-}
-
-void Input::setActivityCallback(void (*callback)())
-{
-	activityWakeCallback = callback;
+	anyKeyCallback = callback;
+	anyKeyCallbackReturn = returnAfterCallback;
+	Serial.print("callback return: ");
+	Serial.println(anyKeyCallbackReturn);
 }

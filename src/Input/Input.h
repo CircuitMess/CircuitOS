@@ -55,8 +55,7 @@ public:
 	 */
 	virtual uint32_t getButtonHeldMillis(uint8_t pin);
 
-	virtual void setInactivityCallback(uint _time, void (*callback)());
-	virtual void setActivityCallback(void (*callback)());
+	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = 0);
 
 	static Input* getInstance();
 
@@ -81,13 +80,9 @@ protected:
 	std::vector<uint32_t> btnHoldRepeatValue; //Value in ms that the callback will be triggered after periodically
 	std::vector<uint32_t> btnHoldRepeatCounter;
 	std::vector<bool> btnHoldOver;
-
-	void(*inactivityCallback)(void); 
-	uint inactivityTime;
-	uint inactivityCallbackTime;
-	bool inactivityCheck;
-	void(*activityWakeCallback)(void); 
-
+	
+	void(*anyKeyCallback)(void); 
+	bool anyKeyCallbackReturn;
 
 	void btnPress(uint i);
 	void btnRelease(uint );
