@@ -14,9 +14,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'mkdir -p build'
-                sh 'mv CircuitOS.ino ${PWD##*/}.ino'
-                sh '~/.arduino/arduino-cli compile -b cm:esp32:ringo -o build ${PWD##*/}.ino'
+                sh 'mkdir -p CircuitOS'
+                sh 'cp CircuitOS.ino CircuitOS/'
+                sh 'cd CircuitOS && ~/.arduino/arduino-cli compile -b cm:esp32:ringo -n CircuitOS.ino'
             }
         }
     }

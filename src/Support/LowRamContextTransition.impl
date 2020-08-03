@@ -1,0 +1,57 @@
+#include "ContextTransition.h"
+#include "Context.h"
+#include "../Update/UpdateManager.h"
+#include "../UI/Screen.h"
+
+ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB) :
+		ContextTransition(display, contextA, contextB, false){
+
+}
+
+ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse)
+	: reverse(reverse), display(&display), contextA(contextA), contextB(contextB) {
+
+	contextA->stop();
+	contextA->pack();
+
+	contextB->unpack();
+    contextB->draw();
+
+	UpdateManager::addListener(this);
+}
+
+ContextTransition::~ContextTransition(){
+	UpdateManager::removeListener(this);
+}
+
+void ContextTransition::update(uint micros){
+	time += micros;
+
+	uint scroll = time / (1.5 * 1000.0);
+	if(lastScroll < scroll){
+        Serial.println(scroll);
+
+		if(reverse){
+            display->getBaseSprite()->setPos(0,scroll - display->getHeight());
+		}else{
+            display->getBaseSprite()->setPos(0,display->getHeight() - scroll);
+		}
+		display->commit();
+
+		lastScroll = scroll;
+	}
+
+	if(scroll >= display->getHeight()){
+		Serial.println("Ending context switch");
+        if(!reverse){
+            display->getBaseSprite()->setPos(0,0);
+        }
+        display->commit();
+		contextB->start();
+        if(reverse)
+        {
+            display->getBaseSprite()->setPos(0,0);
+        }
+		delete this;
+	}
+}

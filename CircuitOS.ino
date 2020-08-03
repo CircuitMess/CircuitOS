@@ -1,15 +1,16 @@
 #include <Arduino.h>
-#include "src/UI/Image.h"
-#include "src/UI/Screen.h"
-#include "src/CircuitOS.h"
-#include "src/Util/Vector.h"
-#include "src/UI/LinearLayout.h"
-#include "src/UI/GridLayout.h"
-#include "src/UI/ScrollLayout.h"
-#include "src/Input/Input.h"
-#include "src/Bitmaps/Bitmaps.hpp"
-#include "src/Input/InputGPIO.h"
-#include "src/Update/UpdateManager.h"
+#include <CircuitOS.h>
+#include <UI/Image.h>
+#include <UI/Screen.h>
+#include <CircuitOS.h>
+#include <Util/Vector.h>
+#include <UI/LinearLayout.h>
+#include <UI/GridLayout.h>
+#include <UI/ScrollLayout.h>
+#include <Input/Input.h>
+#include <Bitmaps/Bitmaps.hpp>
+#include <Input/InputGPIO.h>
+#include <Update/UpdateManager.h>
 
 #define BTN_A 32
 #define BTN_B 34
