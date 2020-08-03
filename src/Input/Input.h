@@ -55,6 +55,12 @@ public:
 	 */
 	virtual uint32_t getButtonHeldMillis(uint8_t pin);
 
+	/**
+	 * Sets a callback to be executed when any button is pressed or released. 
+	 * @param callback Callback to be executed.
+	 * @param returnAfterCallback Optional parameter. If true, ignores button input after anyKeyCallback is executed.
+	 * Useful to prevent button inputs after waking up from sleep, for example.
+	 */
 	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = 0);
 
 	static Input* getInstance();
