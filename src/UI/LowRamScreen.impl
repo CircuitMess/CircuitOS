@@ -72,7 +72,7 @@ void Screen::setPos(int x, int y){
 }
 
 Sprite* Screen::getSprite(){
-	return SpriteElement::getSprite();
+	return display->getBaseSprite();
 }
 
 void Screen::pack()
