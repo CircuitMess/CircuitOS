@@ -8,7 +8,7 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 								   btnHoldCallback(pinNumber, nullptr), btnHoldRepeatCallback(pinNumber, nullptr),
 								   btnHoldStart(pinNumber, 0), btnHoldRepeatCounter(pinNumber, 0),
 								   btnHoldValue(pinNumber, 0), btnHoldRepeatValue(pinNumber, 0),
-								   btnHoldOver(pinNumber, 0){
+								   btnHoldOver(pinNumber, 0), anyKeyCallback(nullptr), anyKeyCallbackReturn(0){
 	instance = this;
 }
 
@@ -50,6 +50,18 @@ void Input::btnPress(uint i){
 		btnCount[i]++;
 
 		if(btnState[i] == 0 && btnCount[i] == DEBOUNCE_COUNT){
+			if(anyKeyCallback != nullptr)
+			{
+				if(anyKeyCallbackReturn)
+				{
+					anyKeyCallback();
+					return;
+				}
+				else
+				{
+					anyKeyCallback();
+				}
+			}
 			btnState[i] = 1;
 			if(!btnHoldOver[buttons[i]])
 			{
@@ -67,6 +79,18 @@ void Input::btnRelease(uint i){
 		btnCount[i]--;
 
 		if(btnState[i] == 1 && btnCount[i] == 0){
+			if(anyKeyCallback != nullptr)
+			{
+				if(anyKeyCallbackReturn)
+				{
+					anyKeyCallback();
+					return;
+				}
+				else
+				{
+					anyKeyCallback();
+				}
+			}
 			btnState[i] = 0;
 			btnHoldOver[buttons[i]] = 0;
 			btnHoldStart[buttons[i]] = millis();
@@ -78,7 +102,8 @@ void Input::btnRelease(uint i){
 		}
 	}
 }
-void Input::update(uint _millis)
+
+void Input::update(uint _time)
 {
 	scanButtons();
 	for(uint8_t i = 0; i < buttons.size(); i++)
@@ -106,6 +131,7 @@ void Input::update(uint _millis)
 		}
 	}
 }
+
 void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callback)())
 {
 	if(pin >= pinNumber) return;
@@ -113,6 +139,7 @@ void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callbac
 	btnHoldCallback[pin] = callback;
 	btnHoldValue[pin] = holdTime;
 }
+
 void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint))
 {
 	if(pin >= pinNumber) return;
@@ -120,8 +147,17 @@ void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (
 	btnHoldRepeatCallback[pin]=callback;
 	btnHoldRepeatValue[pin] = periodTime;
 }
+
 uint32_t Input::getButtonHeldMillis(uint8_t pin)
 {
 	if(pin >= pinNumber) return 0;
 	return millis() - btnHoldStart[pin];
+}
+
+void Input::setAnyKeyCallback(void (*callback)(), bool returnAfterCallback)
+{
+	anyKeyCallback = callback;
+	anyKeyCallbackReturn = returnAfterCallback;
+	Serial.print("callback return: ");
+	Serial.println(anyKeyCallbackReturn);
 }

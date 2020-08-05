@@ -47,7 +47,22 @@ public:
 	 * The first time it's called, (uint)1 will be passed, the 2nd time (uint)2 and so on.
 	 */
 	virtual void setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint));
+
+	/**
+	 * Returns the time in milliseconds a button is being held down.
+	 * @param pin Input pin of the button.
+	 * @return Ammount of time the button was held down.
+	 */
 	virtual uint32_t getButtonHeldMillis(uint8_t pin);
+
+	/**
+	 * Sets a callback to be executed when any button is pressed or released. 
+	 * @param callback Callback to be executed.
+	 * @param returnAfterCallback Optional parameter. If true, ignores button input after anyKeyCallback is executed.
+	 * Useful to prevent button inputs after waking up from sleep, for example.
+	 */
+	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = 0);
+
 	static Input* getInstance();
 
 protected:
@@ -71,10 +86,13 @@ protected:
 	std::vector<uint32_t> btnHoldRepeatValue; //Value in ms that the callback will be triggered after periodically
 	std::vector<uint32_t> btnHoldRepeatCounter;
 	std::vector<bool> btnHoldOver;
+	
+	void(*anyKeyCallback)(void); 
+	bool anyKeyCallbackReturn;
 
 	void btnPress(uint i);
 	void btnRelease(uint );
-	void update(uint millis) override;
+	void update(uint _time) override;
 	void btnHeld(uint8_t i, uint32_t millis);
 
 };
