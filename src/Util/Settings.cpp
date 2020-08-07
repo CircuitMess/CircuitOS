@@ -1,5 +1,9 @@
 #include "../../Setup.hpp"
 
 #ifdef CIRCUITOS_NVS
-#include "Settings.impl"
+#include "SettingsNVS.impl"
+#endif
+
+#ifdef CIRCUITOS_LITTLEFS
+#include "SettingsLittleFS.impl"
 #endif
