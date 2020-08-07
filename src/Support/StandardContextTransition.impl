@@ -47,10 +47,10 @@ void ContextTransition::update(uint micros){
 
 		if(reverse){
 			//copySprite(display->getBaseSprite(), display->getBaseSprite(), 1);
-			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), (int) scroll - (int) display->getHeight());
+			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), min(0, (int) scroll - (int) display->getHeight()));
 		}else{
 			copySprite(display->getBaseSprite(), display->getBaseSprite(), -1);
-			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), display->getHeight() - scroll);
+			copySprite(contextB->getScreen().getSprite(), display->getBaseSprite(), max(0, (int) display->getHeight() - (int) scroll));
 		}
 
 		lastScroll = scroll;

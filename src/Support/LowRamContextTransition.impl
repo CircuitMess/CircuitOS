@@ -29,12 +29,10 @@ void ContextTransition::update(uint micros){
 
 	uint scroll = time / (1.5 * 1000.0);
 	if(lastScroll < scroll){
-        Serial.println(scroll);
-
 		if(reverse){
-            display->getBaseSprite()->setPos(0,scroll - display->getHeight());
+            display->getBaseSprite()->setPos(0, min(0, (int) scroll - (int) display->getHeight()));
 		}else{
-            display->getBaseSprite()->setPos(0,display->getHeight() - scroll);
+            display->getBaseSprite()->setPos(0, max(0, (int) display->getHeight() - (int) scroll));
 		}
 		display->commit();
 
