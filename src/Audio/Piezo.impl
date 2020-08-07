@@ -6,14 +6,6 @@ void PiezoImpl::begin(uint8_t pin){
 	this->pin = pin;
 }
 
-void PiezoImpl::setMute(bool mute){
-	this->mute = mute;
-
-	if(!mute){
-		this->noTone();
-	}
-}
-
 void PiezoImpl::tone(uint16_t freq, uint16_t duration){
 	if(pin == (uint8_t) -1) return;
 	if(mute) return;
@@ -23,4 +15,16 @@ void PiezoImpl::tone(uint16_t freq, uint16_t duration){
 void PiezoImpl::noTone(){
 	if(pin == (uint8_t) -1) return;
 	::noTone(pin);
+}
+
+void PiezoImpl::setMute(bool mute){
+	this->mute = mute;
+
+	if(!mute){
+		this->noTone();
+	}
+}
+
+bool PiezoImpl::isMuted() const{
+	return mute;
 }
