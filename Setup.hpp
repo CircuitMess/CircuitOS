@@ -13,6 +13,9 @@
 /** Whether NVS (non-volatile storage) is present in the core. Required for Settings */
 // #define CIRCUITOS_NVS
 
+/** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
+// #define CIRCUITOS_TONE
+
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
 // #define CIRCUITOS_LOWRAM
 
