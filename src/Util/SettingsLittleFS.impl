@@ -1,0 +1,52 @@
+#include "Settings.h"
+
+#include <FS.h>
+#include <LittleFS.h>
+
+#define Settings_Filename "/CircuitOS"
+
+void* Settings::_data = nullptr;
+size_t Settings::dataSize = 0;
+
+
+bool Settings::init(void* ptr, size_t size){
+	_data = ptr;
+	dataSize = size;
+
+	if(!LittleFS.begin()){
+		Serial.println("LittleFS begin error");
+	}
+
+	if(!LittleFS.exists(Settings_Filename)){
+		return false;
+	}
+
+	retrieve();
+	return true;
+}
+
+void* Settings::data(){
+	return _data;
+}
+
+void Settings::store(){
+	File file = LittleFS.open(Settings_Filename, "w");
+	if(!file){
+		Serial.println("Settings store error");
+		return;
+	}
+
+	file.write((byte*) _data, dataSize);
+	file.close();
+}
+
+void Settings::retrieve(){
+	File file = LittleFS.open(Settings_Filename, "r");
+	if(!file){
+		Serial.println("Settings load error");
+		return;
+	}
+
+	file.readBytes((char*) _data , dataSize);
+	file.close();
+}

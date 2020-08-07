@@ -10,8 +10,11 @@
 #define CIRCUITOS_QUEUE
 #endif
 
-/** Whether NVS (non-volatile storage) is present in the core. Required for Settings */
+/** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
 // #define CIRCUITOS_NVS
+
+/** Whether LittleFS library is available. Enables LittleFS variant of Settings */
+// #define CIRCUITOS_LITTLEFS
 
 /** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
 // #define CIRCUITOS_TONE
