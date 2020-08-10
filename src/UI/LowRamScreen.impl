@@ -21,9 +21,6 @@ Screen& Screen::addChild(Element* element){
 
 void Screen::draw(){
 	logln("Drawing screen");
-
-	sprite.clear(TFT_BLACK);
-
 	ElementContainer::draw();
 }
 
@@ -51,24 +48,17 @@ Display* Screen::getDisplay() const{
 	return display;
 }
 
-int Screen::getX() const{
-	return sprite.getX();
-}
-
-int Screen::getY() const{
-	return sprite.getY();
-}
-
 int Screen::getTotalX() const{
-	return 0; // getX();
+	return getX(); // getX();
 }
 
 int Screen::getTotalY() const{
-	return 0; // getY();
+	return getY(); // getY();
 }
 
 void Screen::setPos(int x, int y){
-	sprite.setPos(x, y);
+	setX(x);
+	setY(y);
 }
 
 Sprite* Screen::getSprite(){
