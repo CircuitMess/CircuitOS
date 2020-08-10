@@ -3,6 +3,7 @@
 
 
 #include "ElementContainer.h"
+#include "../Display/Sprite.h"
 #include <string>
 
 class TextElement : public Element {
@@ -22,8 +23,10 @@ public:
 	uint getHeight() override;
 
 	void setWidth(uint width);
-
 	void setHeight(uint height);
+
+	enum TextAlignment { LEFT, CENTER, RIGHT };
+	void setAlignment(TextAlignment alignment);
 
 private:
 	uint width;
@@ -32,6 +35,7 @@ private:
 	uint textFont = 0;
 	uint textSize = 1;
 	Color textColor = TFT_DARKGREY;
+	TextAlignment textAlignment = LEFT;
 
 	std::string text = "";
 

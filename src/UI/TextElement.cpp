@@ -20,13 +20,40 @@ TextElement& TextElement::setColor(Color color){
 	return *this;
 }
 
+void TextElement::setAlignment(TextElement::TextAlignment alignment){
+	this->textAlignment = alignment;
+}
+
 void TextElement::draw(){
 	Sprite* canvas = getSprite();
 	canvas->setTextFont(textFont);
 	canvas->setTextColor(textColor);
 	canvas->setTextSize(textSize);
-	canvas->setCursor(getTotalX(), getTotalY());
+
+	canvas->setCursor(-255, -255);
 	canvas->print(text.c_str());
+	uint textWidth = canvas->getCursorX() + 255;
+	canvas->setCursor(-255, -255);
+	canvas->println(text.c_str());
+	uint textHeight = canvas->getCursorY() + 255;
+
+	uint textX;
+	switch(textAlignment){
+		default:
+		case LEFT:
+			textX = 0;
+			break;
+		case CENTER:
+			textX = (width - textWidth) / 2;
+			break;
+		case RIGHT:
+			textX = width - textWidth;
+			break;
+	}
+
+	canvas->setCursor(getTotalX() + textX, getTotalY() + (height - textHeight) / 2 + 1);
+	canvas->print(text.c_str());
+	Element::draw();
 }
 
 const std::string& TextElement::getText() const{
