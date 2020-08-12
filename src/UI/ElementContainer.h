@@ -8,6 +8,7 @@
 class ElementContainer : public Element {
 public:
 	using Element::Element;
+	virtual ~ElementContainer();
 
 	virtual ElementContainer& addChild(Element* element);
 
