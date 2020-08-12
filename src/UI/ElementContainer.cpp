@@ -30,3 +30,9 @@ void ElementContainer::draw(){
 Vector<Element*>& ElementContainer::getChildren(){
 	return children;
 }
+
+ElementContainer::~ElementContainer(){
+	for(Element* el : children){
+		delete el;
+	}
+}
