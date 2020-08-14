@@ -16,6 +16,9 @@ void Display::begin()
 	}
 
 	tft.init();
+
+	tft.writecommand(17); //wakeup command in case display driver is in sleep mode
+
 	tft.invertDisplay(0);
 	if(rotation != 1){
 		tft.setRotation(rotation);
