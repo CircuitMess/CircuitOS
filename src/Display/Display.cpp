@@ -20,8 +20,8 @@ void Display::begin()
 	if(rotation != 1){
 		tft.setRotation(rotation);
 	}
-	tft.fillScreen(TFT_PURPLE);
-	baseSprite->clear(TFT_GREEN);
+	tft.fillScreen(TFT_BLACK);
+	baseSprite->clear(TFT_BLACK);
 
 	if(mirror){
 		mirrorBuffer = static_cast<uint16_t*>(malloc(sizeof(uint16_t) * getWidth() * getHeight()));
