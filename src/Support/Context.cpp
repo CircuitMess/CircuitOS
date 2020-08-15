@@ -5,6 +5,10 @@ Context::Context(Display& display) : screen(display){
 	addSprite(&screen);
 }
 
+Context::~Context(){
+
+}
+
 Screen& Context::getScreen(){
 	return screen;
 }

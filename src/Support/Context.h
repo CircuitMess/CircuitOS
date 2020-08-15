@@ -6,6 +6,7 @@
 class Context {
 public:
 	explicit Context(Display& display);
+	virtual ~Context();
 
 	virtual void draw() = 0;
 
