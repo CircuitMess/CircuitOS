@@ -161,3 +161,9 @@ void Input::setAnyKeyCallback(void (*callback)(), bool returnAfterCallback)
 	Serial.print("callback return: ");
 	Serial.println(anyKeyCallbackReturn);
 }
+
+void Input::preregisterButtons(Vector<uint8_t> pins){
+	for(const uint8_t pin : pins){
+		registerButton(pin);
+	}
+}
