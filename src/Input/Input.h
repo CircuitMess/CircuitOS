@@ -61,7 +61,7 @@ public:
 	 * @param returnAfterCallback Optional parameter. If true, ignores button input after anyKeyCallback is executed.
 	 * Useful to prevent button inputs after waking up from sleep, for example.
 	 */
-	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = true);
+	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = false);
 
 	/**
 	 * Pre-register buttons. Buttons are automatically registered with callback functions, but pre-registration is nedded for anyKeyCallback.
