@@ -21,12 +21,12 @@ void LoopManager::removeListener(LoopListener* listener){
 	listeners.remove(index);
 }
 
-void LoopManager::update(){
+void LoopManager::loop(){
 	uint m = micros();
 	uint delta = m - lastMicros;
 
 	for(LoopListener* listener : listeners){
-		listener->update(delta);
+		listener->loop(delta);
 	}
 
 	lastMicros = m;
@@ -61,7 +61,7 @@ void LoopManager::taskFunc(Task* task){
 
 	while(task->running){
 		vTaskDelay(1);
-		update();
+		loop();
 	}
 }
 #endif

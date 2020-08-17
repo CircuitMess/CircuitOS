@@ -15,7 +15,7 @@ public:
 	LoopListener();
 	virtual ~LoopListener();
 
-	virtual void update(uint micros) = 0;
+	virtual void loop(uint micros) = 0;
 
 #ifdef CIRCUITOS_TASK
 	void startTask(std::string name, byte priority = 0, size_t stackSize = 2048);

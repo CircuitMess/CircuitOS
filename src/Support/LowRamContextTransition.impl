@@ -24,7 +24,7 @@ ContextTransition::~ContextTransition(){
 	LoopManager::removeListener(this);
 }
 
-void ContextTransition::update(uint micros){
+void ContextTransition::loop(uint micros){
 	time += micros;
 
 	uint scroll = time / (1.5 * 1000.0);

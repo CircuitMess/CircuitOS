@@ -55,7 +55,7 @@ void setup(){
 }
 
 void loop(){
-	LoopManager::update();
+	LoopManager::loop();
 }
 
 void setUI(){

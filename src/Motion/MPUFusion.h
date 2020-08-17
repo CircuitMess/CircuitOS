@@ -9,7 +9,7 @@ class MPUFusion : public MPU, public LoopListener {
 public:
 	explicit MPUFusion(MPU* mpu);
 
-	void update(uint millis) override;
+	void loop(uint millis) override;
 
 	bool readSensor() override;
 	void begin() override;

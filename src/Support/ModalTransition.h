@@ -13,7 +13,7 @@ class ModalTransition : public LoopListener {
 public:
 	ModalTransition(Display& display, Context* context, Modal* modal, bool reverse = false);
 
-	void update(uint micros) override;
+	void loop(uint micros) override;
 
 	virtual ~ModalTransition();
 

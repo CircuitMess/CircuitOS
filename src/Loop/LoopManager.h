@@ -14,7 +14,7 @@ public:
 	static void addListener(LoopListener* listener);
 	static void removeListener(LoopListener* listener);
 
-	static void update();
+	static void loop();
 
 #ifdef CIRCUITOS_TASK
 	/**

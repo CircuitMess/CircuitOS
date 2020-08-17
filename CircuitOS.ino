@@ -68,7 +68,7 @@ void setup(){
 }
 
 void loop(){
-	LoopManager::update();
+	LoopManager::loop();
 }
 
 void selectElement(uint element){

@@ -98,7 +98,7 @@ protected:
 
 	void btnPress(uint i);
 	void btnRelease(uint );
-	void update(uint _time) override;
+	void loop(uint _time) override;
 	void btnHeld(uint8_t i, uint32_t millis);
 
 };

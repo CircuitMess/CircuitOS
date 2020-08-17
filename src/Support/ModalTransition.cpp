@@ -46,7 +46,7 @@ void ModalTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int x, in
 	sprite->setPos(oldX, oldY);
 }
 
-void ModalTransition::update(uint micros){
+void ModalTransition::loop(uint micros){
 	time += micros;
 
 	int scroll = time / (1.5 * 1000.0);

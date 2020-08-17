@@ -11,7 +11,7 @@ public:
 	SliderElement(ElementContainer* parent, uint width, uint height);
 	~SliderElement();
 
-	void update(uint millis) override;
+	void loop(uint millis) override;
 
 	void start();
 	void stop();

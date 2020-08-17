@@ -37,7 +37,7 @@ void LoopListener::taskFunc(Task* task){
 		uint m = micros();
 		uint delta = m - instance->lastMicros;
 
-		instance->update(delta);
+		instance->loop(delta);
 
 		instance->lastMicros = m;
 	}

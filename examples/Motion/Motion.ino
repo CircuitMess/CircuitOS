@@ -89,7 +89,7 @@ void setup(){
 void loop(){
 	delay(500);
 	//printDisplay();
-	//LoopManager::update();
+	//LoopManager::loop();
 	/*mpu->readSensor();
 	euler = mpu->getEuler();
 	accel = mpu->getAccel();

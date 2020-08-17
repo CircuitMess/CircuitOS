@@ -39,7 +39,7 @@ void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos
 	sprite->setPos(oldX, oldY);
 }
 
-void ContextTransition::update(uint micros){
+void ContextTransition::loop(uint micros){
 	time += micros;
 
 	uint scroll = time / (1.5 * 1000.0);
