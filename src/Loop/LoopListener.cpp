@@ -1,35 +1,35 @@
-#include "UpdateListener.h"
-#include "UpdateManager.h"
+#include "LoopListener.h"
+#include "LoopManager.h"
 
 #ifdef CIRCUITOS_TASK
 #include <Util/Task.h>
 #include <utility>
 #endif
 
-UpdateListener::UpdateListener(){
-	// UpdateManager::addListener(this);
+LoopListener::LoopListener(){
+	// LoopManager::addListener(this);
 }
 
-UpdateListener::~UpdateListener(){
-	UpdateManager::removeListener(this);
+LoopListener::~LoopListener(){
+	LoopManager::removeListener(this);
 }
 
 #ifdef CIRCUITOS_TASK
-void UpdateListener::startTask(std::string name, byte priority, size_t stackSize){
+void LoopListener::startTask(std::string name, byte priority, size_t stackSize){
 	lastMicros = micros();
 	task = new Task(std::move(name), taskFunc, stackSize, this);
 	task->start(priority);
 }
 
-void UpdateListener::stopTask(){
+void LoopListener::stopTask(){
 	if(task == nullptr || !task->running) return;
 	task->stop(true);
 	delete task;
 	task = nullptr;
 }
 
-void UpdateListener::taskFunc(Task* task){
-	UpdateListener* instance = static_cast<UpdateListener*>(task->arg);
+void LoopListener::taskFunc(Task* task){
+	LoopListener* instance = static_cast<LoopListener*>(task->arg);
 
 	while(task->running){
 		vTaskDelay(1);

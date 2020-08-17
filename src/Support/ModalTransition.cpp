@@ -1,5 +1,5 @@
 #include "ModalTransition.h"
-#include "../Update/UpdateManager.h"
+#include "../Loop/LoopManager.h"
 
 ModalTransition::ModalTransition(Display& display, Context* context, Modal* modal, bool reverse)
 		: reverse(reverse), display(&display), context(context), modal(modal){
@@ -25,11 +25,11 @@ ModalTransition::ModalTransition(Display& display, Context* context, Modal* moda
 		modal->getScreen().getSprite()->setPos(modalX, display.getHeight());
 	}
 
-	UpdateManager::addListener(this);
+	LoopManager::addListener(this);
 }
 
 ModalTransition::~ModalTransition(){
-	UpdateManager::removeListener(this);
+	LoopManager::removeListener(this);
 }
 
 void ModalTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int x, int y){

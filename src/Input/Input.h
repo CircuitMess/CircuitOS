@@ -1,13 +1,13 @@
 #ifndef CIRCUITOS_INPUT_H
 #define CIRCUITOS_INPUT_H
 
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
 
 #define PIN_MAX 45
 #define DEBOUNCE_COUNT 1
 
-class Input : public UpdateListener {
+class Input : public LoopListener {
 public:
 	Input(uint8_t _pinNumber);
 

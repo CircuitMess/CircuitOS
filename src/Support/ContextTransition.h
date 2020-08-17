@@ -1,12 +1,12 @@
 #ifndef CIRCUITOS_CONTEXTTRANSITION_H
 #define CIRCUITOS_CONTEXTTRANSITION_H
 
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 #include "../Display/Display.h"
 
 class Context;
 
-class ContextTransition : public UpdateListener {
+class ContextTransition : public LoopListener {
 public:
 	ContextTransition(Display& display, Context* contextA, Context* contextB);
 	ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse);

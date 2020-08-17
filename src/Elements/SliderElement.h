@@ -4,9 +4,9 @@
 #include "../UI/SpriteElement.h"
 #include "../UI/Layout.h"
 #include "../UI/Image.h"
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 
-class SliderElement : public Layout, public UpdateListener {
+class SliderElement : public Layout, public LoopListener {
 public:
 	SliderElement(ElementContainer* parent, uint width, uint height);
 	~SliderElement();

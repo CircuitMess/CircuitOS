@@ -1,7 +1,7 @@
 #ifndef CIRCUITOS_MODALTRANSITION_H
 #define CIRCUITOS_MODALTRANSITION_H
 
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 #include "../UI/ElementContainer.h"
 #include "../UI/LinearLayout.h"
 #include "../UI/ScrollLayout.h"
@@ -9,7 +9,7 @@
 #include "Context.h"
 #include "Modal.h"
 
-class ModalTransition : public UpdateListener {
+class ModalTransition : public LoopListener {
 public:
 	ModalTransition(Display& display, Context* context, Modal* modal, bool reverse = false);
 

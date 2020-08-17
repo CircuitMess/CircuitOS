@@ -1,5 +1,4 @@
 #include "SliderElement.h"
-#include "../Update/UpdateManager.h"
 
 SliderElement::SliderElement(ElementContainer* parent, uint width, uint height) :
 		Layout(parent){
