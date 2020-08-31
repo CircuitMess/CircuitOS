@@ -1,6 +1,6 @@
 #include "ContextTransition.h"
 #include "Context.h"
-#include "../Update/UpdateManager.h"
+#include "../Loop/LoopManager.h"
 #include "../UI/Screen.h"
 
 ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB) :
@@ -18,11 +18,11 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 	contextB->getScreen().getSprite()->setPos(0, display.getHeight());
 	contextB->getScreen().draw();
 
-	UpdateManager::addListener(this);
+	LoopManager::addListener(this);
 }
 
 ContextTransition::~ContextTransition(){
-	UpdateManager::removeListener(this);
+	LoopManager::removeListener(this);
 }
 
 void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos){
@@ -39,7 +39,7 @@ void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos
 	sprite->setPos(oldX, oldY);
 }
 
-void ContextTransition::update(uint micros){
+void ContextTransition::loop(uint micros){
 	time += micros;
 
 	uint scroll = time / (1.5 * 1000.0);

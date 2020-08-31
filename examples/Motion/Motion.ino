@@ -4,7 +4,7 @@
 #include <Motion/vec.hpp>
 #include <Util/Task.h>
 #include <Display/Display.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 #include <Motion/MPU6050_CM.h>
 #include <Motion/ICM20948.h>
 
@@ -83,13 +83,13 @@ void setup(){
 
 	Task dTask("DisplayTask", displayTask);
 	dTask.start(2);
-	//UpdateManager::startTask();
+	//LoopManager::startTask();
 }
 
 void loop(){
 	delay(500);
 	//printDisplay();
-	//UpdateManager::update();
+	//LoopManager::loop();
 	/*mpu->readSensor();
 	euler = mpu->getEuler();
 	accel = mpu->getAccel();

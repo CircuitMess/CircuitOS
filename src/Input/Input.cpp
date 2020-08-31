@@ -103,7 +103,7 @@ void Input::btnRelease(uint i){
 	}
 }
 
-void Input::update(uint _time)
+void Input::loop(uint _time)
 {
 	scanButtons();
 	for(uint8_t i = 0; i < buttons.size(); i++)

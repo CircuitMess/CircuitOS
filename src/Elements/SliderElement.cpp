@@ -1,5 +1,4 @@
 #include "SliderElement.h"
-#include "../Update/UpdateManager.h"
 
 SliderElement::SliderElement(ElementContainer* parent, uint width, uint height) :
 		Layout(parent){
@@ -17,7 +16,7 @@ void SliderElement::reposChildren(){
 	children[0]->setPos(newPos, 0);
 }
 
-void SliderElement::update(uint millis){
+void SliderElement::loop(uint millis){
 	if(started){
 		progress += millis;
 		reposChildren();

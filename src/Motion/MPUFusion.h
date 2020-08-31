@@ -2,14 +2,14 @@
 #define CIRCUITOS_MPUFUSION_H
 
 
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 #include "MPU.h"
 
-class MPUFusion : public MPU, public UpdateListener {
+class MPUFusion : public MPU, public LoopListener {
 public:
 	explicit MPUFusion(MPU* mpu);
 
-	void update(uint millis) override;
+	void loop(uint millis) override;
 
 	bool readSensor() override;
 	void begin() override;

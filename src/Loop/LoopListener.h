@@ -1,5 +1,5 @@
-#ifndef CIRCUITOS_UPDATELISTENER_H
-#define CIRCUITOS_UPDATELISTENER_H
+#ifndef CIRCUITOS_LOOPLISTENER_H
+#define CIRCUITOS_LOOPLISTENER_H
 
 #include <Arduino.h>
 #include "../../Setup.hpp"
@@ -10,12 +10,12 @@
 class Task;
 #endif
 
-class UpdateListener {
+class LoopListener {
 public:
-	UpdateListener();
-	virtual ~UpdateListener();
+	LoopListener();
+	virtual ~LoopListener();
 
-	virtual void update(uint micros) = 0;
+	virtual void loop(uint micros) = 0;
 
 #ifdef CIRCUITOS_TASK
 	void startTask(std::string name, byte priority = 0, size_t stackSize = 2048);
@@ -33,4 +33,4 @@ private:
 };
 
 
-#endif //CIRCUITOS_UPDATELISTENER_H
+#endif //CIRCUITOS_LOOPLISTENER_H

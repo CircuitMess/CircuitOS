@@ -17,7 +17,7 @@ bool MPUFusion::readSensor(){
 	return true;
 }
 
-void MPUFusion::update(uint millis){
+void MPUFusion::loop(uint millis){
 	time += millis;
 
 	if(time >= pollT * 1000){

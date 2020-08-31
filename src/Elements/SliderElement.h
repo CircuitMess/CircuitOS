@@ -4,14 +4,14 @@
 #include "../UI/SpriteElement.h"
 #include "../UI/Layout.h"
 #include "../UI/Image.h"
-#include "../Update/UpdateListener.h"
+#include "../Loop/LoopListener.h"
 
-class SliderElement : public Layout, public UpdateListener {
+class SliderElement : public Layout, public LoopListener {
 public:
 	SliderElement(ElementContainer* parent, uint width, uint height);
 	~SliderElement();
 
-	void update(uint millis) override;
+	void loop(uint millis) override;
 
 	void start();
 	void stop();

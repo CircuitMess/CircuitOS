@@ -10,7 +10,7 @@
 #include <Input/InputGPIO.h>
 #include <Bitmaps/Bitmaps.hpp>
 #include <Elements/ListMenu.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 
 #define BTN_A 32
 #define BTN_B 34
@@ -51,11 +51,11 @@ void setup(){
 	input->setBtnReleaseCallback(BTN_A, btnRPress);
 	input->setBtnPressCallback(BTN_B, btnLPress);
 
-	UpdateManager::addListener(input);
+	LoopManager::addListener(input);
 }
 
 void loop(){
-	UpdateManager::update();
+	LoopManager::loop();
 }
 
 void setUI(){
