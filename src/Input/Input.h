@@ -71,6 +71,8 @@ public:
 
 	static Input* getInstance();
 
+	void loop(uint _time) override;
+
 protected:
 	uint8_t pinNumber = 0;
 	
@@ -98,7 +100,6 @@ protected:
 
 	void btnPress(uint i);
 	void btnRelease(uint );
-	void loop(uint _time) override;
 	void btnHeld(uint8_t i, uint32_t millis);
 
 };
