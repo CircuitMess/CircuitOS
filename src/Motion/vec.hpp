@@ -180,11 +180,11 @@ struct quat {
 		float sinr_cosp = 2 * (w * x + y * z);
 		float cosr_cosp = 1 - 2 * (x * x + y * y);
 		euler.roll = std::atan2(sinr_cosp, cosr_cosp);
-
+		
 		// pitch (y-axis rotation)
 		float sinp = 2 * (w * y - z * x);
 		if (abs(sinp) >= 1)
-			euler.pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+			euler.pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
 		else
 			euler.pitch = std::asin(sinp);
 
