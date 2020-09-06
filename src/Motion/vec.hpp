@@ -176,11 +176,11 @@ struct quat {
 
 		return euler;
 
-		// roll (x-axis rotation)
+		/* // roll (x-axis rotation)
 		float sinr_cosp = 2 * (w * x + y * z);
 		float cosr_cosp = 1 - 2 * (x * x + y * y);
 		euler.roll = std::atan2(sinr_cosp, cosr_cosp);
-
+		
 		// pitch (y-axis rotation)
 		float sinp = 2 * (w * y - z * x);
 		if (abs(sinp) >= 1)
@@ -193,7 +193,7 @@ struct quat {
 		float cosy_cosp = 1 - 2 * (y * y + z * z);
 		euler.yaw = std::atan2(siny_cosp, cosy_cosp);
 
-		return euler;
+		return euler; */
 	}
 
 	vec3<T> rotate(const vec3<T>& point) const {
