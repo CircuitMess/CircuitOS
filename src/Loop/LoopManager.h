@@ -2,6 +2,7 @@
 #define CIRCUITOS_LOOPMANAGER_H
 
 
+#include <unordered_set>
 #include "../Util/Vector.h"
 #include "../../Setup.hpp"
 
@@ -42,6 +43,8 @@ public:
 
 private:
 	static Vector<LoopListener*> listeners;
+	static std::unordered_set<LoopListener*> removedListeners;
+
 	static uint lastMicros;
 
 #ifdef CIRCUITOS_TASK

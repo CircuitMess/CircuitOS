@@ -9,6 +9,7 @@ Task* LoopManager::task = nullptr;
 #endif
 
 Vector<LoopListener*> LoopManager::listeners;
+std::unordered_set<LoopListener*> LoopManager::removedListeners;
 uint LoopManager::lastMicros = micros();
 
 void LoopManager::addListener(LoopListener* listener){
@@ -18,6 +19,7 @@ void LoopManager::addListener(LoopListener* listener){
 void LoopManager::removeListener(LoopListener* listener){
 	uint index = listeners.indexOf(listener);
 	if(index == -1) return;
+	removedListeners.insert(listener);
 	listeners.remove(index);
 }
 
@@ -26,9 +28,11 @@ void LoopManager::loop(){
 	uint delta = m - lastMicros;
 
 	for(LoopListener* listener : listeners){
+		if(removedListeners.find(listener) != removedListeners.end()) continue;
 		listener->loop(delta);
 	}
 
+	removedListeners.clear();
 	lastMicros = m;
 }
 
