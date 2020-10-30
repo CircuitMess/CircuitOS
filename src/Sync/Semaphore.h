@@ -1,14 +1,14 @@
-#ifndef CIRCUITOS_BINARYSEMAPHORE_H
-#define CIRCUITOS_BINARYSEMAPHORE_H
+#ifndef CIRCUITOS_SEMAPHORE_H
+#define CIRCUITOS_SEMAPHORE_H
 
 #define INCLUDE_vTaskSuspend 1
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 
-class BinarySemaphore {
+class Semaphore {
 public:
-	BinarySemaphore();
-	~BinarySemaphore();
+	Semaphore(uint size);
+	~Semaphore();
 
 	bool wait();
 	void signal();
@@ -18,4 +18,4 @@ private:
 };
 
 
-#endif //CIRCUITOS_BINARYSEMAPHORE_H
+#endif //CIRCUITOS_SEMAPHORE_H
