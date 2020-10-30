@@ -1,0 +1,17 @@
+#include "Semaphore.h"
+
+Semaphore::Semaphore(uint size){
+	semaphore = xSemaphoreCreateCounting(size, 0);
+}
+
+Semaphore::~Semaphore(){
+	vSemaphoreDelete(semaphore);
+}
+
+bool Semaphore::wait(){
+	return xSemaphoreTake(semaphore, portMAX_DELAY) == pdTRUE; // TODO: INCLUDE_vTaskSuspend to be set to 1
+}
+
+void Semaphore::signal(){
+	xSemaphoreGive(semaphore);
+}
