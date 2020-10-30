@@ -6,6 +6,7 @@
 #include <freertos/semphr.h>
 
 class BinarySemaphore {
+public:
 	BinarySemaphore();
 	~BinarySemaphore();
 
@@ -13,7 +14,7 @@ class BinarySemaphore {
 	void signal();
 
 private:
-	SemaphoreHandle_t mutex;
+	SemaphoreHandle_t semaphore;
 };
 
 
