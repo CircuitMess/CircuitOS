@@ -23,7 +23,7 @@ public:
 	 *
 	 * @param priority
 	 */
-	void start(byte priority = 0 /*(1 | portPRIVILEGE_BIT)*/);
+	void start(byte priority = 0 /*(1 | portPRIVILEGE_BIT)*/, int8_t core = -1);
 
 	/**
 	 * Stop the task gracefully. The task will stop when the current iteration of the loop finishes.

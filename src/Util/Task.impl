@@ -23,11 +23,13 @@ void Task::taskFunc(void* arg){
 	vTaskDelete(NULL);
 }
 
-void Task::start(byte priority){
+void Task::start(byte priority, int8_t core){
 	running = true;
 	stopped = false;
 
-	if(pinnedTasks){
+	if(core != -1){
+		xTaskCreatePinnedToCore(Task::taskFunc, taskName.c_str(), stackSize, this, priority, &tHandle, core);
+	}else if(pinnedTasks){
 		Serial.printf("Creating task on proc %d\n", usedCores);
 		xTaskCreatePinnedToCore(Task::taskFunc, taskName.c_str(), stackSize, this, priority, &tHandle, usedCores++);
 	}else{
