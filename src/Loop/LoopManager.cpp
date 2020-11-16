@@ -37,12 +37,12 @@ void LoopManager::loop(){
 }
 
 #ifdef CIRCUITOS_TASK
-void LoopManager::startTask(byte priority){
+void LoopManager::startTask(byte priority, byte core){
 	if(task == nullptr){
 		task = new Task("LoopManager", LoopManager::taskFunc, 10000);
 	}
 
-	task->start(priority);
+	task->start(priority, core);
 }
 
 void LoopManager::stopTask(){

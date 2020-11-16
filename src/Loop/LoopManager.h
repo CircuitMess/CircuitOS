@@ -23,7 +23,7 @@ public:
 	 * @see LoopManager::setStackSize
 	 * @param priority
 	 */
-	static void startTask(byte priority = 0);
+	static void startTask(byte priority = 0, byte core = 1);
 
 	/**
 	 * Stops the LoopManager task.
