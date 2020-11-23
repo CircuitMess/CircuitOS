@@ -53,7 +53,7 @@ void Task::kill(){
 		usedCores--;
 	}
 
-	vTaskDelete(NULL);
+	vTaskDelete(tHandle);
 
 	running = false;
 	stopped = true;
