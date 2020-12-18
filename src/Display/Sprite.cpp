@@ -4,18 +4,18 @@
 #include <pgmspace.h>
 
 
-Sprite::Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height) : TFT_eSprite(spi){
+Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi){
 	parent = nullptr;
 	parentSPI = spi;
 	createSprite(width, height);
 }
 
-Sprite::Sprite(Display& display, uint8_t width, uint8_t height) : TFT_eSprite(display.getBaseSprite()) {
+Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()) {
 	parent = display.getBaseSprite();
 	createSprite(width, height);
 }
 
-Sprite::Sprite(Sprite* sprite, uint8_t width, uint8_t height) : TFT_eSprite(sprite){
+Sprite::Sprite(Sprite* sprite, uint16_t width, uint16_t height) : TFT_eSprite(sprite){
 	parent = sprite;
 	createSprite(width, height);
 }
