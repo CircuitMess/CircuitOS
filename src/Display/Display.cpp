@@ -3,6 +3,9 @@
 Display::Display(uint16_t width, uint16_t height, int8_t blPin, int8_t rotation, bool mirror) : tft(), blPin(blPin),
 		width(width), height(height), baseSprite(new Sprite(&tft, width, height)), rotation(rotation), mirror(mirror){
 
+	if(baseSprite == nullptr){
+		Serial.println("Base sprite init error");
+	}
 }
 
 void Display::begin()
