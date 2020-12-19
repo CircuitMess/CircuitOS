@@ -12,7 +12,6 @@ AnimatedSprite::AnimatedSprite(Sprite* parentSprite, uint8_t* gifData, size_t gi
 
 	width = gif->width;
 	height = gif->height;
-	Serial.printf("%d %d", width, height);
 
 	while (gd_get_frame(gif) == 1) {
 		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
@@ -60,19 +59,37 @@ void AnimatedSprite::setXY(int x, int y){
 }
 
 void AnimatedSprite::push(){
-	if(lastFrameTime == 0){
-		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height);
-		lastFrameTime = millis();
+	if(currentFrameTime == 0){
+		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 1, TFT_TRANSPARENT);
+		currentFrameTime = millis();
 		return;
 	}
 
-	uint cFrameTime = lastFrameTime;
+	uint cFrameTime = currentFrameTime;
 	uint currentTime = millis();
 	while(cFrameTime + frames[currentFrame].duration < currentTime){
 		cFrameTime += frames[currentFrame].duration;
 		currentFrame = (currentFrame + 1) % frames.size();
-		lastFrameTime = currentTime;
+		currentFrameTime = currentTime;
+
+		if(currentFrame == 0){
+			if(loopDoneCallback != nullptr && !alerted){
+				loopDoneCallback();
+				alerted = true;
+			}
+		}else{
+			alerted = false;
+		}
 	}
 
-	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 2);
+	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 1, TFT_TRANSPARENT);
+}
+
+void AnimatedSprite::reset(){
+	currentFrame = 0;
+	currentFrameTime = 0;
+}
+
+void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
+	loopDoneCallback = callback;
 }
