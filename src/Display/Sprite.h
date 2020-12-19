@@ -10,9 +10,9 @@ class Display;
 
 class Sprite : public TFT_eSprite {
 public:
-	Sprite(TFT_eSPI* spi, uint8_t width, uint8_t height);
-	Sprite(Display& display, uint8_t width, uint8_t height);
-	Sprite(Sprite* sprite, uint8_t width, uint8_t height);
+	Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height);
+	Sprite(Display& display, uint16_t width, uint16_t height);
+	Sprite(Sprite* sprite, uint16_t width, uint16_t height);
 	virtual ~Sprite();
 
 	Sprite& push();
