@@ -60,19 +60,24 @@ void AnimatedSprite::setXY(int x, int y){
 }
 
 void AnimatedSprite::push(){
-	if(lastFrameTime == 0){
+	if(currentFrameTime == 0){
 		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height);
-		lastFrameTime = millis();
+		currentFrameTime = millis();
 		return;
 	}
 
-	uint cFrameTime = lastFrameTime;
+	uint cFrameTime = currentFrameTime;
 	uint currentTime = millis();
 	while(cFrameTime + frames[currentFrame].duration < currentTime){
 		cFrameTime += frames[currentFrame].duration;
 		currentFrame = (currentFrame + 1) % frames.size();
-		lastFrameTime = currentTime;
+		currentFrameTime = currentTime;
 	}
 
 	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 2);
+}
+
+void AnimatedSprite::reset(){
+	currentFrame = 0;
+	currentFrameTime = 0;
 }

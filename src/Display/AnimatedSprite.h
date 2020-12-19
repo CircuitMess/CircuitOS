@@ -18,6 +18,7 @@ public:
 	void setXY(int x, int y);
 
 	void push();
+	void reset();
 
 private:
 	Sprite* parentSprite = nullptr;
@@ -25,7 +26,7 @@ private:
 	uint16_t width, height;
 
 	uint16_t currentFrame = 0;
-	uint32_t lastFrameTime = 0;
+	uint32_t currentFrameTime = 0;
 
 	struct Frame {
 		uint8_t* data;
