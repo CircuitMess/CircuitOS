@@ -19,6 +19,7 @@ public:
 
 	void push();
 	void reset();
+	void setLoopDoneCallback(void (*callback)());
 
 private:
 	Sprite* parentSprite = nullptr;
@@ -33,6 +34,9 @@ private:
 		uint32_t duration;
 	};
 	std::vector<Frame> frames;
+
+	void (*loopDoneCallback)() = nullptr;
+	bool alerted = false;
 };
 
 
