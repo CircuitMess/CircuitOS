@@ -1,13 +1,12 @@
-#ifndef SPENCER_GIFDEC_H
-#define SPENCER_GIFDEC_H
+#ifndef CIRCUITOS_GIFDEC_H
+#define CIRCUITOS_GIFDEC_H
 /*
 Modified version of the excellent and lightweight gifdec library by Marcel Rodrigues.
 (https://github.com/lecram/gifdec)
-Library is modified to work with Paul Stoffregen's SerialFlash library.
-(https://github.com/PaulStoffregen/SerialFlash)
+Library is modified to work with the filesystem File class from ESP's core.
 */
 #include <Arduino.h>
-#include "PGMFile.h"
+#include <FS.h>
 
 typedef struct gd_Palette {
     int size;
@@ -23,7 +22,7 @@ typedef struct gd_GCE {
 } gd_GCE;
 
 typedef struct gd_GIF {
-    PGMFile* fd;
+    fs::File* fd;
     off_t anim_start;
     uint16_t width, height;
     uint16_t depth;
@@ -43,7 +42,7 @@ typedef struct gd_GIF {
     uint8_t *canvas, *frame;
 } gd_GIF;
 
-gd_GIF *gd_open_gif(PGMFile* file);
+gd_GIF *gd_open_gif(fs::File* file);
 int gd_get_frame(gd_GIF *gif);
 void gd_render_frame(gd_GIF *gif, uint8_t *buffer, bool monochrome = 1);
 int gd_is_bgcolor(gd_GIF *gif, uint8_t color[3]);

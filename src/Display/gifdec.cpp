@@ -1,4 +1,5 @@
 #include "gifdec.h"
+#include <memory>
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -16,7 +17,7 @@ typedef struct Table {
 } Table;
 
 static uint16_t
-read_num(PGMFile* fd)
+read_num(fs::File* fd)
 {
 	uint8_t bytes[2];
 
@@ -25,8 +26,10 @@ read_num(PGMFile* fd)
 }
 
 gd_GIF *
-gd_open_gif(PGMFile *file)
+gd_open_gif(fs::File *file)
 {
+	// Serial.println("opening gif file");
+	// delay(5);
 	uint8_t sigver[3];
 	uint16_t width, height, depth;
 	uint8_t fdsz, bgidx, aspect;
@@ -36,8 +39,9 @@ gd_open_gif(PGMFile *file)
 	gd_GIF *gif;
 	bool gctPresent = 1;
 
-	PGMFile* fd = file;
-	if (!*fd) return NULL;
+	// Serial.println((uint32_t)file, HEX);
+	File* fd = file;
+	if (!(*fd)) return NULL;
 
 	/* Header */
 	fd->read(sigver, 3);

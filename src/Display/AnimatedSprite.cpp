@@ -1,9 +1,9 @@
 #include "AnimatedSprite.h"
 #include "PGMFile.h"
 #include "gifdec.h"
-
+#include <FS.h>
 AnimatedSprite::AnimatedSprite(Sprite* parentSprite, uint8_t* gifData, size_t gifSize) : parentSprite(parentSprite){
-	PGMFile file(gifData, gifSize);
+	fs::File file = fs::File(fs::FileImplPtr(new PGMFile(gifData, gifSize)));
 	gd_GIF* gif = gd_open_gif(&file);
 	if(gif == nullptr){
 		Serial.println("Failed opening gif");

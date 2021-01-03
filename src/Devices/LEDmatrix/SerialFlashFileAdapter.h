@@ -1,14 +1,21 @@
-#ifndef CIRCUITOS_PGMFILE_H
-#define CIRCUITOS_PGMFILE_H
+#ifndef CIRCUITOS_SERIALFLASHFILEADAPTER_H
+#define CIRCUITOS_SERIALFLASHFILEADAPTER_H
 
 #include <Arduino.h>
 #include <FS.h>
 #include <FSImpl.h>
+#include <memory>
 
-class PGMFile : public fs::FileImpl {
+class SerialFlashFile;
+/**
+ * Class to adapt SerialFlashFile class from the SerialFlash lib by Paul Stoffregen (https://github.com/PaulStoffregen/SerialFlash)
+ * to the File interface from esp8266/esp32 FS core.
+ */
+class SerialFlashFileAdapter : public fs::FileImpl {
 public:
-	PGMFile(const uint8_t* data, size_t size);
-	virtual ~PGMFile();
+	SerialFlashFileAdapter(SerialFlashFile* _file);
+	SerialFlashFileAdapter(const char* path);
+	virtual ~SerialFlashFileAdapter();
 
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
@@ -31,10 +38,8 @@ public:
 	int available();
 
 private:
-	const uint8_t* data;
-	size_t dataSize;
-	size_t cursor = 0;
+	SerialFlashFile* file;
 };
 
 
-#endif //CIRCUITOS_PGMFILE_H
+#endif //CIRCUITOS_SERIALFLASHFILEADAPTER_H
