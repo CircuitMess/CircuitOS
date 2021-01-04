@@ -1,6 +1,6 @@
 
 /** ### Features ### */
-#define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
+// #define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
 
 /** Task and synchronization classes are only available if we're compiling with FreeRTOS */
 #ifdef CIRCUITOS_FREERTOS
@@ -12,7 +12,7 @@
 #endif
 
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
-#define CIRCUITOS_NVS
+// #define CIRCUITOS_NVS
 
 /** Whether LittleFS library is available. Enables LittleFS variant of Settings */
 // #define CIRCUITOS_LITTLEFS
@@ -26,4 +26,4 @@
 /** ### Device drivers ### */
 // #define CIRCUITOS_ICM20948
 // #define CIRCUITOS_MPU6050
-#define CIRCUITOS_LEDMATRIX
+// #define CIRCUITOS_LEDMATRIX
