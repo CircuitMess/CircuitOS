@@ -26,3 +26,5 @@
 /** ### Device drivers ### */
 // #define CIRCUITOS_ICM20948
 // #define CIRCUITOS_MPU6050
+// #define CIRCUITOS_LEDMATRIX
+// #define CIRCUITOS_SERIALFLASH

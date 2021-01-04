@@ -54,10 +54,6 @@ bool PGMFile::seek(uint32_t pos){
 	return seek(pos, SeekSet);
 }
 
-size_t PGMFile::readBytes(char* buffer, size_t length){
-	return read(reinterpret_cast<uint8_t*>(buffer), length);
-}
-
 size_t PGMFile::read(uint8_t* buf, size_t size){
 	if(cursor >= dataSize) return 0;
 
@@ -88,10 +84,26 @@ void PGMFile::close(){
 	dataSize = 0;
 }
 
-PGMFile::operator bool() const{
+PGMFile::operator bool(){
 	return data != nullptr;
 }
 
-boolean PGMFile::isDirectory(void){
+bool PGMFile::isDirectory(){
 	return false;
+}
+
+time_t PGMFile::getLastWrite(){
+	return 0;
+}
+
+const char* PGMFile::name() const {
+	return nullptr;
+}
+
+void PGMFile::rewindDirectory() {
+
+}
+
+fs::FileImplPtr PGMFile::openNextFile(const char* mode){
+	return fs::FileImplPtr();
 }
