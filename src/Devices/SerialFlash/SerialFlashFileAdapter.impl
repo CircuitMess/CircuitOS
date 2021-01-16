@@ -10,9 +10,8 @@ SerialFlashFileAdapter::SerialFlashFileAdapter(const char* path) : file(new Seri
 	
 	if(!(*file)){
 		file->close();
-		Serial.println("BAD FILE");
+		Serial.printf("BAD FILE %s\n", path);
 	}
-	Serial.printf("file opened %s\n", path);
 	delay(5);
 }
 
