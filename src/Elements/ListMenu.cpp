@@ -24,9 +24,10 @@ ListMenu::~ListMenu(){
 }
 
 void ListMenu::draw(){
-	drawTitle();
-	drawItems();
-	LinearLayout::draw();
+	getSprite()->fillRect(getTotalX(), getTotalY(), getWidth(), getHeight(), TFT_BLACK);
+
+	scroller->draw();
+	titleImage->draw();
 }
 
 void ListMenu::drawTitle(){
@@ -72,17 +73,12 @@ void ListMenu::selectElement(uint element){
 	drawItem(oldSelected);
 	drawItem(selected);
 
-	drawTitle();
-
 	if(needsRedraw){
-		// TODO: clipping
-		list->clear();
-		list->draw();
+		draw();
+	}else{
+		items[oldSelected].image->draw();
+		items[selected].image->draw();
 	}
-
-	items[oldSelected].image->draw();
-	items[selected].image->draw();
-	titleImage->draw();
 }
 
 bool ListMenu::setSelected(uint element){
@@ -178,6 +174,9 @@ void ListMenu::reflow(){
 		item.image->unpack();
 	}
 	list->reflow();
+
+	drawTitle();
+	drawItems();
 }
 
 void ListMenu::relocate(uint oldPos, uint newPos){
