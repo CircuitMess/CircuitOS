@@ -13,7 +13,17 @@
 MPU6050_CM::MPU6050_CM(int sda, int scl) : sda(sda), scl(scl), mpu(new MPU6050(0x69)){ }
 
 void MPU6050_CM::begin(){
-	Wire.begin(sda, scl);
+	if(!Wire.begin(sda, scl)){
+		Serial.println("MPU6050 i2c error");
+		return;
+	}
+
+	Wire.beginTransmission(0x69);
+	if (Wire.endTransmission() != 0) {
+		Serial.println("MPU6050 i2c error 2");
+		return;
+	}
+
 	Wire.setClock(400000);
 	mpu->testConnection();
 	mpu->initialize();
