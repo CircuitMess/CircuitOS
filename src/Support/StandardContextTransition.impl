@@ -16,7 +16,7 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 
 	contextB->unpack();
 	contextB->getScreen().getSprite()->setPos(0, display.getHeight());
-	contextB->getScreen().draw();
+	contextB->draw();
 
 	LoopManager::addListener(this);
 }
