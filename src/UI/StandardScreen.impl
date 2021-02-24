@@ -23,8 +23,6 @@ Screen& Screen::addChild(Element* element){
 void Screen::draw(){
 	logln("Drawing screen");
 
-	sprite.clear(TFT_BLACK);
-
 	ElementContainer::draw();
 }
 
