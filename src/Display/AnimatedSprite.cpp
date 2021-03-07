@@ -1,10 +1,8 @@
 #include "AnimatedSprite.h"
-#include "PGMFile.h"
 #include "gifdec.h"
-#include <FS.h>
-AnimatedSprite::AnimatedSprite(Sprite* parentSprite, uint8_t* gifData, size_t gifSize) : parentSprite(parentSprite){
-	fs::File file = fs::File(fs::FileImplPtr(new PGMFile(gifData, gifSize)));
-	gd_GIF* gif = gd_open_gif(&file);
+
+AnimatedSprite::AnimatedSprite(Sprite* parentSprite, fs::File _gifFile) : parentSprite(parentSprite), gifFile(_gifFile){
+	gif = gd_open_gif(&gifFile);
 	if(gif == nullptr){
 		Serial.println("Failed opening gif");
 		return;
@@ -13,28 +11,12 @@ AnimatedSprite::AnimatedSprite(Sprite* parentSprite, uint8_t* gifData, size_t gi
 	width = gif->width;
 	height = gif->height;
 
-	while (gd_get_frame(gif) == 1) {
-		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
-		//render 24-bit color frame into buffer
-		gd_render_frame(gif, buffer, false);
+	if(!nextFrame()) return;
 
-		uint16_t* frame = static_cast<uint16_t*>(malloc(width * height * sizeof(uint16_t)));
-		for(int i = 0; i < width * height; i++){
-			frame[i] = C_RGB(buffer[i*3], buffer[i*3+1], buffer[i*3+2]);
-		}
-
-		free(buffer);
-
-		frames.push_back({ (uint8_t*) frame, static_cast<uint>(gif->gce.delay*10) });
-	}
-
-	gd_close_gif(gif);
 }
 
 AnimatedSprite::~AnimatedSprite(){
-	for(const Frame& frame : frames){
-		free(frame.data);
-	}
+	gd_close_gif(gif);
 }
 
 int AnimatedSprite::getX() const{
@@ -60,19 +42,17 @@ void AnimatedSprite::setXY(int x, int y){
 
 void AnimatedSprite::push(){
 	if(currentFrameTime == 0){
-		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 1, TFT_TRANSPARENT);
+		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
 		currentFrameTime = millis();
 		return;
 	}
 
 	uint cFrameTime = currentFrameTime;
 	uint currentTime = millis();
-	while(cFrameTime + frames[currentFrame].duration < currentTime){
-		cFrameTime += frames[currentFrame].duration;
-		currentFrame = (currentFrame + 1) % frames.size();
+	while(cFrameTime + currentFrame.duration < currentTime){
+		cFrameTime += currentFrame.duration;
 		currentFrameTime = currentTime;
-
-		if(currentFrame == 0){
+		if(!nextFrame()){
 			if(loopDoneCallback != nullptr && !alerted){
 				loopDoneCallback();
 				alerted = true;
@@ -81,15 +61,37 @@ void AnimatedSprite::push(){
 			alerted = false;
 		}
 	}
-
-	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(frames[currentFrame].data), x, y, width, height, 1, TFT_TRANSPARENT);
+	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
 }
 
 void AnimatedSprite::reset(){
-	currentFrame = 0;
+	gd_rewind(gif);
+	if(!nextFrame()) return;
 	currentFrameTime = 0;
 }
 
 void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
 	loopDoneCallback = callback;
+}
+
+bool AnimatedSprite::nextFrame(){
+	if(gd_get_frame(gif) == 1) {
+		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
+		//render 24-bit color frame into buffer
+		
+		gd_render_frame(gif, buffer, false);
+		
+		uint16_t* frame = static_cast<uint16_t*>(malloc(width * height * sizeof(uint16_t)));
+		for(int i = 0; i < width * height; i++){
+			frame[i] = C_RGB(buffer[i*3], buffer[i*3+1], buffer[i*3+2]);
+		}
+		free(buffer);
+		if(currentFrame.data != nullptr){
+			free(currentFrame.data);
+		}
+		currentFrame.data = (uint8_t*)frame;
+		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
+		return true;
+	}
+	return false;
 }
