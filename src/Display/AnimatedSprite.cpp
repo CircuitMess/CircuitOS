@@ -68,6 +68,7 @@ void AnimatedSprite::reset(){
 	gd_rewind(gif);
 	if(!nextFrame()) return;
 	currentFrameTime = 0;
+	alerted=false;
 }
 
 void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
@@ -76,6 +77,9 @@ void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
 
 bool AnimatedSprite::nextFrame(){
 	if(gd_get_frame(gif) == 1) {
+		if(currentFrame.data != nullptr){
+			free(currentFrame.data);
+		}
 		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
 		//render 24-bit color frame into buffer
 		
@@ -86,9 +90,7 @@ bool AnimatedSprite::nextFrame(){
 			frame[i] = C_RGB(buffer[i*3], buffer[i*3+1], buffer[i*3+2]);
 		}
 		free(buffer);
-		if(currentFrame.data != nullptr){
-			free(currentFrame.data);
-		}
+
 		currentFrame.data = (uint8_t*)frame;
 		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
 		return true;
