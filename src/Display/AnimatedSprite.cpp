@@ -17,6 +17,9 @@ AnimatedSprite::AnimatedSprite(Sprite* parentSprite, fs::File _gifFile) : parent
 
 AnimatedSprite::~AnimatedSprite(){
 	gd_close_gif(gif);
+	if(currentFrame.data != nullptr){
+		free(currentFrame.data);
+	}
 }
 
 int AnimatedSprite::getX() const{
