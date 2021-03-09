@@ -97,3 +97,12 @@ bool AnimatedSprite::nextFrame(){
 	}
 	return false;
 }
+
+bool AnimatedSprite::newFrameReady(){
+	uint cFrameTime = currentFrameTime;
+	uint currentTime = millis();
+	if(cFrameTime + currentFrame.duration < currentTime){
+		return true;
+	}
+	return false;
+}

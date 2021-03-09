@@ -23,6 +23,7 @@ public:
 	void push();
 	void reset();
 	void setLoopDoneCallback(void (*callback)());
+	bool newFrameReady();
 
 private:
 	Sprite* parentSprite = nullptr;
