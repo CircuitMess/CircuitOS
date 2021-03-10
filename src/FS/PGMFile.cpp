@@ -8,6 +8,10 @@ PGMFile::~PGMFile(){
 	close();
 }
 
+fs::File PGMFile::open(const uint8_t* data, size_t size){
+	return File(std::make_shared<PGMFile>(data, size));
+}
+
 size_t PGMFile::write(uint8_t data){
 	return 0;
 	// this->data[cursor++] = data;
