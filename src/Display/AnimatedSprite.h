@@ -5,10 +5,13 @@
 #include <vector>
 #include "../Loop/LoopListener.h"
 #include "Sprite.h"
+#include <FS.h>
+
+class gd_GIF;
 
 class AnimatedSprite {
 public:
-	AnimatedSprite(Sprite* parentSprite, uint8_t* gifData, size_t gifSize);
+	AnimatedSprite(Sprite* parentSprite, fs::File gifFile);
 	virtual ~AnimatedSprite();
 
 	int getX() const;
@@ -20,20 +23,30 @@ public:
 	void push();
 	void reset();
 	void setLoopDoneCallback(void (*callback)());
+	bool newFrameReady();
 
 private:
 	Sprite* parentSprite = nullptr;
 	int x = 0, y = 0;
 	uint16_t width, height;
 
-	uint16_t currentFrame = 0;
+	gd_GIF* gif;
+	fs::File gifFile;
 	uint32_t currentFrameTime = 0;
 
 	struct Frame {
-		uint8_t* data;
-		uint32_t duration;
+		uint8_t* data = nullptr;
+		uint32_t duration = 0;
 	};
-	std::vector<Frame> frames;
+	Frame currentFrame;
+
+	/**
+	 * @brief Function to load the next frame of the GIF, if available.
+	 * 
+	 * @return true New frame is loaded successfully.
+	 * @return false Reached the end of GIF, no more frames available.
+	 */
+	bool nextFrame();
 
 	void (*loopDoneCallback)() = nullptr;
 	bool alerted = false;
