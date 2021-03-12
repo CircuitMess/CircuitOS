@@ -19,16 +19,17 @@ bool FSBuffer::moveRead(size_t amount){
 }
 
 bool FSBuffer::refill(){
-	if(cursor != bytesFilled){
-		memmove(buffer, buffer + cursor, max(int(bytesFilled - cursor), 0));
-	}else{
-		clear();
+	size_t remaining = bytesFilled - cursor;
+
+	if(remaining != 0){
+		memmove(buffer, buffer + cursor, remaining);
 	}
-	bytesFilled = file.read(buffer + cursor, (bytesFilled == 0) ? size : (bytesFilled - cursor));
+
+	bytesFilled = file.read(buffer + remaining, size - remaining);
+	bytesFilled += remaining;
 	cursor = 0;
 
-	if(bytesFilled == 0) return false;
-	else return true;
+	return bytesFilled != 0;
 }
 
 void FSBuffer::clear(){
