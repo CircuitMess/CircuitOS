@@ -1,7 +1,14 @@
 #include "CompressedFile.h"
+#include "../Buffer/FSBuffer.h"
 
 CompressedFile::CompressedFile(File& f) : f(f){
+	decoder = heatshrink_decoder_alloc(FSBUFFER_SIZE, 8, 4);
+	fileBuffer = new FSBuffer(f, FSBUFFER_SIZE);
+}
 
+CompressedFile::~CompressedFile(){
+	heatshrink_decoder_free(decoder);
+	delete fileBuffer;
 }
 
 fs::File CompressedFile::open(File& f){
@@ -9,19 +16,45 @@ fs::File CompressedFile::open(File& f){
 }
 
 size_t CompressedFile::write(const uint8_t* buf, size_t size){
-	return f.write(buf, size);
+	return 0;
 }
 
 size_t CompressedFile::read(uint8_t* buf, size_t size){
-	// TODO
+
+	size_t polledBytes = 0;
+
+	//use leftover polling buffer from earlier
+	if(pollLeft){
+		size_t singlePollSize = 0;
+		HSD_poll_res pollRes = heatshrink_decoder_poll(decoder, buf + polledBytes, size - polledBytes, &singlePollSize);
+		polledBytes+=singlePollSize;
+		pollLeft = (pollRes == HSDR_POLL_MORE);
+	}
+
+	while(polledBytes < size){
+		size_t singleSinkSize = 0;
+		bool moreSink = fileBuffer->refill();
+		if(moreSink){
+			heatshrink_decoder_sink(decoder, (uint8_t*)fileBuffer->data(), fileBuffer->available(), &singleSinkSize);
+			fileBuffer->moveRead(singleSinkSize);
+		}else{
+			heatshrink_decoder_finish(decoder);
+		}
+
+		size_t singlePollSize = 0;
+		HSD_poll_res pollRes = heatshrink_decoder_poll(decoder, buf + polledBytes, size - polledBytes, &singlePollSize);
+		polledBytes+=singlePollSize;
+		pollLeft = (pollRes == HSDR_POLL_MORE);
+		if(!pollLeft && !moreSink) break; //reached end of file and decoder output is empty
+	}
+	decodedCursor+=polledBytes;
+	return polledBytes;
 }
 
 void CompressedFile::flush(){
-	f.flush(); // TODO
 }
 
 bool CompressedFile::seek(uint32_t pos, SeekMode mode){
-	return f.seek(pos, mode); // TODO
 }
 
 size_t CompressedFile::position() const{
@@ -33,19 +66,19 @@ size_t CompressedFile::size() const{
 }
 
 void CompressedFile::close(){
-
+	f.close();
 }
 
 time_t CompressedFile::getLastWrite(){
-	return 0;
+	return f.getLastWrite();
 }
 
 const char* CompressedFile::name() const{
-	return nullptr;
+	return f.name();
 }
 
 boolean CompressedFile::isDirectory(void){
-	return 0;
+	return f.isDirectory();
 }
 
 fs::FileImplPtr CompressedFile::openNextFile(const char* mode){
@@ -53,9 +86,9 @@ fs::FileImplPtr CompressedFile::openNextFile(const char* mode){
 }
 
 void CompressedFile::rewindDirectory(void){
-
+	f.rewindDirectory();
 }
 
 CompressedFile::operator bool(){
-	return false;
+	return (bool)(f);
 }

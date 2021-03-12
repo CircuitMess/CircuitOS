@@ -4,11 +4,15 @@
 #include <Arduino.h>
 #include <FS.h>
 #include <FSImpl.h>
+#include <heatshrink_decoder.h>
+
+class FSBuffer;
+#define FSBUFFER_SIZE 16
 
 class CompressedFile : public fs::FileImpl {
 public:
 	CompressedFile(File& f);
-
+	~CompressedFile();
 	static fs::File open(File& f);
 
 	size_t write(const uint8_t* buf, size_t size) override;
@@ -27,7 +31,11 @@ public:
 
 private:
 	File f;
-
+	heatshrink_decoder *decoder;
+	FSBuffer *fileBuffer;
+	bool pollLeft = false;
+	size_t decodedSize = 0;
+	size_t decodedCursor = 0;
 };
 
 
