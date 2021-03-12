@@ -11,14 +11,16 @@ public:
 
 	size_t available();
 	bool moveRead(size_t amount);
-	void refill();
+	bool refill();
 	void clear();
 
 	const uint8_t* data();
+	File& getFile();
 
 private:
 	File file;
 	const size_t size;
+	size_t bytesFilled = 0;
 
 	uint8_t* buffer = nullptr;
 	size_t cursor = 0;
