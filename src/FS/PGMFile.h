@@ -10,6 +10,8 @@ public:
 	PGMFile(const uint8_t* data, size_t size);
 	virtual ~PGMFile();
 
+	static fs::File open(const uint8_t* data, size_t size);
+
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
 	void flush() override;

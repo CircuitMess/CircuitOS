@@ -9,22 +9,27 @@ FSBuffer::~FSBuffer(){
 }
 
 size_t FSBuffer::available(){
-	return size - cursor;
+	return bytesFilled - cursor;
 }
 
 bool FSBuffer::moveRead(size_t amount){
-	if(cursor + amount > size) return false;
+	if(cursor + amount > bytesFilled) return false;
 	cursor += amount;
 	return true;
 }
 
-void FSBuffer::refill(){
-	if(cursor != size){
-		memmove(buffer, buffer + cursor, size - cursor);
+bool FSBuffer::refill(){
+	size_t remaining = bytesFilled - cursor;
+
+	if(remaining != 0){
+		memmove(buffer, buffer + cursor, remaining);
 	}
 
-	file.read(buffer + cursor, size - cursor);
+	bytesFilled = file.read(buffer + remaining, size - remaining);
+	bytesFilled += remaining;
 	cursor = 0;
+
+	return bytesFilled != 0;
 }
 
 void FSBuffer::clear(){
@@ -33,4 +38,8 @@ void FSBuffer::clear(){
 
 const uint8_t* FSBuffer::data(){
 	return buffer + cursor;
+}
+
+File& FSBuffer::getFile(){
+	return file;
 }
