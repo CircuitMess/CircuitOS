@@ -5,6 +5,11 @@
 #include <TFT_eSPI.h>
 #include "Display.h"
 #include "Color.h"
+#include "../../Setup.hpp"
+
+#ifdef CIRCUITOS_U8G2FONTS
+#include <U8g2_for_TFT_eSPI.h>
+#endif
 
 class Display;
 
@@ -47,6 +52,10 @@ public:
 	void setParent(Sprite* parent);
 
 	Sprite* getParent() const;
+#ifdef CIRCUITOS_U8G2FONTS
+	void startU8g2Fonts();
+	U8g2_for_TFT_eSPI* getU8f();
+#endif
 
 private:
 	Sprite* parent;

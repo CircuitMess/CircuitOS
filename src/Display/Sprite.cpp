@@ -3,6 +3,9 @@
 #include "../Util/Debug.h"
 #include <pgmspace.h>
 
+#ifdef CIRCUITOS_U8G2FONTS
+U8g2_for_TFT_eSPI u8f;
+#endif
 
 Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi){
 	parent = nullptr;
@@ -286,3 +289,13 @@ Sprite* Sprite::getParent() const{
 Sprite::~Sprite(){
 	deleteSprite();
 }
+
+#ifdef CIRCUITOS_U8G2FONTS
+void Sprite::startU8g2Fonts(){
+	u8f.begin(*this);
+}
+U8g2_for_TFT_eSPI* Sprite::getU8f(){
+	return &u8f;
+}
+
+#endif
