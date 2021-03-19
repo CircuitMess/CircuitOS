@@ -1,7 +1,7 @@
 #include "AnimatedSprite.h"
 #include "gifdec.h"
 
-AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool loop) : canvas(canvas), file(file), loop(loop){
+AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), file(file){
 	if(!file){
 		Serial.printf("AnimatedGif file %s not open\n", file.name());
 		return;
@@ -51,7 +51,7 @@ void AnimatedSprite::push(){
 	if(flags){
 		for(int i = 0; i < width * height; i++){
 			Color color = table->getColor(gifFrame.data[i]);
-			if(color == TFT_TRANSPARENT) continue;
+			if(color == maskingColor) continue;
 
 			int _y = i / width;
 			int _x = i - _y * width;
@@ -59,9 +59,8 @@ void AnimatedSprite::push(){
 			canvas->drawPixel(x + _x, y + _y, color);
 		}
 	}else{
-		canvas->drawIcon(reinterpret_cast<const unsigned short*>(gifFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
+		canvas->drawIcon(reinterpret_cast<const unsigned short*>(gifFrame.data), x, y, width, height, 1, maskingColor);
 	}
-
 }
 
 void AnimatedSprite::reset(){
@@ -157,4 +156,12 @@ uint16_t AnimatedSprite::getWidth() const{
 
 uint16_t AnimatedSprite::getHeight() const{
 	return height;
+}
+
+void AnimatedSprite::setLoop(bool loop){
+	AnimatedSprite::loop = loop;
+}
+
+void AnimatedSprite::setMaskingColor(Color maskingColor){
+	AnimatedSprite::maskingColor = maskingColor;
 }
