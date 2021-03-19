@@ -11,7 +11,7 @@
 
 class AnimatedSprite {
 public:
-	AnimatedSprite(Sprite* canvas, fs::File file, bool loop = false);
+	AnimatedSprite(Sprite* canvas, fs::File file);
 	virtual ~AnimatedSprite();
 
 	void push();
@@ -40,10 +40,14 @@ public:
 	uint16_t getWidth() const;
 	uint16_t getHeight() const;
 
+	void setLoop(bool loop);
+	void setMaskingColor(Color maskingColor);
+
 private:
 	Sprite* canvas;
 	fs::File file;
-	bool loop;
+	bool loop = false;
+	Color maskingColor = TFT_TRANSPARENT;
 	size_t dataStart;
 	uint32_t currentFrameTime = 0;
 
