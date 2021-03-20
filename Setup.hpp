@@ -28,3 +28,7 @@
 // #define CIRCUITOS_MPU6050
 // #define CIRCUITOS_LEDMATRIX
 // #define CIRCUITOS_SERIALFLASH
+
+/** Using u8g2 fonts uses up some RAM and PROGMEM for every font used.
+ * The U8g2_for_TFT_eSPI library is used. (https://github.com/Bodmer/U8g2_for_TFT_eSPI)*/
+// #define CIRCUITOS_U8G2FONTS
