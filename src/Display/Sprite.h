@@ -9,6 +9,7 @@
 
 #ifdef CIRCUITOS_U8G2FONTS
 #include <U8g2_for_TFT_eSPI.h>
+typedef U8g2_for_TFT_eSPI FontWriter;
 #endif
 
 class Display;
@@ -53,8 +54,7 @@ public:
 
 	Sprite* getParent() const;
 #ifdef CIRCUITOS_U8G2FONTS
-	void startU8g2Fonts();
-	U8g2_for_TFT_eSPI* getU8f();
+	FontWriter& startU8g2Fonts();
 #endif
 
 private:
