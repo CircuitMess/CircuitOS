@@ -1,77 +1,74 @@
 #include "AnimatedSprite.h"
 #include "gifdec.h"
 
-AnimatedSprite::AnimatedSprite(Sprite* parentSprite, fs::File _gifFile) : parentSprite(parentSprite), gifFile(_gifFile){
-	gif = gd_open_gif(&gifFile);
-	if(gif == nullptr){
-		Serial.println("Failed opening gif");
+AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), file(file){
+	if(!file){
+		Serial.printf("AnimatedGif file %s not open\n", file.name());
 		return;
 	}
 
-	width = gif->width;
-	height = gif->height;
+	file.seek(0);
 
-	if(!nextFrame()) return;
+	Header header;
+	file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header));
 
+	width = header.width;
+	height = header.height;
+	noFrames = header.noFrames;
+	flags = header.flags;
+
+	if(flags){
+		table = new Table(file);
+	}
+
+	gifFrame.data = static_cast<uint8_t*>(malloc(width * height * (flags ? 1 : 2)));
+
+	dataStart = file.position();
+	reset();
+}
+
+AnimatedSprite::Table::Table(fs::File& file){
+	file.read(&noColors, sizeof(noColors));
+	colors = static_cast<Color*>(malloc(sizeof(Color) * noColors));
+	file.read(reinterpret_cast<uint8_t*>(colors), sizeof(Color) * noColors);
+}
+
+AnimatedSprite::Table::~Table(){
+	delete colors;
+}
+
+Color AnimatedSprite::Table::getColor(uint8_t i) const {
+	if(colors == nullptr || i >= noColors) return 0;
+	return colors[i];
 }
 
 AnimatedSprite::~AnimatedSprite(){
-	gd_close_gif(gif);
-	if(currentFrame.data != nullptr){
-		free(currentFrame.data);
-	}
-}
-
-int AnimatedSprite::getX() const{
-	return x;
-}
-
-void AnimatedSprite::setX(int x){
-	AnimatedSprite::x = x;
-}
-
-int AnimatedSprite::getY() const{
-	return y;
-}
-
-void AnimatedSprite::setY(int y){
-	AnimatedSprite::y = y;
-}
-
-void AnimatedSprite::setXY(int x, int y){
-	AnimatedSprite::x = x;
-	AnimatedSprite::y = y;
+	delete table;
+	delete gifFrame.data;
 }
 
 void AnimatedSprite::push(){
-	if(currentFrameTime == 0){
-		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
-		currentFrameTime = millis();
-		return;
-	}
+	if(flags){
+		for(int i = 0; i < width * height; i++){
+			Color color = table->getColor(gifFrame.data[i]);
+			if(color == maskingColor) continue;
 
-	uint cFrameTime = currentFrameTime;
-	uint currentTime = millis();
-	while(cFrameTime + currentFrame.duration < currentTime){
-		cFrameTime += currentFrame.duration;
-		currentFrameTime = currentTime;
-		if(!nextFrame()){
-			if(loopDoneCallback != nullptr && !alerted){
-				loopDoneCallback();
-				alerted = true;
-			}
-		}else{
-			alerted = false;
+			int _y = i / width;
+			int _x = i - _y * width;
+
+			canvas->drawPixel(x + _x, y + _y, color);
 		}
+	}else{
+		canvas->drawIcon(reinterpret_cast<const unsigned short*>(gifFrame.data), x, y, width, height, 1, maskingColor);
 	}
-	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
 }
 
 void AnimatedSprite::reset(){
-	gd_rewind(gif);
-	if(!nextFrame()) return;
+	file.seek(dataStart);
 	currentFrameTime = 0;
-	alerted=false;
+	currentFrame = 0;
+	alerted = false;
+	done = false;
 }
 
 void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
@@ -79,33 +76,92 @@ void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
 }
 
 bool AnimatedSprite::nextFrame(){
-	if(gd_get_frame(gif) == 1) {
-		if(currentFrame.data != nullptr){
-			free(currentFrame.data);
-		}
-		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
-		//render 24-bit color frame into buffer
-		
-		gd_render_frame(gif, buffer, false);
-		
-		uint16_t* frame = static_cast<uint16_t*>(malloc(width * height * sizeof(uint16_t)));
-		for(int i = 0; i < width * height; i++){
-			frame[i] = C_RGB(buffer[i*3], buffer[i*3+1], buffer[i*3+2]);
-		}
-		free(buffer);
+	if(done) return false;
 
-		currentFrame.data = (uint8_t*)frame;
-		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
+	if(currentFrameTime == 0){
+		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
+		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
+		currentFrameTime = millis();
 		return true;
 	}
+
+	bool newFrame = false;
+
+	uint currentTime = millis();
+	while(currentFrameTime + gifFrame.duration < currentTime){
+		currentFrameTime += gifFrame.duration;
+		currentFrame++;
+
+		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
+		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
+
+		newFrame = true;
+		if(currentFrame == noFrames-1){
+			done = true;
+		}
+	}
+
+	return newFrame;
+}
+
+bool AnimatedSprite::checkFrame(){
+	if(currentFrameTime == 0) return true;
+	if(done && alerted) return false; // if on last frame, so user can push after it ends, triggering the callback
+
+	if(currentFrameTime + gifFrame.duration < millis()){
+		if(done && !alerted){
+			alerted = true;
+
+			// Order of callbacks is important in case the AnimatedSprite gets deleted in it.
+
+			if(loop){
+				reset();
+
+				if(loopDoneCallback != nullptr){
+					loopDoneCallback();
+				}
+
+				return true;
+			}
+
+			if(loopDoneCallback != nullptr){
+				loopDoneCallback();
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
 	return false;
 }
 
-bool AnimatedSprite::newFrameReady(){
-	uint cFrameTime = currentFrameTime;
-	uint currentTime = millis();
-	if(cFrameTime + currentFrame.duration < currentTime){
-		return true;
-	}
-	return false;
+void AnimatedSprite::setX(int16_t x){
+	AnimatedSprite::x = x;
+}
+
+void AnimatedSprite::setY(int16_t y){
+	AnimatedSprite::y = y;
+}
+
+void AnimatedSprite::setXY(int16_t x, int16_t y){
+	AnimatedSprite::x = x;
+	AnimatedSprite::y = y;
+}
+
+uint16_t AnimatedSprite::getWidth() const{
+	return width;
+}
+
+uint16_t AnimatedSprite::getHeight() const{
+	return height;
+}
+
+void AnimatedSprite::setLoop(bool loop){
+	AnimatedSprite::loop = loop;
+}
+
+void AnimatedSprite::setMaskingColor(Color maskingColor){
+	AnimatedSprite::maskingColor = maskingColor;
 }

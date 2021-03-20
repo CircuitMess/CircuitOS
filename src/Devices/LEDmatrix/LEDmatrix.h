@@ -35,6 +35,7 @@ public:
 	LEDmatrixImpl(uint8_t width = 16, uint8_t height = 9);
 	bool begin(uint8_t sda = 22, uint8_t scl = 21, uint8_t addr = ISSI_ADDR_DEFAULT);
 	void drawPixel(int16_t x, int16_t y, uint16_t color);
+	void drawPixel(uint8_t i, uint8_t brightness);
 	void clear(void);
 
 	void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
