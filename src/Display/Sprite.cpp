@@ -182,7 +182,7 @@ Sprite& Sprite::push(){
 	bool oldSwapBytes = parent->getSwapBytes();
 	parent->setSwapBytes(true);
 	if(chroma){
-		parent->pushImage(x, y, _iwidth, _iheight, _img, chromaKey);
+		parent->pushImage(x, y, _iwidth, _iheight, _img, (uint32_t) chromaKey);
 	}else{
 		static_cast<TFT_eSprite*>(parent)->pushImage(x, y, _iwidth, _iheight, _img);
 	}
