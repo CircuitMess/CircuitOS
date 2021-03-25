@@ -11,14 +11,14 @@ class FSBuffer;
 
 class CompressedFile : public fs::FileImpl {
 public:
-	CompressedFile(File& f);
+	CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits);
 	~CompressedFile();
-	static fs::File open(File& f);
+	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits);
 
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
 	void flush() override;
-	bool seek(uint32_t pos, SeekMode mode) override;
+	bool seek(uint32_t pos, fs::SeekMode mode) override;
 	size_t position() const override;
 	size_t size() const override;
 	void close() override;
@@ -30,7 +30,7 @@ public:
 	operator bool() override;
 
 private:
-	File f;
+	fs::File f;
 	heatshrink_decoder *decoder;
 	FSBuffer *fileBuffer;
 	bool pollLeft = false;
