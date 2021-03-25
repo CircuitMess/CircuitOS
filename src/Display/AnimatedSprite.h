@@ -69,6 +69,8 @@ private:
 		~Table();
 
 		Color getColor(uint8_t i) const;
+		uint8_t getNoColors() const;
+
 	private:
 		uint8_t noColors;
 		Color* colors;
@@ -83,7 +85,7 @@ private:
 	uint16_t currentFrame = 0;
 	uint8_t flags;
 
-	bool done = false;
+	bool onLastFrame = false;
 	void (*loopDoneCallback)() = nullptr;
 	bool alerted = false;
 };
