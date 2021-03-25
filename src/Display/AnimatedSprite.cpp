@@ -42,6 +42,10 @@ Color AnimatedSprite::Table::getColor(uint8_t i) const {
 	return colors[i];
 }
 
+uint8_t AnimatedSprite::Table::getNoColors() const{
+	return noColors;
+}
+
 AnimatedSprite::~AnimatedSprite(){
 	delete table;
 	delete gifFrame.data;
@@ -68,7 +72,7 @@ void AnimatedSprite::reset(){
 	currentFrameTime = 0;
 	currentFrame = 0;
 	alerted = false;
-	done = false;
+	onLastFrame = false;
 }
 
 void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
@@ -76,7 +80,7 @@ void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
 }
 
 bool AnimatedSprite::nextFrame(){
-	if(done) return false;
+	if(onLastFrame) return false;
 
 	if(currentFrameTime == 0){
 		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
@@ -92,12 +96,18 @@ bool AnimatedSprite::nextFrame(){
 		currentFrameTime += gifFrame.duration;
 		currentFrame++;
 
+		if(currentFrame == noFrames){
+			currentFrame = 0;
+			file.seek(dataStart);
+		}
+
 		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
 		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
 
 		newFrame = true;
 		if(currentFrame == noFrames-1){
-			done = true;
+			onLastFrame = true;
+			if(!loop) break;
 		}
 	}
 
@@ -106,10 +116,10 @@ bool AnimatedSprite::nextFrame(){
 
 bool AnimatedSprite::checkFrame(){
 	if(currentFrameTime == 0) return true;
-	if(done && alerted) return false; // if on last frame, so user can push after it ends, triggering the callback
+	if(onLastFrame && alerted) return false;
 
 	if(currentFrameTime + gifFrame.duration < millis()){
-		if(done && !alerted){
+		if(onLastFrame && !alerted){
 			alerted = true;
 
 			// Order of callbacks is important in case the AnimatedSprite gets deleted in it.
