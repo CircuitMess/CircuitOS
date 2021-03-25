@@ -1,7 +1,11 @@
 #include "DataBuffer.h"
 
 DataBuffer::DataBuffer(const size_t size) : size(size){
-	buffer = static_cast<uint8_t*>(malloc(size));
+	if(psramFound()){
+		buffer = static_cast<uint8_t*>(ps_malloc(size));
+	}else{
+		buffer = static_cast<uint8_t*>(malloc(size));
+	}
 }
 
 DataBuffer::~DataBuffer(){

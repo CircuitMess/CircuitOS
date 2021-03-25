@@ -1,7 +1,11 @@
 #include "FSBuffer.h"
 
 FSBuffer::FSBuffer(const File& file, const size_t size) : file(file), size(size){
-	buffer = static_cast<uint8_t*>(malloc(size));
+	if(psramFound()){
+		buffer = static_cast<uint8_t*>(ps_malloc(size));
+	}else{
+		buffer = static_cast<uint8_t*>(malloc(size));
+	}
 }
 
 FSBuffer::~FSBuffer(){
