@@ -1,8 +1,8 @@
 #include "CompressedFile.h"
 #include "../Buffer/FSBuffer.h"
 
-CompressedFile::CompressedFile(File& f) : f(f){
-	decoder = heatshrink_decoder_alloc(FSBUFFER_SIZE, 8, 4);
+CompressedFile::CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits) : f(f){
+	decoder = heatshrink_decoder_alloc(FSBUFFER_SIZE, expansionBits, lookaheadBits);
 	fileBuffer = new FSBuffer(f, FSBUFFER_SIZE);
 }
 
@@ -11,8 +11,8 @@ CompressedFile::~CompressedFile(){
 	delete fileBuffer;
 }
 
-fs::File CompressedFile::open(File& f){
-	return File(std::make_shared<CompressedFile>(f));
+fs::File CompressedFile::open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits){
+	return File(std::make_shared<CompressedFile>(f, expansionBits, lookaheadBits));
 }
 
 size_t CompressedFile::write(const uint8_t* buf, size_t size){
@@ -54,7 +54,7 @@ size_t CompressedFile::read(uint8_t* buf, size_t size){
 void CompressedFile::flush(){
 }
 
-bool CompressedFile::seek(uint32_t pos, SeekMode mode){
+bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 }
 
 size_t CompressedFile::position() const{
