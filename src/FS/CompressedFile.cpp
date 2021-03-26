@@ -55,6 +55,9 @@ void CompressedFile::flush(){
 }
 
 bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
+	if(pos == 0 && mode == SeekSet){
+		f.seek(0);
+	}
 }
 
 size_t CompressedFile::position() const{
