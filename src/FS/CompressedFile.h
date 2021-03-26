@@ -18,7 +18,7 @@ public:
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
 	void flush() override;
-	bool seek(uint32_t pos, fs::SeekMode mode) override;
+	bool seek(uint32_t pos, fs::SeekMode mode = fs::SeekMode::SeekSet) override;
 	size_t position() const override;
 	size_t size() const override;
 	void close() override;
