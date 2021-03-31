@@ -1,7 +1,7 @@
 #include "DataBuffer.h"
 
-DataBuffer::DataBuffer(const size_t size) : size(size){
-	if(psramFound()){
+DataBuffer::DataBuffer(const size_t size, bool local) : size(size){
+	if(psramFound() && !local){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));
 	}else{
 		buffer = static_cast<uint8_t*>(malloc(size));
@@ -40,6 +40,7 @@ uint8_t* DataBuffer::writeData(){
 
 void DataBuffer::clear(){
 	readCursor = 0;
+	writeCursor = 0;
 }
 
 const uint8_t* DataBuffer::readData(){

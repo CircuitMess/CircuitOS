@@ -1,18 +1,15 @@
 #include "CompressedFile.h"
-#include "../Buffer/FSBuffer.h"
 
-CompressedFile::CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits) : f(f){
-	decoder = heatshrink_decoder_alloc(FSBUFFER_SIZE, expansionBits, lookaheadBits);
-	fileBuffer = new FSBuffer(f, FSBUFFER_SIZE);
+CompressedFile::CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize) : f(f), fileBuffer(f, readBufferSize){
+	decoder = heatshrink_decoder_alloc(readBufferSize, expansionBits, lookaheadBits);
 }
 
 CompressedFile::~CompressedFile(){
 	heatshrink_decoder_free(decoder);
-	delete fileBuffer;
 }
 
-fs::File CompressedFile::open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits){
-	return File(std::make_shared<CompressedFile>(f, expansionBits, lookaheadBits));
+fs::File CompressedFile::open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize){
+	return File(std::make_shared<CompressedFile>(f, expansionBits, lookaheadBits, readBufferSize));
 }
 
 size_t CompressedFile::write(const uint8_t* buf, size_t size){
@@ -20,35 +17,29 @@ size_t CompressedFile::write(const uint8_t* buf, size_t size){
 }
 
 size_t CompressedFile::read(uint8_t* buf, size_t size){
+	size_t bytesWritten = 0;
+	fileBuffer.refill();
 
-	size_t polledBytes = 0;
-
-	//use leftover polling buffer from earlier
-	if(pollLeft){
-		size_t singlePollSize = 0;
-		HSD_poll_res pollRes = heatshrink_decoder_poll(decoder, buf + polledBytes, size - polledBytes, &singlePollSize);
-		polledBytes+=singlePollSize;
-		pollLeft = (pollRes == HSDR_POLL_MORE);
-	}
-
-	while(polledBytes < size){
-		size_t singleSinkSize = 0;
-		bool moreSink = fileBuffer->refill();
-		if(moreSink){
-			heatshrink_decoder_sink(decoder, (uint8_t*)fileBuffer->data(), fileBuffer->available(), &singleSinkSize);
-			fileBuffer->moveRead(singleSinkSize);
+	while(bytesWritten < size){
+		if(fileBuffer.available() > 0){
+			size_t read = 0;
+			heatshrink_decoder_sink(decoder, fileBuffer.data(), fileBuffer.available(), &read);
+			fileBuffer.moveRead(read);
 		}else{
 			heatshrink_decoder_finish(decoder);
 		}
 
-		size_t singlePollSize = 0;
-		HSD_poll_res pollRes = heatshrink_decoder_poll(decoder, buf + polledBytes, size - polledBytes, &singlePollSize);
-		polledBytes+=singlePollSize;
-		pollLeft = (pollRes == HSDR_POLL_MORE);
-		if(!pollLeft && !moreSink) break; //reached end of file and decoder output is empty
+		size_t bytesDecoded = 0;
+		HSD_poll_res res = heatshrink_decoder_poll(decoder, buf + bytesWritten, size - bytesWritten, &bytesDecoded);
+		bytesWritten += bytesDecoded;
+
+		fileBuffer.refill();
+		if(res == HSDR_POLL_EMPTY && fileBuffer.available() == 0){
+			break;
+		}
 	}
-	decodedCursor+=polledBytes;
-	return polledBytes;
+
+	return bytesWritten;
 }
 
 void CompressedFile::flush(){
@@ -58,6 +49,8 @@ bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 	if(pos == 0 && mode == SeekSet){
 		f.seek(0);
 	}
+
+	fileBuffer.clear();
 }
 
 size_t CompressedFile::position() const{

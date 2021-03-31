@@ -5,15 +5,16 @@
 #include <FS.h>
 #include <FSImpl.h>
 #include <heatshrink_decoder.h>
+#include "../Buffer/FSBuffer.h"
+#include "../Buffer/DataBuffer.h"
 
-class FSBuffer;
-#define FSBUFFER_SIZE 16
+#define FSBUFFER_SIZE 512
 
 class CompressedFile : public fs::FileImpl {
 public:
-	CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits);
+	CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 	~CompressedFile();
-	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits);
+	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
@@ -32,10 +33,7 @@ public:
 private:
 	fs::File f;
 	heatshrink_decoder *decoder;
-	FSBuffer *fileBuffer;
-	bool pollLeft = false;
-	size_t decodedSize = 0;
-	size_t decodedCursor = 0;
+	FSBuffer fileBuffer;
 };
 
 

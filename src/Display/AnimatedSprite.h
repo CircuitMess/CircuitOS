@@ -43,10 +43,13 @@ public:
 	void setLoop(bool loop);
 	void setMaskingColor(Color maskingColor);
 
+	void setSwapBytes(bool swapBytes);
+
 private:
 	Sprite* canvas;
 	fs::File file;
 	bool loop = false;
+	bool swapBytes = false;
 	Color maskingColor = TFT_TRANSPARENT;
 	size_t dataStart;
 	uint32_t currentFrameTime = 0;

@@ -17,11 +17,15 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), 
 	noFrames = header.noFrames;
 	flags = header.flags;
 
+	// Serial.printf("Width %d, height %d, %d frames, color table %s\n", width, height, noFrames, flags ? "yes" : "no");
 	if(flags){
 		table = new Table(file);
+		// Serial.printf("Colors: %d\n", table->getNoColors());
 	}
 
 	gifFrame.data = static_cast<uint8_t*>(malloc(width * height * (flags ? 1 : 2)));
+
+	// Serial.printf("Data start: %lu\n", file.position());
 
 	dataStart = file.position();
 	reset();
@@ -55,6 +59,9 @@ void AnimatedSprite::push(){
 	if(flags){
 		for(int i = 0; i < width * height; i++){
 			Color color = table->getColor(gifFrame.data[i]);
+			if(swapBytes){
+				color = color << 8 | color >> 8;
+			}
 			if(color == maskingColor) continue;
 
 			int _y = i / width;
@@ -86,6 +93,9 @@ bool AnimatedSprite::nextFrame(){
 		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
 		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
 		currentFrameTime = millis();
+
+		// Serial.printf("New frame, %d ms\n", gifFrame.duration);
+
 		return true;
 	}
 
@@ -103,6 +113,8 @@ bool AnimatedSprite::nextFrame(){
 
 		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
 		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
+
+		// Serial.printf("New frame, %d ms\n", gifFrame.duration);
 
 		newFrame = true;
 		if(currentFrame == noFrames-1){
@@ -174,4 +186,8 @@ void AnimatedSprite::setLoop(bool loop){
 
 void AnimatedSprite::setMaskingColor(Color maskingColor){
 	AnimatedSprite::maskingColor = maskingColor;
+}
+
+void AnimatedSprite::setSwapBytes(bool swapBytes){
+	AnimatedSprite::swapBytes = swapBytes;
 }

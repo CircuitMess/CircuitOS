@@ -5,7 +5,7 @@
 
 class DataBuffer {
 public:
-	DataBuffer(const size_t size);
+	DataBuffer(const size_t size, bool prefferLocal = false);
 	virtual ~DataBuffer();
 
 	size_t readAvailable();
