@@ -80,6 +80,7 @@ void AnimatedSprite::reset(){
 	currentFrame = 0;
 	alerted = false;
 	onLastFrame = false;
+	playing = true;
 }
 
 void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
@@ -87,6 +88,7 @@ void AnimatedSprite::setLoopDoneCallback(void (*callback)()){
 }
 
 bool AnimatedSprite::nextFrame(){
+	if(!playing) return false;
 	if(onLastFrame) return false;
 
 	if(currentFrameTime == 0){
@@ -190,4 +192,13 @@ void AnimatedSprite::setMaskingColor(Color maskingColor){
 
 void AnimatedSprite::setSwapBytes(bool swapBytes){
 	AnimatedSprite::swapBytes = swapBytes;
+}
+
+void AnimatedSprite::start(){
+	playing = true;
+	currentFrameTime = millis();
+}
+
+void AnimatedSprite::stop(){
+	playing = false;
 }

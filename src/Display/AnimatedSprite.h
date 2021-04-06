@@ -45,6 +45,9 @@ public:
 
 	void setSwapBytes(bool swapBytes);
 
+	void start();
+	void stop();
+
 private:
 	Sprite* canvas;
 	fs::File file;
@@ -91,6 +94,8 @@ private:
 	bool onLastFrame = false;
 	void (*loopDoneCallback)() = nullptr;
 	bool alerted = false;
+
+	bool playing = false;
 };
 
 
