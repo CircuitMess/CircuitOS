@@ -53,6 +53,7 @@ uint8_t AnimatedSprite::Table::getNoColors() const{
 AnimatedSprite::~AnimatedSprite(){
 	delete table;
 	delete gifFrame.data;
+	file.close();
 }
 
 void AnimatedSprite::push(){
