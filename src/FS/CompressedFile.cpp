@@ -48,9 +48,9 @@ void CompressedFile::flush(){
 bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 	if(pos == 0 && mode == SeekSet){
 		f.seek(0);
+		fileBuffer.clear();
+		heatshrink_decoder_reset(decoder);
 	}
-
-	fileBuffer.clear();
 }
 
 size_t CompressedFile::position() const{
