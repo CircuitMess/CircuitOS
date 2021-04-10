@@ -12,7 +12,7 @@ class gd_GIF;
 class GIFAnimatedSprite {
 public:
 	GIFAnimatedSprite(Sprite* parentSprite, fs::File gifFile);
-	virtual ~AnimatedSprite();
+	virtual ~GIFAnimatedSprite();
 
 	int getX() const;
 	void setX(int x);
