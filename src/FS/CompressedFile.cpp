@@ -39,6 +39,7 @@ size_t CompressedFile::read(uint8_t* buf, size_t size){
 		}
 	}
 
+	pos += bytesWritten;
 	return bytesWritten;
 }
 
@@ -47,6 +48,7 @@ void CompressedFile::flush(){
 
 bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 	if(pos == 0 && mode == SeekSet){
+		this->pos = 0;
 		f.seek(0);
 		fileBuffer.clear();
 		heatshrink_decoder_reset(decoder);
@@ -54,7 +56,7 @@ bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 }
 
 size_t CompressedFile::position() const{
-	return 0;
+	return pos;
 }
 
 size_t CompressedFile::size() const{

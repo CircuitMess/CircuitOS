@@ -34,6 +34,7 @@ private:
 	fs::File f;
 	heatshrink_decoder *decoder;
 	FSBuffer fileBuffer;
+	size_t pos = 0;
 };
 
 
