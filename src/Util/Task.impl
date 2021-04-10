@@ -44,7 +44,9 @@ void Task::stop(bool wait){
 	running = false;
 
 	if(wait){
-		while(!stopped);
+		while(!stopped){
+			delay(1);
+		}
 	}
 }
 
