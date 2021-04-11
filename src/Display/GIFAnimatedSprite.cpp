@@ -45,7 +45,7 @@ void GIFAnimatedSprite::setXY(int x, int y){
 
 void GIFAnimatedSprite::push(){
 	if(currentFrameTime == 0){
-		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
+		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, scale, TFT_TRANSPARENT);
 		currentFrameTime = millis();
 		return;
 	}
@@ -64,7 +64,7 @@ void GIFAnimatedSprite::push(){
 			alerted = false;
 		}
 	}
-	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, 1, TFT_TRANSPARENT);
+	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, scale, TFT_TRANSPARENT);
 }
 
 void GIFAnimatedSprite::reset(){
@@ -108,4 +108,9 @@ bool GIFAnimatedSprite::newFrameReady(){
 		return true;
 	}
 	return false;
+}
+
+void GIFAnimatedSprite::setScale(uint8_t scale){
+	GIFAnimatedSprite::scale = scale;
+
 }

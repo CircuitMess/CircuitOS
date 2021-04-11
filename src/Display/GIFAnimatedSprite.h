@@ -24,6 +24,7 @@ public:
 	void reset();
 	void setLoopDoneCallback(void (*callback)());
 	bool newFrameReady();
+	void setScale(uint8_t scale);
 
 private:
 	Sprite* parentSprite = nullptr;
@@ -33,6 +34,7 @@ private:
 	gd_GIF* gif;
 	fs::File gifFile;
 	uint32_t currentFrameTime = 0;
+	uint8_t scale=1;
 
 	struct Frame {
 		uint8_t* data = nullptr;
