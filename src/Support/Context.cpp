@@ -1,6 +1,8 @@
 #include "Context.h"
 #include "ContextTransition.h"
 
+bool Context::deleteOnPop = false;
+
 Context::Context(Display& display) : screen(display){
 	addSprite(&screen);
 }
@@ -39,7 +41,12 @@ void Context::unpack(){
 
 void Context::pop(){
 	if(parent == nullptr) return;
-	new ContextTransition(*screen.getDisplay(), this, parent, true);
+	ContextTransition* transition = new ContextTransition(*screen.getDisplay(), this, parent, true);
+	if(deleteOnPop){
+		transition->setDoneCallback([](Context* oldCtx, Context* newCtx){
+			delete oldCtx;
+		});
+	}
 	parent = nullptr;
 }
 
@@ -56,4 +63,8 @@ void Context::push(Context* parent){
 
 void Context::returned(void* data){
 
+}
+
+void Context::setDeleteOnPop(bool deleteOnPop){
+	Context::deleteOnPop = deleteOnPop;
 }

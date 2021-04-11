@@ -24,6 +24,8 @@ public:
 
 	Screen& getScreen();
 
+	static void setDeleteOnPop(bool deleteOnPop);
+
 protected:
 	Screen screen;
 	Context* parent = nullptr;
@@ -32,6 +34,7 @@ protected:
 
 	Vector<SpriteElement*> sprites;
 
+	static bool deleteOnPop;
 };
 
 
