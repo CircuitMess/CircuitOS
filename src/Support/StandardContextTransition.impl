@@ -57,12 +57,20 @@ void ContextTransition::loop(uint micros){
 	}
 
 	if(scroll >= display->getHeight()){
-		Serial.println("Ending context switch");
 		contextB->getScreen().setPos(0, 0);
 		contextB->getScreen().commit();
+
+		if(doneCallback){
+			doneCallback(contextA, contextB);
+		}
+
 		contextB->start();
 		delete this;
 	}else{
 		display->commit();
 	}
+}
+
+void ContextTransition::setDoneCallback(void (* doneCallback)(Context*, Context*)){
+	ContextTransition::doneCallback = doneCallback;
 }

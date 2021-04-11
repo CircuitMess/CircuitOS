@@ -40,16 +40,18 @@ void ContextTransition::loop(uint micros){
 	}
 
 	if(scroll >= display->getHeight()){
-		Serial.println("Ending context switch");
-        if(!reverse){
-            display->getBaseSprite()->setPos(0,0);
-        }
+		display->getBaseSprite()->setPos(0,0);
         display->commit();
+
+		if(doneCallback){
+			doneCallback(contextA, contextB);
+		}
+
 		contextB->start();
-        if(reverse)
-        {
-            display->getBaseSprite()->setPos(0,0);
-        }
 		delete this;
 	}
+}
+
+void ContextTransition::setDoneCallback(void (* doneCallback)(Context*, Context*)){
+	ContextTransition::doneCallback = doneCallback;
 }

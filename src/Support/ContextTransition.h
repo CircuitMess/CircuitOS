@@ -11,6 +11,8 @@ public:
 	ContextTransition(Display& display, Context* contextA, Context* contextB);
 	ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse);
 
+	void setDoneCallback(void (* doneCallback)(Context*, Context*));
+
 	void loop(uint micros) override;
 
 	virtual ~ContextTransition();
@@ -28,6 +30,7 @@ private:
 
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int pos);
 
+	void (*doneCallback)(Context* oldCtx, Context* newCtx) = nullptr;
 };
 
 
