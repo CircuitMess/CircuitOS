@@ -26,6 +26,8 @@ public:
 
 	static void setDeleteOnPop(bool deleteOnPop);
 
+	void setParent(Context* parent);
+
 protected:
 	Screen screen;
 	Context* parent = nullptr;

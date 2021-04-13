@@ -68,3 +68,7 @@ void Context::returned(void* data){
 void Context::setDeleteOnPop(bool deleteOnPop){
 	Context::deleteOnPop = deleteOnPop;
 }
+
+void Context::setParent(Context* parent){
+	Context::parent = parent;
+}
