@@ -33,6 +33,7 @@ Animation::~Animation()
 	for(AnimationFrame i : frames){
 		free(i.data);
 	}
+	file->close();
 	delete file;
 }
 

@@ -10,7 +10,10 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), 
 	file.seek(0);
 
 	Header header;
-	file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header));
+	if(file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header)) != sizeof(Header)){
+		Serial.println("Failed reading G565 header");
+		return;
+	}
 
 	width = header.width;
 	height = header.height;
