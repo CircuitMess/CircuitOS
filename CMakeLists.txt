@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(CircuitOS)
+set(PORT /dev/ttyUSB0)
+set(DEVICE cm:esp32:spencer) # Arduino device FQBN
 set(CMAKE_CXX_STANDARD 11)
 
 if(WIN32 OR CYGWIN)
@@ -43,6 +45,7 @@ include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/SPIF
 include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/HTTPClient/src)
 include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/TFT_eSPI)
 include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/TFT_eSPI/Extensions)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/heatshrink)
 
 # External libs
 include_directories(${ArduinoLibs}/Keypad_I2Ca)
@@ -73,7 +76,26 @@ AUX_SOURCE_DIRECTORY(src/Util SOURCES)
 AUX_SOURCE_DIRECTORY(src/Network SOURCES)
 
 add_definitions(-DDEBUG)
-add_executable(CircuitOS ${SOURCES} CircuitOS.ino)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
+set(BUILD ${ROOT}/build)
+
+SET_SOURCE_FILES_PROPERTIES(${CMAKE_PROJECT_NAME}.ino PROPERTIES LANGUAGE CXX)
+
+add_custom_command(OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf
+        COMMAND arduino-cli compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_SOURCE_DIR}
+        DEPENDS ${CMAKE_PROJECT_NAME}.ino ${SOURCES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+add_custom_target(CMBuild
+        SOURCES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf)
+
+add_custom_target(CMUpload ALL
+        COMMAND arduino-cli upload --fqbn ${DEVICE} -p ${PORT} --input-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        DEPENDS CMBuild
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES})
 
 set(EXAMPLES ListMenu Settings Mutex Queue Motion)
 
