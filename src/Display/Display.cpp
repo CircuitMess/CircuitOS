@@ -18,7 +18,10 @@ void Display::begin()
 		digitalWrite(blPin, HIGH);
 	}
 
+	tft.setAttribute(PSRAM_ENABLE, false);
 	tft.init();
+	tft.setAttribute(PSRAM_ENABLE, false);
+
 
 	tft.writecommand(17); //wakeup command in case display driver is in sleep mode
 
