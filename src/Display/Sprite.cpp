@@ -180,7 +180,12 @@ Sprite& Sprite::push(){
 	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
-	parent->setSwapBytes(true);
+	if(parent->getSwapBytes() && getSwapBytes()) {
+		parent->setSwapBytes(false);
+	}else{
+		parent->setSwapBytes(true);
+	}
+
 	if(chroma){
 		parent->pushImage(x, y, _iwidth, _iheight, _img, (uint32_t) chromaKey);
 	}else{
