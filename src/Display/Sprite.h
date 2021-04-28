@@ -58,7 +58,7 @@ public:
 #endif
 
 private:
-	Sprite* parent;
+	Sprite* parent = nullptr;
 	TFT_eSPI* parentSPI = nullptr;
 	int32_t x = 0, y = 0;
 

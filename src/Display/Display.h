@@ -46,7 +46,7 @@ private:
 	uint16_t* mirrorBuffer = nullptr;
 	bool mirror;
 
-	Sprite* baseSprite;
+	Sprite* baseSprite = nullptr;
 };
 
 
