@@ -3,6 +3,7 @@
 
 #include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
+#include "InputListener.h"
 
 #define PIN_MAX 45
 #define DEBOUNCE_COUNT 1
@@ -69,19 +70,23 @@ public:
 	 */
 	virtual void preregisterButtons(Vector<uint8_t> pins);
 
-	static Input* getInstance();
+	static Input *getInstance();
 
 	void loop(uint _time) override;
 
+	void addListener(InputListener *listener);
+
+	void removeListener(InputListener *listener);
+
 protected:
 	uint8_t pinNumber = 0;
-	
-	std::vector<void(*)()> btnPressCallback;
-	std::vector<void(*)()> btnReleaseCallback;
-	std::vector<void(*)()> btnHoldCallback;
-	std::vector<void(*)(uint)> btnHoldRepeatCallback;
 
-	static Input* instance;
+	std::vector<void (*)()> btnPressCallback;
+	std::vector<void (*)()> btnReleaseCallback;
+	std::vector<void (*)()> btnHoldCallback;
+	std::vector<void (*)(uint)> btnHoldRepeatCallback;
+
+	static Input *instance;
 	virtual void scanButtons() = 0;
 
 	virtual void registerButton(uint8_t pin);
@@ -94,14 +99,16 @@ protected:
 	std::vector<uint32_t> btnHoldRepeatValue; //Value in ms that the callback will be triggered after periodically
 	std::vector<uint32_t> btnHoldRepeatCounter;
 	std::vector<bool> btnHoldOver;
-	
-	void(*anyKeyCallback)(void); 
+
+	void (*anyKeyCallback)(void);
+
 	bool anyKeyCallbackReturn;
 
 	void btnPress(uint i);
-	void btnRelease(uint );
-	void btnHeld(uint8_t i, uint32_t millis);
 
+	void btnRelease(uint);
+
+	Vector<InputListener *> listeners;
 };
 
 
