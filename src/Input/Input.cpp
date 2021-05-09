@@ -1,7 +1,7 @@
 #include "Input.h"
 #include "../Util/Debug.h"
 
-Input *Input::instance;
+Input* Input::instance;
 
 Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
 								   btnReleaseCallback(pinNumber, nullptr),
@@ -12,13 +12,13 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 	instance = this;
 }
 
-void Input::setBtnPressCallback(uint8_t pin, void (*callback)()){
+void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
 	btnPressCallback[pin] = callback;
 }
 
-void Input::setBtnReleaseCallback(uint8_t pin, void (*callback)()){
+void Input::setBtnReleaseCallback(uint8_t pin, void (* callback)()){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
 	btnReleaseCallback[pin] = callback;
@@ -34,7 +34,7 @@ void Input::removeBtnReleaseCallback(uint8_t pin){
 	btnReleaseCallback[pin] = nullptr;
 }
 
-Input *Input::getInstance(){
+Input* Input::getInstance(){
 	return instance;
 }
 
@@ -133,14 +133,14 @@ void Input::loop(uint _time){
 	}
 }
 
-void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callback)()){
+void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)()){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
 	btnHoldCallback[pin] = callback;
 	btnHoldValue[pin] = holdTime;
 }
 
-void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint)){
+void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (* callback)(uint)){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
 	btnHoldRepeatCallback[pin] = callback;
@@ -152,7 +152,7 @@ uint32_t Input::getButtonHeldMillis(uint8_t pin){
 	return millis() - btnHoldStart[pin];
 }
 
-void Input::setAnyKeyCallback(void (*callback)(), bool returnAfterCallback){
+void Input::setAnyKeyCallback(void (* callback)(), bool returnAfterCallback){
 	anyKeyCallback = callback;
 	anyKeyCallbackReturn = returnAfterCallback;
 }
@@ -163,12 +163,12 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 	}
 }
 
-void Input::addListener(InputListener *listener){
+void Input::addListener(InputListener* listener){
 	listeners.push_back(listener);
 }
 
-void Input::removeListener(InputListener *listener){
+void Input::removeListener(InputListener* listener){
 	uint i = listeners.indexOf(listener);
-	if(i == (uint)-1) return;
+	if(i == (uint) -1) return;
 	listeners.remove(i);
 }

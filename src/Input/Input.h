@@ -17,14 +17,14 @@ public:
 	 * @param pin Input pin of the button.
 	 * @param callback Callback to be executed.
 	 */
-	virtual void setBtnPressCallback(uint8_t pin, void (*callback)());
+	virtual void setBtnPressCallback(uint8_t pin, void (* callback)());
 
 	/**
 	 * Sets a callback to be executed when a button is released.
 	 * @param pin Input pin of the button.
 	 * @param callback Callback to be executed.
 	 */
-	virtual void setBtnReleaseCallback(uint8_t pin, void (*callback)());
+	virtual void setBtnReleaseCallback(uint8_t pin, void (* callback)());
 
 	virtual void removeBtnPressCallback(uint8_t pin);
 	virtual void removeBtnReleaseCallback(uint8_t pin);
@@ -36,7 +36,7 @@ public:
 	 * @param holdTime Ammount of time after which the callback is executed.
 	 * @param callback Callback to be executed.
 	 */
-	virtual void setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callback)());
+	virtual void setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)());
 
 	/**
 	 * Sets a callback to be executed when a button is held for a certain ammount of time, periodically.
@@ -47,7 +47,7 @@ public:
 	 * @param callback Callback to be executed. The callback also receives an uint parameter with the number of repetitions.
 	 * The first time it's called, (uint)1 will be passed, the 2nd time (uint)2 and so on.
 	 */
-	virtual void setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint));
+	virtual void setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (* callback)(uint));
 
 	/**
 	 * Returns the time in milliseconds a button is being held down.
@@ -62,7 +62,7 @@ public:
 	 * @param returnAfterCallback Optional parameter. If true, ignores button input after anyKeyCallback is executed.
 	 * Useful to prevent button inputs after waking up from sleep, for example.
 	 */
-	virtual void setAnyKeyCallback(void(*callback)(), bool returnAfterCallback = false);
+	virtual void setAnyKeyCallback(void(* callback)(), bool returnAfterCallback = false);
 
 	/**
 	 * Pre-register buttons. Buttons are automatically registered with callback functions, but pre-registration is nedded for anyKeyCallback.
@@ -70,13 +70,13 @@ public:
 	 */
 	virtual void preregisterButtons(Vector<uint8_t> pins);
 
-	static Input *getInstance();
+	static Input* getInstance();
 
 	void loop(uint _time) override;
 
-	void addListener(InputListener *listener);
+	void addListener(InputListener* listener);
 
-	void removeListener(InputListener *listener);
+	void removeListener(InputListener* listener);
 
 protected:
 	uint8_t pinNumber = 0;
@@ -86,7 +86,7 @@ protected:
 	std::vector<void (*)()> btnHoldCallback;
 	std::vector<void (*)(uint)> btnHoldRepeatCallback;
 
-	static Input *instance;
+	static Input* instance;
 	virtual void scanButtons() = 0;
 
 	virtual void registerButton(uint8_t pin);
@@ -100,7 +100,7 @@ protected:
 	std::vector<uint32_t> btnHoldRepeatCounter;
 	std::vector<bool> btnHoldOver;
 
-	void (*anyKeyCallback)(void);
+	void (* anyKeyCallback)(void);
 
 	bool anyKeyCallbackReturn;
 
@@ -108,7 +108,7 @@ protected:
 
 	void btnRelease(uint);
 
-	Vector<InputListener *> listeners;
+	Vector<InputListener*> listeners;
 };
 
 
