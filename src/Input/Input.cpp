@@ -50,22 +50,22 @@ void Input::btnPress(uint i){
 		btnCount[i]++;
 
 		if(btnState[i] == 0 && btnCount[i] == DEBOUNCE_COUNT){
-			if(anyKeyCallback != nullptr)
-			{
-				if(anyKeyCallbackReturn)
-				{
+			if(anyKeyCallback != nullptr){
+				if(anyKeyCallbackReturn){
 					anyKeyCallback();
 					return;
-				}
-				else
-				{
+				}else{
 					anyKeyCallback();
 				}
 			}
 			btnState[i] = 1;
-			if(!btnHoldOver[buttons[i]])
-			{
+			if(!btnHoldOver[buttons[i]]){
 				btnHoldStart[buttons[i]] = millis();
+			}
+
+			for(auto listener : listeners){
+				if(listener == nullptr) continue;
+				listener->buttonPressed(buttons[i]);
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
 				btnPressCallback[buttons[i]]();
@@ -79,15 +79,11 @@ void Input::btnRelease(uint i){
 		btnCount[i]--;
 
 		if(btnState[i] == 1 && btnCount[i] == 0){
-			if(anyKeyCallback != nullptr)
-			{
-				if(anyKeyCallbackReturn)
-				{
+			if(anyKeyCallback != nullptr){
+				if(anyKeyCallbackReturn){
 					anyKeyCallback();
 					return;
-				}
-				else
-				{
+				}else{
 					anyKeyCallback();
 				}
 			}
@@ -96,6 +92,10 @@ void Input::btnRelease(uint i){
 			btnHoldStart[buttons[i]] = millis();
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
+			for(auto listener : listeners){
+				if(listener == nullptr) continue;
+				listener->buttonReleased(buttons[i]);
+			}
 			if(btnReleaseCallback[buttons[i]] != nullptr){
 				btnReleaseCallback[buttons[i]]();
 			}
@@ -103,28 +103,29 @@ void Input::btnRelease(uint i){
 	}
 }
 
-void Input::loop(uint _time)
-{
+void Input::loop(uint _time){
 	scanButtons();
-	for(uint8_t i = 0; i < buttons.size(); i++)
-	{
+	for(uint8_t i = 0; i < buttons.size(); i++){
 		uint32_t holdTime = getButtonHeldMillis(buttons[i]);
-		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr))
-		{
-			
-			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]])
-			{
-				if(btnHoldCallback[buttons[i]] != nullptr)
-				{
+		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr)){
+			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]]){
+				for(auto listener : listeners){
+					if(listener == nullptr) continue;
+					listener->buttonHeld(buttons[i]);
+				}
+				if(btnHoldCallback[buttons[i]] != nullptr){
 					btnHoldCallback[buttons[i]]();
 				}
-				btnHoldOver[buttons[i]] = 1;
+				btnHoldOver[buttons[i]] = true;
 			}
-			if(holdTime >= (btnHoldRepeatCounter[buttons[i]] + 1)*btnHoldRepeatValue[buttons[i]])
-			{
+			if(holdTime >= (btnHoldRepeatCounter[buttons[i]] + 1) * btnHoldRepeatValue[buttons[i]]){
 				btnHoldRepeatCounter[buttons[i]]++;
-				if(btnHoldRepeatCallback[buttons[i]] != nullptr)
-				{
+
+				for(auto listener : listeners){
+					if(listener == nullptr) continue;
+					listener->buttonHeldRepeat(buttons[i], btnHoldRepeatCounter[buttons[i]]);
+				}
+				if(btnHoldRepeatCallback[buttons[i]] != nullptr){
 					btnHoldRepeatCallback[buttons[i]](btnHoldRepeatCounter[buttons[i]]);
 				}
 			}
@@ -132,30 +133,26 @@ void Input::loop(uint _time)
 	}
 }
 
-void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (*callback)())
-{
+void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)()){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
 	btnHoldCallback[pin] = callback;
 	btnHoldValue[pin] = holdTime;
 }
 
-void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (*callback)(uint))
-{
+void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (* callback)(uint)){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
-	btnHoldRepeatCallback[pin]=callback;
+	btnHoldRepeatCallback[pin] = callback;
 	btnHoldRepeatValue[pin] = periodTime;
 }
 
-uint32_t Input::getButtonHeldMillis(uint8_t pin)
-{
+uint32_t Input::getButtonHeldMillis(uint8_t pin){
 	if(pin >= pinNumber) return 0;
 	return millis() - btnHoldStart[pin];
 }
 
-void Input::setAnyKeyCallback(void (*callback)(), bool returnAfterCallback)
-{
+void Input::setAnyKeyCallback(void (* callback)(), bool returnAfterCallback){
 	anyKeyCallback = callback;
 	anyKeyCallbackReturn = returnAfterCallback;
 }
@@ -164,4 +161,14 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 	for(const uint8_t pin : pins){
 		registerButton(pin);
 	}
+}
+
+void Input::addListener(InputListener* listener){
+	listeners.push_back(listener);
+}
+
+void Input::removeListener(InputListener* listener){
+	uint i = listeners.indexOf(listener);
+	if(i == (uint) -1) return;
+	listeners.remove(i);
 }
