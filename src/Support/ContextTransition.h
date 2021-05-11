@@ -17,6 +17,8 @@ public:
 
 	virtual ~ContextTransition();
 
+	bool getTransitionRunning();
+
 private:
 	bool reverse = false;
 
@@ -31,6 +33,8 @@ private:
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int pos);
 
 	void (*doneCallback)(Context* oldCtx, Context* newCtx) = nullptr;
+
+	static bool transitionRunning;
 };
 
 

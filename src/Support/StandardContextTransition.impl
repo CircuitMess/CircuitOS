@@ -11,6 +11,7 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 ContextTransition::ContextTransition(Display& display, Context* contextA, Context* contextB, bool reverse)
 	: reverse(reverse), display(&display), contextA(contextA), contextB(contextB) {
 
+	transitionRunning = true;
 	contextA->stop();
 	contextA->pack();
 
@@ -23,6 +24,7 @@ ContextTransition::ContextTransition(Display& display, Context* contextA, Contex
 
 ContextTransition::~ContextTransition(){
 	LoopManager::removeListener(this);
+	transitionRunning = false;
 }
 
 void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos){

@@ -2,6 +2,7 @@
 #include "ContextTransition.h"
 
 bool Context::deleteOnPop = false;
+Context* Context::currentContext = nullptr;
 
 Context::Context(Display& display) : screen(display){
 	addSprite(&screen);
@@ -27,6 +28,8 @@ void Context::pack(){
 	}
 
 	packed = true;
+	currentContext = nullptr;
+	deinit();
 }
 
 void Context::unpack(){
@@ -37,6 +40,8 @@ void Context::unpack(){
 	}
 
 	packed = false;
+	currentContext = this;
+	init();
 }
 
 void Context::pop(){
@@ -72,3 +77,7 @@ void Context::setDeleteOnPop(bool deleteOnPop){
 void Context::setParent(Context* parent){
 	Context::parent = parent;
 }
+
+void Context::init(){}
+
+void Context::deinit(){}

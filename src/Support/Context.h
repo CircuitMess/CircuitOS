@@ -37,6 +37,12 @@ protected:
 	Vector<SpriteElement*> sprites;
 
 	static bool deleteOnPop;
+
+	virtual void init();
+	virtual void deinit();
+
+private:
+	static Context* currentContext;
 };
 
 
