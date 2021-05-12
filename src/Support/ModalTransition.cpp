@@ -2,7 +2,7 @@
 #include "../Loop/LoopManager.h"
 
 ModalTransition::ModalTransition(Display& display, Context* context, Modal* modal, bool reverse)
-		: reverse(reverse), display(&display), context(context), modal(modal){
+		: reverse(reverse), display(&display), context(context), modal(modal), tempSprite(display, display.getWidth(), display.getHeight()){
 
 	modalX = modal->getScreen().getX();
 	modalY = modal->getScreen().getY();
@@ -24,7 +24,7 @@ ModalTransition::ModalTransition(Display& display, Context* context, Modal* moda
 
 		modal->getScreen().getSprite()->setPos(modalX, display.getHeight());
 	}
-
+	copySprite(display.getBaseSprite(), &tempSprite, 0, 0);
 	LoopManager::addListener(this);
 }
 
@@ -54,9 +54,12 @@ void ModalTransition::loop(uint micros){
 		copySprite(context->getScreen().getSprite(), display->getBaseSprite());
 
 		if(reverse){
+			copySprite(&tempSprite, display->getBaseSprite(), 0, 0);
 			copySprite(modal->getScreen().getSprite(), display->getBaseSprite(), modalX, modalY + scroll);
 		}else{
+			copySprite(&tempSprite, display->getBaseSprite(), 0, 0);
 			copySprite(modal->getScreen().getSprite(), display->getBaseSprite(), modalX, max(modalY, (int) display->getHeight() - scroll));
+
 		}
 
 		lastScroll = scroll;
