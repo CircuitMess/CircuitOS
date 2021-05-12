@@ -17,7 +17,7 @@ public:
 
 	virtual ~ContextTransition();
 
-	bool getTransitionRunning();
+	bool isRunning();
 
 private:
 	bool reverse = false;

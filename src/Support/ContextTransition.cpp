@@ -3,7 +3,7 @@
 
 bool ContextTransition::transitionRunning = false;
 
-bool ContextTransition::getTransitionRunning(){
+bool ContextTransition::isRunning(){
 	return transitionRunning;
 }
 #ifdef CIRCUITOS_LOWRAM
