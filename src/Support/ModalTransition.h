@@ -30,7 +30,6 @@ private:
 	int modalX;
 	int modalY;
 
-	Sprite tempSprite;
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int x = 0, int y = 0);
 
 };

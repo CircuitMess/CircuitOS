@@ -2,14 +2,13 @@
 #include "../Loop/LoopManager.h"
 
 ModalTransition::ModalTransition(Display& display, Context* context, Modal* modal, bool reverse)
-		: reverse(reverse), display(&display), context(context), modal(modal), tempSprite(display, display.getWidth(), display.getHeight()){
+		: reverse(reverse), display(&display), context(context), modal(modal){
 
 	modalX = modal->getScreen().getX();
 	modalY = modal->getScreen().getY();
 
 	if(reverse){
 		modal->stop();
-		modal->pack();
 
 		context->unpack();
 		context->getScreen().draw();
@@ -17,14 +16,12 @@ ModalTransition::ModalTransition(Display& display, Context* context, Modal* moda
 		modal->getScreen().getSprite()->setPos(modalX, modalY);
 	}else{
 		context->stop();
-		context->pack();
 
 		modal->unpack();
 		modal->getScreen().draw();
 
 		modal->getScreen().getSprite()->setPos(modalX, display.getHeight());
 	}
-	copySprite(display.getBaseSprite(), &tempSprite, 0, 0);
 	LoopManager::addListener(this);
 }
 
@@ -54,10 +51,10 @@ void ModalTransition::loop(uint micros){
 		copySprite(context->getScreen().getSprite(), display->getBaseSprite());
 
 		if(reverse){
-			copySprite(&tempSprite, display->getBaseSprite(), 0, 0);
+			copySprite(context->getScreen().getSprite(), display->getBaseSprite(), 0, 0);
 			copySprite(modal->getScreen().getSprite(), display->getBaseSprite(), modalX, modalY + scroll);
 		}else{
-			copySprite(&tempSprite, display->getBaseSprite(), 0, 0);
+			copySprite(context->getScreen().getSprite(), display->getBaseSprite(), 0, 0);
 			copySprite(modal->getScreen().getSprite(), display->getBaseSprite(), modalX, max(modalY, (int) display->getHeight() - scroll));
 
 		}
@@ -69,9 +66,12 @@ void ModalTransition::loop(uint micros){
 		modal->getScreen().setPos(modalX, modalY);
 
 		if(reverse){
+			modal->pack();
+			delete modal;
 			context->getScreen().commit();
 			context->start();
 		}else{
+			context->pack();
 			modal->getScreen().commit();
 			modal->start();
 		}
