@@ -81,3 +81,7 @@ void Context::setParent(Context* parent){
 void Context::init(){}
 
 void Context::deinit(){}
+
+Context *Context::getCurrentContext(){
+	return currentContext;
+}

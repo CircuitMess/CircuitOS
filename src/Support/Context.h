@@ -28,6 +28,8 @@ public:
 
 	void setParent(Context* parent);
 
+	static Context* getCurrentContext();
+
 protected:
 	Screen screen;
 	Context* parent = nullptr;
