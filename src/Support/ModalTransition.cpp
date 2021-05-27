@@ -11,14 +11,14 @@ ModalTransition::ModalTransition(Display& display, Context* context, Modal* moda
 		modal->stop();
 
 		context->unpack();
-		context->getScreen().draw();
+		context->draw();
 
 		modal->getScreen().getSprite()->setPos(modalX, modalY);
 	}else{
 		context->stop();
 
 		modal->unpack();
-		modal->getScreen().draw();
+		modal->draw();
 
 		modal->getScreen().getSprite()->setPos(modalX, display.getHeight());
 	}
