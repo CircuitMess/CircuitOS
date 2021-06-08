@@ -19,6 +19,8 @@ public:
 
 	static bool isRunning();
 
+	void setDoneCallback(void (* doneCallback)(Context*, Modal*));
+
 private:
 	bool reverse = false;
 
@@ -34,6 +36,8 @@ private:
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int x = 0, int y = 0);
 
 	static bool transitionRunning;
+
+	void (*doneCallback)(Context* oldCtx, Modal* newCtx) = nullptr;
 };
 
 

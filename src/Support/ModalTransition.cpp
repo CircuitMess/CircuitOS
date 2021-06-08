@@ -94,3 +94,7 @@ void ModalTransition::loop(uint micros){
 bool ModalTransition::isRunning(){
 	return transitionRunning;
 }
+
+void ModalTransition::setDoneCallback(void (*doneCallback)(Context*, Modal*)){
+	ModalTransition::doneCallback = doneCallback;
+}
