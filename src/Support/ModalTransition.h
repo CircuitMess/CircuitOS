@@ -17,6 +17,8 @@ public:
 
 	virtual ~ModalTransition();
 
+	static bool isRunning();
+
 private:
 	bool reverse = false;
 
@@ -27,11 +29,11 @@ private:
 	uint time = 0;
 	uint lastScroll = 0;
 
-	int modalX;
-	int modalY;
+	int modalX, modalY, contextX, contextY;
 
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int x = 0, int y = 0);
 
+	static bool transitionRunning;
 };
 
 

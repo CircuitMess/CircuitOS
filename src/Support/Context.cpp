@@ -21,6 +21,7 @@ void Context::addSprite(SpriteElement* sprite){
 }
 
 void Context::pack(){
+	currentContext = nullptr;
 	if(packed) return;
 
 	for(SpriteElement* element : sprites){
@@ -28,11 +29,11 @@ void Context::pack(){
 	}
 
 	packed = true;
-	currentContext = nullptr;
 	deinit();
 }
 
 void Context::unpack(){
+	currentContext = this;
 	if(!packed) return;
 
 	for(SpriteElement* element : sprites){
@@ -40,7 +41,6 @@ void Context::unpack(){
 	}
 
 	packed = false;
-	currentContext = this;
 	init();
 }
 
