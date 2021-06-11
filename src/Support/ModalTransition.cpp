@@ -55,7 +55,7 @@ void ModalTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int x, in
 void ModalTransition::loop(uint micros){
 	time += micros;
 
-	int scroll = time / (100.5 * 1000.0);
+	int scroll = time / (1.5 * 1000.0);
 	if(lastScroll < scroll){
 		copySprite(context->getScreen().getSprite(), display->getBaseSprite(), contextX, contextY);
 
