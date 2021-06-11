@@ -12,9 +12,9 @@ public:
 	void pack() override;
 	void unpack() override;
 
-	ModalTransition* push(Context* parent) override;
-	ModalTransition* pop() override;
-	ModalTransition* pop(void* data) override;
+	ContextTransition* push(Context* parent) override;
+	ContextTransition* pop() override;
+	ContextTransition* pop(void* data) override;
 
 	int getPosX() const;
 	int getPosY() const;
@@ -22,6 +22,8 @@ public:
 	void setPos(int posX,int posY);
 
 	static Modal* getCurrentModal();
+
+
 
 private:
 	int posX = 0;

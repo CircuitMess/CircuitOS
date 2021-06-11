@@ -36,19 +36,19 @@ void Modal::unpack(){
 	init();
 }
 
-ModalTransition* Modal::push(Context* parent){
+ContextTransition* Modal::push(Context* parent){
 	this->parent = parent;
-	return new ModalTransition(*screen.getDisplay(), parent, this);
+	return static_cast<ContextTransition*>((void*)new ModalTransition(*screen.getDisplay(), parent, this));
 }
 
-ModalTransition* Modal::pop(){
+ContextTransition* Modal::pop(){
 	if(parent == nullptr) return nullptr;
-	ContextTransition* transition = new ModalTransition(*screen.getDisplay(), parent, this, true);
+	ModalTransition* transition = new ModalTransition(*screen.getDisplay(), parent, this, true);
 	parent = nullptr;
-	return transition;
+	return static_cast<ContextTransition*>((void*)transition);
 }
 
-ModalTransition* Modal::pop(void* data){
+ContextTransition* Modal::pop(void* data){
 	if(parent == nullptr) return nullptr;
 	parent->returned(data);
 	pop();

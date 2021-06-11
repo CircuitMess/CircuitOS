@@ -1,7 +1,9 @@
 #include "ModalTransition.h"
 #include "../Loop/LoopManager.h"
-
+#include "Modal.h"
+#include "Context.h"
 bool ModalTransition::transitionRunning = false;
+bool ModalTransition::deleteOnPop = true;
 
 ModalTransition::ModalTransition(Display& display, Context* context, Modal* modal, bool reverse)
 		: reverse(reverse), display(&display), context(context), modal(modal){
@@ -74,7 +76,9 @@ void ModalTransition::loop(uint micros){
 
 		if(reverse){
 			modal->pack();
-			delete modal;
+			if(deleteOnPop){
+				delete modal;
+			}
 			context->unpack();
 			context->getScreen().commit();
 			context->start();
@@ -83,6 +87,10 @@ void ModalTransition::loop(uint micros){
 			modal->unpack();
 			modal->getScreen().commit();
 			modal->start();
+		}
+
+		if(doneCallback){
+			doneCallback(context, modal);
 		}
 
 		delete this;
@@ -97,4 +105,8 @@ bool ModalTransition::isRunning(){
 
 void ModalTransition::setDoneCallback(void (*doneCallback)(Context*, Modal*)){
 	ModalTransition::doneCallback = doneCallback;
+}
+
+void ModalTransition::setDeleteOnPop(bool _deleteOnPop){
+	deleteOnPop = _deleteOnPop;
 }
