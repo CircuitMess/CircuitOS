@@ -1,6 +1,8 @@
 #include "Modal.h"
 #include "ModalTransition.h"
 
+Modal* Modal::currentModal = nullptr;
+
 Modal::Modal(Context& context, uint width, uint height) : Context(*context.getScreen().getDisplay()){
 	screen.getSprite()->resize(width, height);
 
@@ -10,19 +12,44 @@ Modal::Modal(Context& context, uint width, uint height) : Context(*context.getSc
 	setPos(posX, posY);
 }
 
-void Modal::push(Context* parent){
+void Modal::pack(){
+	currentModal = nullptr;
+	if(packed) return;
+
+	for(SpriteElement* element : sprites){
+		element->pack();
+	}
+
+	packed = true;
+	deinit();
+}
+
+void Modal::unpack(){
+	currentModal = this;
+	if(!packed) return;
+
+	for(SpriteElement* element : sprites){
+		element->unpack();
+	}
+
+	packed = false;
+	init();
+}
+
+ContextTransition* Modal::push(Context* parent){
 	this->parent = parent;
-	new ModalTransition(*screen.getDisplay(), parent, this);
+	return static_cast<ContextTransition*>((void*)new ModalTransition(*screen.getDisplay(), parent, this));
 }
 
-void Modal::pop(){
-	if(parent == nullptr) return;
-	new ModalTransition(*screen.getDisplay(), parent, this, true);
+ContextTransition* Modal::pop(){
+	if(parent == nullptr) return nullptr;
+	ModalTransition* transition = new ModalTransition(*screen.getDisplay(), parent, this, true);
 	parent = nullptr;
+	return static_cast<ContextTransition*>((void*)transition);
 }
 
-void Modal::pop(void* data){
-	if(parent == nullptr) return;
+ContextTransition* Modal::pop(void* data){
+	if(parent == nullptr) return nullptr;
 	parent->returned(data);
 	pop();
 }
@@ -40,4 +67,8 @@ void Modal::setPos(int posX, int posY){
 	Modal::posY = posY;
 
 	getScreen().setPos(posX, posY);
+}
+
+Modal *Modal::getCurrentModal(){
+	return currentModal;
 }

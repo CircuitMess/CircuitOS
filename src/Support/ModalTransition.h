@@ -6,8 +6,8 @@
 #include "../UI/LinearLayout.h"
 #include "../UI/ScrollLayout.h"
 #include "../UI/Image.h"
-#include "Context.h"
-#include "Modal.h"
+class Modal;
+class Context;
 
 class ModalTransition : public LoopListener {
 public:
@@ -18,6 +18,10 @@ public:
 	virtual ~ModalTransition();
 
 	static bool isRunning();
+
+	void setDoneCallback(void (* doneCallback)(Context*, Modal*));
+
+	static void setDeleteOnPop(bool deleteOnPop);
 
 private:
 	bool reverse = false;
@@ -34,6 +38,10 @@ private:
 	void copySprite(Sprite* sprite, Sprite* targetSprite, int x = 0, int y = 0);
 
 	static bool transitionRunning;
+
+	void (*doneCallback)(Context* oldCtx, Modal* newCtx) = nullptr;
+
+	static bool deleteOnPop;
 };
 
 
