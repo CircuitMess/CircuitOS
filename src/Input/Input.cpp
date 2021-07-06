@@ -2,7 +2,6 @@
 #include "../Util/Debug.h"
 
 Input* Input::instance;
-std::unordered_set<LoopListener*> LoopManager::removedListeners;
 
 Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
 								   btnReleaseCallback(pinNumber, nullptr),
@@ -73,6 +72,8 @@ void Input::btnPress(uint i){
 			}
 		}
 	}
+
+	clearListeners();
 }
 
 void Input::btnRelease(uint i){
@@ -102,6 +103,8 @@ void Input::btnRelease(uint i){
 			}
 		}
 	}
+
+	clearListeners();
 }
 
 void Input::loop(uint _time){
@@ -132,7 +135,8 @@ void Input::loop(uint _time){
 			}
 		}
 	}
-	removedListeners.clear();
+
+	clearListeners();
 }
 
 void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)()){
@@ -166,12 +170,27 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 }
 
 void Input::addListener(InputListener* listener){
+	if(listeners.indexOf(listener) != (uint) -1) return;
+
 	listeners.push_back(listener);
+
+	auto l = removedListeners.find(listener);
+	if(l != removedListeners.end()){
+		removedListeners.erase(l);
+	}
 }
 
 void Input::removeListener(InputListener* listener){
-	uint i = listeners.indexOf(listener);
-	if(i == (uint) -1) return;
-	listeners.remove(i);
+	if(listeners.indexOf(listener) == -1) return;
 	removedListeners.insert(listener);
+}
+
+void Input::clearListeners(){
+	for(const auto& listener : removedListeners){
+		uint i = listeners.indexOf(listener);
+		if(i == (uint) -1) continue;
+		listeners.remove(i);
+	}
+
+	removedListeners.clear();
 }

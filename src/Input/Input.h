@@ -110,7 +110,9 @@ protected:
 	void btnRelease(uint);
 
 	Vector<InputListener*> listeners;
-	static std::unordered_set<InputListener*> removedListeners;
+	std::unordered_set<InputListener*> removedListeners;
+
+	void clearListeners();
 };
 
 
