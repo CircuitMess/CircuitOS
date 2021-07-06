@@ -64,7 +64,7 @@ void Input::btnPress(uint i){
 			}
 
 			for(auto listener : listeners){
-				if(listener == nullptr) continue;
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonPressed(buttons[i]);
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
@@ -72,6 +72,8 @@ void Input::btnPress(uint i){
 			}
 		}
 	}
+
+	clearListeners();
 }
 
 void Input::btnRelease(uint i){
@@ -93,7 +95,7 @@ void Input::btnRelease(uint i){
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
 			for(auto listener : listeners){
-				if(listener == nullptr) continue;
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonReleased(buttons[i]);
 			}
 			if(btnReleaseCallback[buttons[i]] != nullptr){
@@ -101,6 +103,8 @@ void Input::btnRelease(uint i){
 			}
 		}
 	}
+
+	clearListeners();
 }
 
 void Input::loop(uint _time){
@@ -110,7 +114,7 @@ void Input::loop(uint _time){
 		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr)){
 			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]]){
 				for(auto listener : listeners){
-					if(listener == nullptr) continue;
+					if(removedListeners.find(listener) != removedListeners.end()) continue;
 					listener->buttonHeld(buttons[i]);
 				}
 				if(btnHoldCallback[buttons[i]] != nullptr){
@@ -122,7 +126,7 @@ void Input::loop(uint _time){
 				btnHoldRepeatCounter[buttons[i]]++;
 
 				for(auto listener : listeners){
-					if(listener == nullptr) continue;
+					if(removedListeners.find(listener) != removedListeners.end()) continue;
 					listener->buttonHeldRepeat(buttons[i], btnHoldRepeatCounter[buttons[i]]);
 				}
 				if(btnHoldRepeatCallback[buttons[i]] != nullptr){
@@ -131,6 +135,8 @@ void Input::loop(uint _time){
 			}
 		}
 	}
+
+	clearListeners();
 }
 
 void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)()){
@@ -164,11 +170,27 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 }
 
 void Input::addListener(InputListener* listener){
+	if(listeners.indexOf(listener) != (uint) -1) return;
+
 	listeners.push_back(listener);
+
+	auto l = removedListeners.find(listener);
+	if(l != removedListeners.end()){
+		removedListeners.erase(l);
+	}
 }
 
 void Input::removeListener(InputListener* listener){
-	uint i = listeners.indexOf(listener);
-	if(i == (uint) -1) return;
-	listeners.remove(i);
+	if(listeners.indexOf(listener) == -1) return;
+	removedListeners.insert(listener);
+}
+
+void Input::clearListeners(){
+	for(const auto& listener : removedListeners){
+		uint i = listeners.indexOf(listener);
+		if(i == (uint) -1) continue;
+		listeners.remove(i);
+	}
+
+	removedListeners.clear();
 }
