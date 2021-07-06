@@ -2,6 +2,7 @@
 #include "../Util/Debug.h"
 
 Input* Input::instance;
+std::unordered_set<LoopListener*> LoopManager::removedListeners;
 
 Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNumber, nullptr),
 								   btnReleaseCallback(pinNumber, nullptr),
@@ -64,7 +65,7 @@ void Input::btnPress(uint i){
 			}
 
 			for(auto listener : listeners){
-				if(listener == nullptr) continue;
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonPressed(buttons[i]);
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
@@ -93,7 +94,7 @@ void Input::btnRelease(uint i){
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
 			for(auto listener : listeners){
-				if(listener == nullptr) continue;
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonReleased(buttons[i]);
 			}
 			if(btnReleaseCallback[buttons[i]] != nullptr){
@@ -110,7 +111,7 @@ void Input::loop(uint _time){
 		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr)){
 			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]]){
 				for(auto listener : listeners){
-					if(listener == nullptr) continue;
+					if(removedListeners.find(listener) != removedListeners.end()) continue;
 					listener->buttonHeld(buttons[i]);
 				}
 				if(btnHoldCallback[buttons[i]] != nullptr){
@@ -122,7 +123,7 @@ void Input::loop(uint _time){
 				btnHoldRepeatCounter[buttons[i]]++;
 
 				for(auto listener : listeners){
-					if(listener == nullptr) continue;
+					if(removedListeners.find(listener) != removedListeners.end()) continue;
 					listener->buttonHeldRepeat(buttons[i], btnHoldRepeatCounter[buttons[i]]);
 				}
 				if(btnHoldRepeatCallback[buttons[i]] != nullptr){
@@ -131,6 +132,7 @@ void Input::loop(uint _time){
 			}
 		}
 	}
+	removedListeners.clear();
 }
 
 void Input::setButtonHeldCallback(uint8_t pin, uint32_t holdTime, void (* callback)()){
@@ -171,4 +173,5 @@ void Input::removeListener(InputListener* listener){
 	uint i = listeners.indexOf(listener);
 	if(i == (uint) -1) return;
 	listeners.remove(i);
+	removedListeners.insert(listener);
 }

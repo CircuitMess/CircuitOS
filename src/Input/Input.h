@@ -4,6 +4,7 @@
 #include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
 #include "InputListener.h"
+#include <unordered_set>
 
 #define PIN_MAX 45
 #define DEBOUNCE_COUNT 1
@@ -109,6 +110,7 @@ protected:
 	void btnRelease(uint);
 
 	Vector<InputListener*> listeners;
+	static std::unordered_set<InputListener*> removedListeners;
 };
 
 
