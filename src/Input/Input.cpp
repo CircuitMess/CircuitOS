@@ -66,6 +66,11 @@ void Input::btnPress(uint i){
 			for(auto listener : listeners){
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonPressed(buttons[i]);
+				if(listener->holdTimes.find(buttons[i]) != listener->holdTimes.end() && !listener->holdTimes.find(buttons[i])->second.holdingOver){
+						btnHoldStart[buttons[i]] = millis();
+						return;
+				}
+
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
 				btnPressCallback[buttons[i]]();
@@ -90,13 +95,19 @@ void Input::btnRelease(uint i){
 				}
 			}
 			btnState[i] = 0;
-			btnHoldOver[buttons[i]] = 0;
+			btnHoldOver[buttons[i]] = false;
 			btnHoldStart[buttons[i]] = millis();
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
 			for(auto listener : listeners){
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonReleased(buttons[i]);
+				if(listener->holdTimes.find(buttons[i]) != listener->holdTimes.end()){
+					listener->holdTimes.find(buttons[i])->second.holdingOver = false;
+				}
+				if(listener->holdAndRepeatTimes.find(buttons[i]) != listener->holdAndRepeatTimes.end()){
+					listener->holdAndRepeatTimes.find(buttons[i])->second.repeatCounter = 0;
+				}
 			}
 			if(btnReleaseCallback[buttons[i]] != nullptr){
 				btnReleaseCallback[buttons[i]]();
@@ -111,12 +122,8 @@ void Input::loop(uint _time){
 	scanButtons();
 	for(uint8_t i = 0; i < buttons.size(); i++){
 		uint32_t holdTime = getButtonHeldMillis(buttons[i]);
-		if(btnState[i] == 1 && (btnHoldRepeatCallback[buttons[i]] != nullptr || btnHoldCallback[buttons[i]] != nullptr)){
+		if(btnState[i] == 1){
 			if(holdTime >= btnHoldValue[buttons[i]] && !btnHoldOver[buttons[i]]){
-				for(auto listener : listeners){
-					if(removedListeners.find(listener) != removedListeners.end()) continue;
-					listener->buttonHeld(buttons[i]);
-				}
 				if(btnHoldCallback[buttons[i]] != nullptr){
 					btnHoldCallback[buttons[i]]();
 				}
@@ -124,13 +131,21 @@ void Input::loop(uint _time){
 			}
 			if(holdTime >= (btnHoldRepeatCounter[buttons[i]] + 1) * btnHoldRepeatValue[buttons[i]]){
 				btnHoldRepeatCounter[buttons[i]]++;
-
-				for(auto listener : listeners){
-					if(removedListeners.find(listener) != removedListeners.end()) continue;
-					listener->buttonHeldRepeat(buttons[i], btnHoldRepeatCounter[buttons[i]]);
-				}
 				if(btnHoldRepeatCallback[buttons[i]] != nullptr){
 					btnHoldRepeatCallback[buttons[i]](btnHoldRepeatCounter[buttons[i]]);
+				}
+			}
+
+			for(auto listener : listeners){
+				auto search = listener->holdTimes.find(buttons[i]);
+				if(search != listener->holdTimes.end() && holdTime >= search->second.time && !search->second.holdingOver){
+					listener->buttonHeld(buttons[i]);
+					search->second.holdingOver = true;
+				}
+				auto searchRepeat = listener->holdAndRepeatTimes.find(buttons[i]);
+				if(searchRepeat != listener->holdAndRepeatTimes.end() && holdTime >= (searchRepeat->second.repeatCounter + 1) * searchRepeat->second.time){
+					searchRepeat->second.repeatCounter++;
+					listener->buttonHeldRepeat(buttons[i], searchRepeat->second.repeatCounter);
 				}
 			}
 		}
