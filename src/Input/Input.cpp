@@ -185,9 +185,9 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 }
 
 void Input::addListener(InputListener* listener){
-	if(listeners.indexOf(listener) != (uint) -1) return;
-
-	listeners.push_back(listener);
+	if(listeners.indexOf(listener) == (uint) -1){
+		listeners.push_back(listener);
+	}
 
 	auto l = removedListeners.find(listener);
 	if(l != removedListeners.end()){
