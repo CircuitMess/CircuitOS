@@ -1,6 +1,10 @@
 #ifndef SPENCER_NET_H
 #define SPENCER_NET_H
 
+#ifndef SPENCER_HOSTNAME
+#define SPENCER_HOSTNAME "Spencer"
+#endif
+
 #include <WiFi.h>
 #include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
