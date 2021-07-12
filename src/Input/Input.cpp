@@ -196,7 +196,7 @@ void Input::addListener(InputListener* listener){
 }
 
 void Input::removeListener(InputListener* listener){
-	if(listeners.indexOf(listener) == -1) return;
+	if(listeners.indexOf(listener) == -1 || removedListeners.find(listener) != removedListeners.end()) return;
 	removedListeners.insert(listener);
 }
 
