@@ -13,27 +13,46 @@ std::unordered_set<LoopListener*> LoopManager::removedListeners;
 uint LoopManager::lastMicros = micros();
 
 void LoopManager::addListener(LoopListener* listener){
-	listeners.push_back(listener);
+	if(listeners.indexOf(listener) == (uint) -1){
+		listeners.push_back(listener);
+	}
+
+	auto l = removedListeners.find(listener);
+	if(l != removedListeners.end()){
+		removedListeners.erase(l);
+	}
 }
 
 void LoopManager::removeListener(LoopListener* listener){
-	uint index = listeners.indexOf(listener);
-	if(index == -1) return;
+	if(listeners.indexOf(listener) ==  (uint) -1 || removedListeners.find(listener) != removedListeners.end()) return;
 	removedListeners.insert(listener);
-	listeners.remove(index);
 }
 
 void LoopManager::loop(){
 	uint m = micros();
 	uint delta = m - lastMicros;
+	clearListeners();
 
-	for(LoopListener* listener : listeners){
-		if(removedListeners.find(listener) != removedListeners.end()) continue;
+	for(auto listener : listeners){
+		if(removedListeners.find(listener) != removedListeners.end()){
+			continue;
+		}
 		listener->loop(delta);
 	}
 
-	removedListeners.clear();
+	clearListeners();
 	lastMicros = m;
+}
+
+void LoopManager::clearListeners(){
+	for(const auto& listener : removedListeners){
+		uint i = listeners.indexOf(listener);
+		if(i == (uint) -1) continue;
+		listeners.remove(i);
+	}
+	if(!removedListeners.empty()){
+		removedListeners.clear();
+	}
 }
 
 #ifdef CIRCUITOS_TASK

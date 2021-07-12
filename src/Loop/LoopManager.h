@@ -46,6 +46,7 @@ private:
 	static std::unordered_set<LoopListener*> removedListeners;
 
 	static uint lastMicros;
+	static void clearListeners();
 
 #ifdef CIRCUITOS_TASK
 	static Task* task;
