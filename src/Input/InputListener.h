@@ -27,7 +27,7 @@ private:
 	virtual void buttonReleased(uint i);
 	virtual void buttonHeld(uint i);
 	virtual void buttonHeldRepeat(uint i, uint repeatCount);
-	virtual void anyKeyCallback();
+	virtual void anyKeyPressed();
 
 	std::map<uint8_t, HoldData> holdTimes;
 	std::map<uint8_t, HoldRepeatData> holdAndRepeatTimes;
