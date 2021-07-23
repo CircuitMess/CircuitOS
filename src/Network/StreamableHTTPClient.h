@@ -1,8 +1,10 @@
 #ifndef SPENCER_STREAMABLEHTTPCLIENT_H
 #define SPENCER_STREAMABLEHTTPCLIENT_H
 
-
+#ifdef ESP32
 #include <HTTPClient.h>
+#endif
+
 #include <Util/Vector.h>
 
 class StreamableHTTPClient : public HTTPClient {

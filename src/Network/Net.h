@@ -1,7 +1,9 @@
 #ifndef SPENCER_NET_H
 #define SPENCER_NET_H
 
+#ifdef ESP32
 #include <WiFi.h>
+#endif
 #include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
 

@@ -1,8 +1,11 @@
 #include "Net.h"
+#ifdef ESP32
 #include <WiFi.h>
-#include "../Loop/LoopManager.h"
 #include <HTTPClient.h>
 #include <ESP32Ping.h>
+#endif
+#include "../Loop/LoopManager.h"
+
 
 NetImpl Net;
 
