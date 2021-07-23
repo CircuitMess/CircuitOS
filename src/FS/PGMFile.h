@@ -7,6 +7,15 @@
 
 class PGMFile : public fs::FileImpl {
 public:
+#ifdef ESP32
+	fs::FileImplPtr openNextFile(const char* mode) override;
+	void rewindDirectory() override;
+	operator bool() override;
+#else
+	fs::FileImplPtr openNextFile(const char* mode) ;
+	void rewindDirectory() ;
+	operator bool() ;
+#endif
 	PGMFile(const uint8_t* data, size_t size);
 	virtual ~PGMFile();
 
@@ -22,9 +31,6 @@ public:
 	time_t getLastWrite() override;
 	const char* name() const override;
 	bool isDirectory();
-	fs::FileImplPtr openNextFile(const char* mode) override;
-	void rewindDirectory() override;
-	operator bool() override;
 
 	bool seek(uint32_t pos);
 	size_t write(uint8_t data);
