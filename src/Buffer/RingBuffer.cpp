@@ -1,15 +1,15 @@
 #include "RingBuffer.h"
 
 RingBuffer::RingBuffer(size_t size) : size(size + 1){
-	if(psramFound()){
-		buffer = static_cast<uint8_t*>(ps_malloc(size + 1));
+#ifdef CONFIG_SPIRAM_SUPPORT
+	if(psramFound() && !local){
+		buffer = static_cast<uint8_t*>(ps_malloc(size));
 	}else{
-		buffer = static_cast<uint8_t*>(malloc(size + 1));
+		buffer = static_cast<uint8_t*>(malloc(size));
 	}
-
-	if(buffer == nullptr){
-		Serial.println("RingBuffer malloc error");
-	}
+#else
+	buffer = static_cast<uint8_t*>(malloc(size));
+#endif
 }
 
 RingBuffer::~RingBuffer(){
