@@ -34,6 +34,18 @@ include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/tools/sdk/incl
 # ESP8266
 include_directories(${Arduino15}/packages/esp8266/hardware/esp8266/2.7.1/cores/esp8266)
 include_directories(${Arduino15}/packages/esp8266/hardware/esp8266/2.7.1/libraries/LittleFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/Nibble/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/CircuitOS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI/Extensions)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/FS)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/FS)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/LittleFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/Wire)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/avr)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/heatshrink)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/ESP8266WiFi/src)
 
 # Package libs
 include_directories(${Arduino15}/packages/cm/hardware/esp32/1.1.1/libraries/Wire/src)
