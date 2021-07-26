@@ -56,6 +56,7 @@ private:
 	Color maskingColor = TFT_TRANSPARENT;
 	size_t dataStart;
 	uint32_t currentFrameTime = 0;
+	uint8_t* buffer = nullptr;
 
 	int16_t x = 0;
 	int16_t y = 0;

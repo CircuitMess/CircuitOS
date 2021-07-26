@@ -25,11 +25,13 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), 
 		table = new Table(file);
 		// Serial.printf("Colors: %d\n", table->getNoColors());
 	}
-	if(psramFound()){
-		gifFrame.data = static_cast<uint8_t*>(ps_malloc(width * height * (flags ? 1 : 2)));
-	}else {
-		gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
+#ifdef CONFIG_SPIRAM_SUPPORT
+	if(psramFound() && !local){
+		buffer = static_cast<uint8_t*>(ps_malloc(size));
+	}else{
+		buffer = static_cast<uint8_t*>(malloc(size));
 	}
+#endif
 	// Serial.printf("Data start: %lu\n", file.position());
 
 	dataStart = file.position();
