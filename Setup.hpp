@@ -9,6 +9,7 @@
 #define CIRCUITOS_BINARY_SEMAPHORE
 #define CIRCUITOS_SEMAPHORE
 #define CIRCUITOS_QUEUE
+#define CIRCUITOS_NET
 #endif
 
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
