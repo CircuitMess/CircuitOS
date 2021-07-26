@@ -32,6 +32,14 @@ public:
 	const char* name() const override;
 	bool isDirectory();
 
+	bool truncate(uint32_t size) override;
+
+	const char* fullName() const override;
+
+	bool isFile() const override;
+
+	bool isDirectory() const override;
+
 	bool seek(uint32_t pos);
 	size_t write(uint8_t data);
 	int read();

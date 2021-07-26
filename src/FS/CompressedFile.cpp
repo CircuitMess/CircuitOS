@@ -90,3 +90,19 @@ void CompressedFile::rewindDirectory(void){
 CompressedFile::operator bool(){
 	return (bool)(f);
 }
+
+bool CompressedFile::truncate(uint32_t size){
+	return false;
+}
+
+const char* CompressedFile::fullName() const{
+	return nullptr;
+}
+
+bool CompressedFile::isFile() const{
+	return false;
+}
+
+bool CompressedFile::isDirectory() const{
+	return false;
+}

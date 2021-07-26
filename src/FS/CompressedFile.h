@@ -37,6 +37,14 @@ public:
 	time_t getLastWrite() override;
 	const char* name() const override;
 
+	bool truncate(uint32_t size) override;
+
+	const char* fullName() const override;
+
+	bool isFile() const override;
+
+	bool isDirectory() const override;
+
 private:
 	fs::File f;
 	heatshrink_decoder *decoder;
