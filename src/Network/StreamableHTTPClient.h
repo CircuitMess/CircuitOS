@@ -1,10 +1,8 @@
-#ifndef SPENCER_STREAMABLEHTTPCLIENT_H
-#define SPENCER_STREAMABLEHTTPCLIENT_H
+#ifndef CIRCUITOS_NET_H
+#define CIRCUITOS_NET_H
 
-#ifdef ESP32
+
 #include <HTTPClient.h>
-#endif
-
 #include <Util/Vector.h>
 
 class StreamableHTTPClient : public HTTPClient {
@@ -21,4 +19,4 @@ private:
 };
 
 
-#endif //SPENCER_STREAMABLEHTTPCLIENT_H
+#endif //CIRCUITOS_NET_H

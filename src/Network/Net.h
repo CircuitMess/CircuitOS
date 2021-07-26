@@ -1,15 +1,13 @@
-#ifndef SPENCER_NET_H
-#define SPENCER_NET_H
+#ifndef CIRCUITOS_NET_H
+#define CIRCUITOS_NET_H
 
-#ifdef ESP32
 #include <WiFi.h>
-#endif
 #include "../Loop/LoopListener.h"
 #include "../Util/Vector.h"
 
 class NetStateListener {
 private: virtual void state(wl_status_t) = 0;
-friend class NetImpl;
+	friend class NetImpl;
 };
 
 class NetImpl : public LoopListener {
@@ -100,4 +98,4 @@ private:
 
 extern NetImpl Net;
 
-#endif //SPENCER_NET_H
+#endif //CIRCUITOS_NET_H
