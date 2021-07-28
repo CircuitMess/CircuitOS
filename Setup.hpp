@@ -9,20 +9,19 @@
 #define CIRCUITOS_BINARY_SEMAPHORE
 #define CIRCUITOS_SEMAPHORE
 #define CIRCUITOS_QUEUE
-#define CIRCUITOS_NET
 #endif
 
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
 // #define CIRCUITOS_NVS
 
 /** Whether LittleFS library is available. Enables LittleFS variant of Settings */
-// #define CIRCUITOS_LITTLEFS
+#define CIRCUITOS_LITTLEFS
 
 /** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
-// #define CIRCUITOS_TONE
+#define CIRCUITOS_TONE
 
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
-// #define CIRCUITOS_LOWRAM
+#define CIRCUITOS_LOWRAM
 
 /** ### Device drivers ### */
 // #define CIRCUITOS_ICM20948
@@ -33,3 +32,6 @@
 /** Using u8g2 fonts uses up some RAM and PROGMEM for every font used.
  * The U8g2_for_TFT_eSPI library is used. (https://github.com/Bodmer/U8g2_for_TFT_eSPI)*/
 // #define CIRCUITOS_U8G2FONTS
+
+/** Using WiFi**/
+#define CIRCUITOS_NET
