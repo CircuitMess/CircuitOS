@@ -37,13 +37,13 @@ public:
 	time_t getLastWrite() override;
 	const char* name() const override;
 
-	bool truncate(uint32_t size) override;
+	bool truncate(uint32_t size) ;
 
-	const char* fullName() const override;
+	const char* fullName() const ;
 
-	bool isFile() const override;
+	bool isFile() const ;
 
-	bool isDirectory() const override;
+	bool isDirectory() const ;
 
 private:
 	fs::File f;
