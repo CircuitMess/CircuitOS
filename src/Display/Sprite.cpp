@@ -267,7 +267,9 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 				continue;
 			}
 
-			if(!_iswapBytes) color = color << 8 | color >> 8;
+#ifndef ESP32
+if(!_iswapBytes) color = color << 8 | color >> 8;
+#endif
 			_img[x + ys * _iwidth] = color;
 			x++;
 		}
