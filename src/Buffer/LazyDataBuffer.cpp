@@ -2,7 +2,7 @@
 
 LazyDataBuffer::LazyDataBuffer(const size_t size) : size(size){
 #ifdef CONFIG_SPIRAM_SUPPORT
-	if(psramFound() && !local){
+	if(psramFound()){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));
 	}else{
 		buffer = static_cast<uint8_t*>(malloc(size));
