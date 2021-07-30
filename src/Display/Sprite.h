@@ -1,16 +1,24 @@
 #ifndef SWTEST_SPRITE_H
 #define SWTEST_SPRITE_H
 
-
-#include <TFT_eSPI.h>
-#include "Display.h"
-#include "Color.h"
 #include "../../Setup.hpp"
 
+#ifdef CIRCUITOS_LOVYANGFX
+#include "LovyanGFX_setup.h"
+#else
+#include <TFT_eSPI.h>
 #ifdef CIRCUITOS_U8G2FONTS
 #include <U8g2_for_TFT_eSPI.h>
 typedef U8g2_for_TFT_eSPI FontWriter;
 #endif
+#endif
+
+
+#include "Display.h"
+#include "Color.h"
+#include "../../Setup.hpp"
+
+
 
 class Display;
 
@@ -53,8 +61,10 @@ public:
 	void setParent(Sprite* parent);
 
 	Sprite* getParent() const;
+#ifndef CIRCUITOS_LOVYANGFX
 #ifdef CIRCUITOS_U8G2FONTS
 	FontWriter& startU8g2Fonts();
+#endif
 #endif
 
 private:
@@ -79,6 +89,10 @@ private:
 	using TFT_eSprite::setSwapBytes;
 	using TFT_eSprite::getSwapBytes;
 	using TFT_eSprite::pushSprite;
+
+#ifdef CIRCUITOS_LOVYANGFX
+	uint16_t _bpp = 16;
+#endif
 
 };
 
