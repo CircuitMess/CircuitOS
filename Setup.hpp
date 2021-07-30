@@ -20,6 +20,9 @@
 /** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
 // #define CIRCUITOS_TONE
 
+/** If I2S amplifier chip is present (e.g. TFA9882UK). Required for Audio/Piezo */
+// #define CIRCUITOS_I2S
+
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
 // #define CIRCUITOS_LOWRAM
 
