@@ -13,7 +13,7 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 	createSprite(width, height);
 }
 
-Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()) {
+Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()){
 	parent = display.getBaseSprite();
 	createSprite(width, height);
 }
@@ -46,6 +46,28 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
+
+void Sprite::drawIcon(File& icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
+	if(!icon){
+		return;
+	}
+	Color c = chromaKey;
+	setChroma(TFT_TRANSPARENT);
+
+	for(int i = 0; i < width; i++){
+		for(int j = 0; j < height; j++){
+			uint32_t color;
+			icon.seek((j * width + i)*2);
+			icon.read(reinterpret_cast<uint8_t*>(&color), 2);
+			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
+				fillRect(x + i * scale, y + j * scale, scale, scale, color);
+			}
+		}
+	}
+	setChroma(c);
+}
+
+
 void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
@@ -53,28 +75,29 @@ void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t
 	uint16_t byteWidth = (width + 7) / 8;
 	uint16_t _x = x;
 	uint16_t dw = 8 - (width % 8);
-	for (uint16_t j = 0; j < height; j++) {
+	for(uint16_t j = 0; j < height; j++){
 		x = _x;
-		for (uint16_t i = 0; i < byteWidth;) {
-			
+		for(uint16_t i = 0; i < byteWidth;){
+
 			uint16_t b = pgm_read_byte(icon++);
 			i++;
-			for (uint16_t k = 0; k < 8; k++) {
-				if (i == byteWidth && k == dw) {
+			for(uint16_t k = 0; k < 8; k++){
+				if(i == byteWidth && k == dw){
 					x += (width % 8);
 					break;
 				}
-				if (b & 0x80) {
+				if(b & 0x80){
 					fillRect(x, y, scale, scale, _color);
-				} 
+				}
 				b <<= 1;
-				x+=scale;
+				x += scale;
 			}
 		}
-		y+=scale;
+		y += scale;
 	}
 	setChroma(c);
 }
+
 void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
@@ -88,8 +111,8 @@ void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width
 	}
 	setChroma(c);
 }
-void Sprite::printCenter(const char* text)
-{
+
+void Sprite::printCenter(const char* text){
 	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
 	uint16_t textLength = cursor_x;
@@ -98,8 +121,8 @@ void Sprite::printCenter(const char* text)
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(String text)
-{
+
+void Sprite::printCenter(String text){
 	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
 	uint16_t textLength = cursor_x;
@@ -108,8 +131,8 @@ void Sprite::printCenter(String text)
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(uint32_t text)
-{
+
+void Sprite::printCenter(uint32_t text){
 	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
 	uint16_t textLength = cursor_x;
@@ -118,8 +141,8 @@ void Sprite::printCenter(uint32_t text)
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(int text)
-{
+
+void Sprite::printCenter(int text){
 	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
 	uint16_t textLength = cursor_x;
@@ -128,8 +151,8 @@ void Sprite::printCenter(int text)
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(float text)
-{
+
+void Sprite::printCenter(float text){
 	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
 	uint16_t textLength = cursor_x;
@@ -138,6 +161,7 @@ void Sprite::printCenter(float text)
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
+
 void Sprite::rotate(uint times){
 	if(width() != height()) return;
 	uint N = width();
@@ -180,7 +204,7 @@ Sprite& Sprite::push(){
 	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
-	if(parent->getSwapBytes() && getSwapBytes()) {
+	if(parent->getSwapBytes() && getSwapBytes()){
 		parent->setSwapBytes(false);
 	}else{
 		parent->setSwapBytes(true);
@@ -237,7 +261,7 @@ void Sprite::pushData(uint width, uint height, uint16_t* data){
 	memcpy(_img, data, sizeof(uint16_t) * width * height);
 }
 
-void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma){
+void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t* data, uint32_t chroma){
 	if((x >= _iwidth) || (y >= _iheight) || (w == 0) || (h == 0) || !_created || _bpp != 16) return;
 	if((x + w < 0) || (y + h < 0)) return;
 
@@ -250,8 +274,16 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 	int32_t ws = w;
 	int32_t hs = h;
 
-	if(x < 0){ xo = -x; ws += x; xs = 0; }
-	if(y < 0){ yo = -y; hs += y; ys = 0; }
+	if(x < 0){
+		xo = -x;
+		ws += x;
+		xs = 0;
+	}
+	if(y < 0){
+		yo = -y;
+		hs += y;
+		ys = 0;
+	}
 
 	if(xs + ws >= (int32_t) _iwidth) ws = _iwidth - xs;
 	if(ys + hs >= (int32_t) _iheight) hs = _iheight - ys;
@@ -266,9 +298,8 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 				x++;
 				continue;
 			}
-
 #ifndef ESP32
-if(!_iswapBytes) color = color << 8 | color >> 8;
+			if(!_iswapBytes) color = color << 8 | color >> 8;
 #endif
 			_img[x + ys * _iwidth] = color;
 			x++;
@@ -296,6 +327,7 @@ Sprite* Sprite::getParent() const{
 Sprite::~Sprite(){
 	deleteSprite();
 }
+
 
 #ifdef CIRCUITOS_U8G2FONTS
 FontWriter& Sprite::startU8g2Fonts(){
