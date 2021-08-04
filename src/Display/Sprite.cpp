@@ -13,19 +13,19 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 	parent = nullptr;
 	parentSPI = spi;
 	setColorDepth(16);
-	createSprite(width, height);
+	setPsram(true);
 }
 
 Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()) {
 	parent = display.getBaseSprite();
 	setColorDepth(16);
-	createSprite(width, height);
+	setPsram(true);
 }
 
 Sprite::Sprite(Sprite* sprite, uint16_t width, uint16_t height) : TFT_eSprite(sprite){
 	parent = sprite;
 	setColorDepth(16);
-	createSprite(width, height);
+	setPsram(true);
 }
 
 void Sprite::cleanup(){
@@ -176,7 +176,10 @@ void Sprite::rotate(uint times){
 
 Sprite& Sprite::push(){
 	if((_img == nullptr) || _bpp != 16) return *this;
-
+#ifdef CIRCUITOS_LOVYANGFX
+	TFT_eSprite::pushSprite(x, y);
+	return *this;
+#else
 	if(parent == nullptr){
 		TFT_eSprite::pushSprite(x, y);
 		return *this;
@@ -199,6 +202,7 @@ Sprite& Sprite::push(){
 	parent->setSwapBytes(oldSwapBytes);
 
 	return *this;
+#endif
 }
 
 Sprite& Sprite::clear(uint32_t color){
@@ -241,7 +245,7 @@ Sprite& Sprite::setChroma(Color color){
 void Sprite::pushData(uint width, uint height, uint16_t* data){
 	memcpy(_img, data, sizeof(uint16_t) * width * height);
 }
-
+#ifndef CIRCUITOS_LOVYANGFX
 void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma){
 	if((x >= width()) || (y >= height()) || (w == 0) || (h == 0) || !(_img != nullptr) || _bpp != 16) return;
 	if((x + w < 0) || (y + h < 0)) return;
@@ -279,7 +283,7 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 		ys++;
 	}
 }
-
+#endif
 int32_t Sprite::getX() const{
 	return x;
 }
@@ -290,6 +294,9 @@ int32_t Sprite::getY() const{
 
 void Sprite::setParent(Sprite* parent){
 	Sprite::parent = parent;
+#ifdef CIRCUITOS_LOVYANGFX
+	TFT_eSprite::_parent = parent;
+#endif
 }
 
 Sprite* Sprite::getParent() const{

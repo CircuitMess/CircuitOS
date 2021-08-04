@@ -61,7 +61,10 @@ public:
 	void setParent(Sprite* parent);
 
 	Sprite* getParent() const;
-#ifndef CIRCUITOS_LOVYANGFX
+#ifdef CIRCUITOS_LOVYANGFX
+	using TFT_eSprite::pushImage;
+	using TFT_eSprite::drawBitmap;
+#else
 #ifdef CIRCUITOS_U8G2FONTS
 	FontWriter& startU8g2Fonts();
 #endif
@@ -85,13 +88,15 @@ private:
 	using TFT_eSprite::fillScreen;
 	using TFT_eSprite::fillSprite;
 	using TFT_eSprite::pushRotated;
-	using TFT_eSprite::pushImage;
 	using TFT_eSprite::setSwapBytes;
 	using TFT_eSprite::getSwapBytes;
 	using TFT_eSprite::pushSprite;
 
 #ifdef CIRCUITOS_LOVYANGFX
+	using TFT_eSprite::setPsram;
 	uint16_t _bpp = 16;
+#else
+	void pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma);
 #endif
 
 };

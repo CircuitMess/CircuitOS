@@ -59,7 +59,9 @@ void Display::commit(){
 		baseSprite->drawIcon(mirrorBuffer, 0, 0, getWidth(), getHeight());
 	}
 #ifdef CIRCUITOS_LOVYANGFX
+	tft.startWrite();
 	baseSprite->pushRotateZoom(161, 121, 0, 2, 2);
+	tft.endWrite();
 #else
 	baseSprite->push();
 #endif
