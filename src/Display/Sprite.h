@@ -45,8 +45,8 @@ public:
 
 	void rotate(uint times);
 	// void drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale);
-	void drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint32_t color = TFT_BLACK);
-	void drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint32_t color = TFT_BLACK);
+	void drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint16_t color = TFT_BLACK);
+	void drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint16_t color = TFT_BLACK);
 	void drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, int32_t maskingColor = -1);
 	void printCenter(const char* text);
 	void printCenter(String text);
@@ -95,8 +95,6 @@ private:
 #ifdef CIRCUITOS_LOVYANGFX
 	using TFT_eSprite::setPsram;
 	uint16_t _bpp = 16;
-#else
-	void pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma);
 #endif
 
 };

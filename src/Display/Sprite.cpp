@@ -45,7 +45,7 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 
 	for(int i = 0; i < width; i++){
 		for(int j = 0; j < height; j++){
-			uint32_t color = pgm_read_word(&icon[j * width + i]);
+			uint16_t color = pgm_read_word(&icon[j * width + i]);
 
 			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
 				fillRect(x + i * scale, y + j * scale, scale, scale, color);
@@ -54,7 +54,7 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
@@ -83,7 +83,7 @@ void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
+void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
@@ -298,7 +298,11 @@ int32_t Sprite::getY() const{
 void Sprite::setParent(Sprite* parent){
 	Sprite::parent = parent;
 #ifdef CIRCUITOS_LOVYANGFX
-	TFT_eSprite::_parent = parent;
+	if(parent == nullptr){
+		TFT_eSprite::_parent = parentSPI;
+	}else{
+		TFT_eSprite::_parent = parent;
+	}
 #endif
 }
 
