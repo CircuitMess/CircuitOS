@@ -30,7 +30,7 @@ public:
 	virtual ~Sprite();
 
 	Sprite& push();
-	Sprite& clear(uint32_t color);
+	Sprite& clear(uint16_t color);
 	Sprite& setPos(int32_t x, int32_t y);
 	Sprite& resize(uint width, uint height);
 

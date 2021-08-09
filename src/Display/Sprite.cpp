@@ -208,7 +208,7 @@ Sprite& Sprite::push(){
 #endif
 }
 
-Sprite& Sprite::clear(uint32_t color){
+Sprite& Sprite::clear(uint16_t color){
 	TFT_eSprite::fillSprite(color);
 	return *this;
 }
