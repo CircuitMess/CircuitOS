@@ -25,9 +25,11 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), 
 		table = new Table(file);
 		// Serial.printf("Colors: %d\n", table->getNoColors());
 	}
-#ifdef ESP32
+#ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
 		gifFrame.data = static_cast<uint8_t*>(ps_malloc(width * height * (flags ? 1 : 2)));
+	}else{
+		gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
 	}
 #else
 	gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
