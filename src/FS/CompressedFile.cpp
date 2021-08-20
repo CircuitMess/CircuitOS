@@ -96,11 +96,15 @@ bool CompressedFile::truncate(uint32_t size){
 }
 
 const char* CompressedFile::fullName() const{
-	return nullptr;
+#ifdef ESP8266
+	return f.fullName();
+#else
+	return f.name();
+#endif
 }
 
 bool CompressedFile::isFile() const{
-	return false;
+	return true;
 }
 
 bool CompressedFile::isDirectory() const{
