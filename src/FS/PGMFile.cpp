@@ -111,3 +111,19 @@ void PGMFile::rewindDirectory() {
 fs::FileImplPtr PGMFile::openNextFile(const char* mode){
 	return fs::FileImplPtr();
 }
+
+bool PGMFile::truncate(uint32_t size){
+	return false;
+}
+
+const char* PGMFile::fullName() const{
+	return nullptr;
+}
+
+bool PGMFile::isFile() const{
+	return false;
+}
+
+bool PGMFile::isDirectory() const{
+	return false;
+}

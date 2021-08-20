@@ -1,5 +1,5 @@
-#ifndef SPENCER_NET_H
-#define SPENCER_NET_H
+#ifndef CIRCUITOS_NET_H
+#define CIRCUITOS_NET_H
 
 #include <WiFi.h>
 #include "../Loop/LoopListener.h"
@@ -7,7 +7,7 @@
 
 class NetStateListener {
 private: virtual void state(wl_status_t) = 0;
-friend class NetImpl;
+	friend class NetImpl;
 };
 
 class NetImpl : public LoopListener {
@@ -98,4 +98,4 @@ private:
 
 extern NetImpl Net;
 
-#endif //SPENCER_NET_H
+#endif //CIRCUITOS_NET_H
