@@ -3,12 +3,12 @@
 RingBuffer::RingBuffer(size_t size) : size(size + 1){
 #ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
-		buffer = static_cast<uint8_t*>(ps_malloc(size));
+		buffer = static_cast<uint8_t*>(ps_malloc(size + 1));
 	}else{
-		buffer = static_cast<uint8_t*>(malloc(size));
+		buffer = static_cast<uint8_t*>(malloc(size + 1));
 	}
 #else
-	buffer = static_cast<uint8_t*>(malloc(size));
+	buffer = static_cast<uint8_t*>(malloc(size + 1));
 #endif
 }
 
