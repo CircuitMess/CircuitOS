@@ -51,14 +51,23 @@ void Sprite::drawIcon(File& icon, int16_t x, int16_t y, uint16_t width, uint16_t
 	if(!icon){
 		return;
 	}
+
+	icon.seek(0);
+
+	// TODO: fast bg draw function. pixel bytes of the image should be swapped
+	/*if(width == this->width() && height == this->height() && scale == 1 && maskingColor == -1){
+		icon.read(reinterpret_cast<uint8_t *>(_img), width * height * 2);
+		return;
+	}*/
+
 	Color c = chromaKey;
 	setChroma(TFT_TRANSPARENT);
 
-	for(int i = 0; i < width; i++){
-		for(int j = 0; j < height; j++){
-			uint32_t color;
-			icon.seek((j * width + i)*2);
-			icon.read(reinterpret_cast<uint8_t*>(&color), 2);
+	for(int j = 0; j < height; j++){
+		for(int i = 0; i < width; i++){
+			uint32_t color = 0;
+			icon.read(reinterpret_cast<uint8_t *>(&color), 2);
+
 			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
 				fillRect(x + i * scale, y + j * scale, scale, scale, color);
 			}
