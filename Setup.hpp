@@ -1,6 +1,6 @@
 
 /** ### Features ### */
-// #define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
+ #define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
 
 /** Task and synchronization classes are only available if we're compiling with FreeRTOS */
 #ifdef CIRCUITOS_FREERTOS
@@ -13,7 +13,7 @@
 
 /** Use the LovyanGFX library (https://github.com/lovyan03/LovyanGFX) instead of TFT_eSPI
  * The library has better performance on higher-res screens (320x240 and above). */
-// #define CIRCUITOS_LOVYANGFX
+ #define CIRCUITOS_LOVYANGFX
 
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
 // #define CIRCUITOS_NVS
@@ -25,7 +25,7 @@
 // #define CIRCUITOS_TONE
 
 /** If I2S amplifier chip is present (e.g. TFA9882UK). Required for Audio/Piezo */
-// #define CIRCUITOS_I2S
+ #define CIRCUITOS_I2S
 
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
 // #define CIRCUITOS_LOWRAM

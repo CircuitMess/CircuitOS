@@ -26,8 +26,8 @@ public:
 			cfg.spi_3wire = false;
 			cfg.use_lock = true;
 			cfg.dma_channel = 1;
-			cfg.pin_sclk = 33;
-			cfg.pin_mosi = 27;
+			cfg.pin_sclk = 26;
+			cfg.pin_mosi = 32;
 			cfg.pin_miso = -1;
 			cfg.pin_dc = 25;
 
@@ -38,8 +38,8 @@ public:
 		{
 			auto cfg = _panel_instance.config();
 
-			cfg.pin_cs = 26;
-			cfg.pin_rst = 32;
+			cfg.pin_cs = 33;
+			cfg.pin_rst = 27;
 			cfg.pin_busy = -1;
 
 
