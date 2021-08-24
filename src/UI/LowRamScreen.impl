@@ -9,6 +9,15 @@ Screen::Screen(Display& display, uint width, uint height) : display(&display), w
 	sprite.cleanup();
 }
 
+/* TODO:
+ * missing return value:
+ *
+ * In file included from lib\CircuitOS\src\UI\Screen.cpp:4:
+ * lib\CircuitOS\src\UI\LowRamScreen.impl: In member function 'virtual Screen& Screen::addChild(Element*)':  
+ * lib\CircuitOS\src\UI\LowRamScreen.impl:20:1: error: no return statement in function returning non-void [-Werror=return-type]
+ *   20 | }
+ *      | ^
+*/	     
 Screen& Screen::addChild(Element* element){
 	if(element == nullptr){
 		children.clear();
