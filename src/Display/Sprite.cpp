@@ -240,14 +240,6 @@ Sprite& Sprite::setPos(int32_t x, int32_t y){
 	return *this;
 }
 
-/* TODO:
- * when compiled without 'build_flags = -w' option the following error is issued:
- *
- * lib\CircuitOS\src\Display\Sprite.cpp: In member function 'Sprite& Sprite::resize(uint, uint)':
- * lib\CircuitOS\src\Display\Sprite.cpp:214:5: error: control reaches end of non-void function [-Werror=return-type]
- * 214 |  if(_created == false){
- *     |     ^~~~~~~~
-*/
 Sprite& Sprite::resize(uint width, uint height){
 	if(!_created){
 		createSprite(width, height);
@@ -263,30 +255,18 @@ Sprite& Sprite::resize(uint width, uint height){
 	if(_created == false){
 		logln("Sprite not cretaed");
 	}
+	return *this;
 }
 
-/* TODO:
- * when compiled without 'build_flags = -w' option the following error is issued:
- * lib\CircuitOS\src\Display\Sprite.cpp: In member function 'Sprite& Sprite::setTransparent(bool)':
- * lib\CircuitOS\src\Display\Sprite.cpp:221:1: error: no return statement in function returning non-void [-Werror=return-type]
- * 221 | }
- *     | ^
-*/
 Sprite& Sprite::setTransparent(bool transparent){
 	chroma = transparent;
+	return *this;
 }
 
-/* TODO:
- * when compiled without 'build_flags = -w' option the following error is issued:
- *
- * lib\CircuitOS\src\Display\Sprite.cpp: In member function 'Sprite& Sprite::setChroma(Color)':
- * lib\CircuitOS\src\Display\Sprite.cpp:226:1: error: no return statement in function returning non-void [-Werror=return-type]
- * 226 | }
- *     | ^
-*/
 Sprite& Sprite::setChroma(Color color){
 	chromaKey = color;
 	chroma = true;
+	return *this;
 }
 
 void Sprite::pushData(uint width, uint height, uint16_t* data){
