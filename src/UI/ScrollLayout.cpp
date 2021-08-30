@@ -27,14 +27,6 @@ void ScrollLayout::draw(){
 	Element::draw();
 }
 
-/* TODO:
- * missing return value:
- *
- * lib\CircuitOS\src\UI\ScrollLayout.cpp: In member function 'virtual ElementContainer& ScrollLayout::addChild(Element*)':
- * lib\CircuitOS\src\UI\ScrollLayout.cpp:38:1: error: no return statement in function returning non-void [-Werror=return-type]
- * 38 | }
- *    | ^
-*/
 ElementContainer& ScrollLayout::addChild(Element* element){
 	if(element == nullptr){
 		children.clear();
@@ -43,6 +35,7 @@ ElementContainer& ScrollLayout::addChild(Element* element){
 	}else{
 		children[0] = element;
 	}
+	return *this;
 }
 
 void ScrollLayout::setScroll(uint scrollX, uint scrollY){
