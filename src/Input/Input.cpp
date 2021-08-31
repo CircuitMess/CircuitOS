@@ -66,12 +66,13 @@ void Input::btnPress(uint i){
 			for(auto listener : listeners){
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonPressed(buttons[i]);
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->anyKeyPressed();
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				if(listener->holdTimes.find(buttons[i]) != listener->holdTimes.end() && !listener->holdTimes.find(buttons[i])->second.holdingOver){
 						btnHoldStart[buttons[i]] = millis();
 						return;
 				}
-
 			}
 			if(btnPressCallback[buttons[i]] != nullptr){
 				btnPressCallback[buttons[i]]();
