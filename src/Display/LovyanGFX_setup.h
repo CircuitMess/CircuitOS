@@ -22,13 +22,13 @@ public:
 			cfg.spi_host = VSPI_HOST;
 			cfg.spi_mode = 0;
 			cfg.freq_write = 60000000;
-			cfg.freq_read = 16000000;
+			cfg.freq_read = 60000000;
 			cfg.spi_3wire = false;
 			cfg.use_lock = true;
 			cfg.dma_channel = 1;
 			cfg.pin_sclk = 26;
 			cfg.pin_mosi = 32;
-			cfg.pin_miso = -1;
+			cfg.pin_miso = 5;
 			cfg.pin_dc = 25;
 
 			_bus_instance.config(cfg);
