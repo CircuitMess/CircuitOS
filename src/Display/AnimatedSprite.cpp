@@ -7,13 +7,11 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool compressed) :
 		return;
 	}
 	file.seek(0);
-	delay(4);
 	Header header;
 	if(file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header)) != sizeof(Header)){
 		Serial.println("Failed reading G565 header");
 		return;
 	}
-	delay(4);
 	width = header.width;
 	height = header.height;
 	noFrames = header.noFrames;
@@ -30,9 +28,7 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool compressed) :
 	}
 #else
 	gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
-	delay(4);
 #endif
-	// Serial.printf("Data start: %lu\n", file.position());
 
 	dataStart = file.position();
 	reset();
