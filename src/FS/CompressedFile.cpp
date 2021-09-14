@@ -90,3 +90,23 @@ void CompressedFile::rewindDirectory(void){
 CompressedFile::operator bool(){
 	return (bool)(f);
 }
+
+bool CompressedFile::truncate(uint32_t size){
+	return false;
+}
+
+const char* CompressedFile::fullName() const{
+#ifdef ESP8266
+	return f.fullName();
+#else
+	return f.name();
+#endif
+}
+
+bool CompressedFile::isFile() const{
+	return true;
+}
+
+bool CompressedFile::isDirectory() const{
+	return false;
+}

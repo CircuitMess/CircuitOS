@@ -1,36 +1,34 @@
 #include "AnimatedSprite.h"
 #include "gifdec.h"
 
-AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file) : canvas(canvas), file(file){
+AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool compressed) : canvas(canvas), file(file), compressed(compressed){
 	if(!file){
 		Serial.printf("AnimatedGif file %s not open\n", file.name());
 		return;
 	}
-
 	file.seek(0);
-
 	Header header;
 	if(file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header)) != sizeof(Header)){
 		Serial.println("Failed reading G565 header");
 		return;
 	}
-
 	width = header.width;
 	height = header.height;
 	noFrames = header.noFrames;
 	flags = header.flags;
 
-	// Serial.printf("Width %d, height %d, %d frames, color table %s\n", width, height, noFrames, flags ? "yes" : "no");
 	if(flags){
 		table = new Table(file);
-		// Serial.printf("Colors: %d\n", table->getNoColors());
 	}
+#ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
 		gifFrame.data = static_cast<uint8_t*>(ps_malloc(width * height * (flags ? 1 : 2)));
-	}else {
+	}else{
 		gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
 	}
-	// Serial.printf("Data start: %lu\n", file.position());
+#else
+	gifFrame.data = static_cast<uint8_t *>(malloc(width * height * (flags ? 1 : 2)));
+#endif
 
 	dataStart = file.position();
 	reset();
@@ -40,15 +38,18 @@ AnimatedSprite::Table::Table(fs::File& file){
 	file.read(&noColors, sizeof(noColors));
 	colors = static_cast<Color*>(malloc(sizeof(Color) * noColors));
 	file.read(reinterpret_cast<uint8_t*>(colors), sizeof(Color) * noColors);
+
 }
 
 AnimatedSprite::Table::~Table(){
 	delete colors;
+
 }
 
 Color AnimatedSprite::Table::getColor(uint8_t i) const {
 	if(colors == nullptr || i >= noColors) return 0;
 	return colors[i];
+
 }
 
 uint8_t AnimatedSprite::Table::getNoColors() const{
@@ -56,9 +57,11 @@ uint8_t AnimatedSprite::Table::getNoColors() const{
 }
 
 AnimatedSprite::~AnimatedSprite(){
+
 	delete table;
 	delete gifFrame.data;
 	file.close();
+
 }
 
 void AnimatedSprite::push(){
@@ -78,10 +81,17 @@ void AnimatedSprite::push(){
 	}else{
 		canvas->drawIcon(reinterpret_cast<const unsigned short*>(gifFrame.data), x, y, width, height, 1, maskingColor);
 	}
+
 }
 
 void AnimatedSprite::reset(){
-	file.seek(dataStart);
+	if(compressed){
+		file.seek(0);
+		Header header;
+		file.read(reinterpret_cast<uint8_t*>(&header), sizeof(Header));
+	}else{
+		file.seek(dataStart);
+	}
 	currentFrameTime = 0;
 	currentFrame = 0;
 	alerted = false;
@@ -102,8 +112,6 @@ bool AnimatedSprite::nextFrame(){
 		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
 		currentFrameTime = millis();
 
-		// Serial.printf("New frame, %d ms\n", gifFrame.duration);
-
 		return true;
 	}
 
@@ -121,8 +129,6 @@ bool AnimatedSprite::nextFrame(){
 
 		file.read(reinterpret_cast<uint8_t*>(&gifFrame.duration), sizeof(gifFrame.duration));
 		file.read(gifFrame.data, width * height * (flags ? 1 : 2));
-
-		// Serial.printf("New frame, %d ms\n", gifFrame.duration);
 
 		newFrame = true;
 		if(currentFrame == noFrames-1){
@@ -143,7 +149,6 @@ bool AnimatedSprite::checkFrame(){
 			alerted = true;
 
 			// Order of callbacks is important in case the AnimatedSprite gets deleted in it.
-
 			if(loop){
 				reset();
 

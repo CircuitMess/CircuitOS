@@ -39,3 +39,6 @@
 /** Using u8g2 fonts uses up some RAM and PROGMEM for every font used.
  * The U8g2_for_TFT_eSPI library is used. (https://github.com/Bodmer/U8g2_for_TFT_eSPI)*/
 // #define CIRCUITOS_U8G2FONTS
+
+/** Using WiFi **/
+// #define CIRCUITOS_NET

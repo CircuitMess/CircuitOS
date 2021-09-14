@@ -1,11 +1,15 @@
 #include "LazyDataBuffer.h"
 
 LazyDataBuffer::LazyDataBuffer(const size_t size) : size(size){
+#ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));
 	}else{
 		buffer = static_cast<uint8_t*>(malloc(size));
 	}
+#else
+	buffer = static_cast<uint8_t*>(malloc(size));
+#endif
 }
 
 LazyDataBuffer::~LazyDataBuffer(){

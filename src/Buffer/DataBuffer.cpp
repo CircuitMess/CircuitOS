@@ -1,11 +1,15 @@
 #include "DataBuffer.h"
 
 DataBuffer::DataBuffer(const size_t size, bool local) : size(size){
+#ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound() && !local){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));
 	}else{
 		buffer = static_cast<uint8_t*>(malloc(size));
 	}
+#else
+	buffer = static_cast<uint8_t*>(malloc(size));
+#endif
 }
 
 DataBuffer::~DataBuffer(){

@@ -1,5 +1,5 @@
-#ifndef SPENCER_STREAMABLEHTTPCLIENT_H
-#define SPENCER_STREAMABLEHTTPCLIENT_H
+#ifndef CIRCUITOS_NET_H
+#define CIRCUITOS_NET_H
 
 
 #include <HTTPClient.h>
@@ -19,4 +19,4 @@ private:
 };
 
 
-#endif //SPENCER_STREAMABLEHTTPCLIENT_H
+#endif //CIRCUITOS_NET_H

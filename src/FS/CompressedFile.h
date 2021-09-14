@@ -12,6 +12,17 @@
 
 class CompressedFile : public fs::FileImpl {
 public:
+#ifdef ESP32
+	boolean isDirectory(void) override;
+	fs::FileImplPtr openNextFile(const char* mode) override;
+	void rewindDirectory(void) override;
+	operator bool() override;
+#else
+	boolean isDirectory(void) ;
+	fs::FileImplPtr openNextFile(const char* mode) ;
+	void rewindDirectory(void) ;
+	operator bool() ;
+#endif
 	CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 	~CompressedFile();
 	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
@@ -25,10 +36,14 @@ public:
 	void close() override;
 	time_t getLastWrite() override;
 	const char* name() const override;
-	boolean isDirectory(void) override;
-	fs::FileImplPtr openNextFile(const char* mode) override;
-	void rewindDirectory(void) override;
-	operator bool() override;
+
+	bool truncate(uint32_t size) ;
+
+	const char* fullName() const ;
+
+	bool isFile() const ;
+
+	bool isDirectory() const ;
 
 private:
 	fs::File f;

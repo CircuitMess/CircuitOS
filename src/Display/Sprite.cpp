@@ -17,7 +17,7 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 	createSprite(width, height);
 }
 
-Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()) {
+Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()){
 	parent = display.getBaseSprite();
 	setColorDepth(16);
 	setPsram(true);
@@ -61,25 +61,25 @@ void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t
 	uint16_t byteWidth = (width + 7) / 8;
 	uint16_t _x = x;
 	uint16_t dw = 8 - (width % 8);
-	for (uint16_t j = 0; j < height; j++) {
+	for(uint16_t j = 0; j < height; j++){
 		x = _x;
-		for (uint16_t i = 0; i < byteWidth;) {
-			
+		for(uint16_t i = 0; i < byteWidth;){
+
 			uint16_t b = pgm_read_byte(icon++);
 			i++;
-			for (uint16_t k = 0; k < 8; k++) {
-				if (i == byteWidth && k == dw) {
+			for(uint16_t k = 0; k < 8; k++){
+				if(i == byteWidth && k == dw){
 					x += (width % 8);
 					break;
 				}
-				if (b & 0x80) {
+				if(b & 0x80){
 					fillRect(x, y, scale, scale, _color);
-				} 
+				}
 				b <<= 1;
-				x+=scale;
+				x += scale;
 			}
 		}
-		y+=scale;
+		y += scale;
 	}
 	setChroma(c);
 }
@@ -191,7 +191,7 @@ Sprite& Sprite::push(){
 	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
-	if(parent->getSwapBytes() && getSwapBytes()) {
+	if(parent->getSwapBytes() && getSwapBytes()){
 		parent->setSwapBytes(false);
 	}else{
 		parent->setSwapBytes(true);
