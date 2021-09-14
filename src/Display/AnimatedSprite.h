@@ -11,7 +11,7 @@
 
 class AnimatedSprite {
 public:
-	AnimatedSprite(Sprite* canvas, fs::File file);
+	AnimatedSprite(Sprite* canvas, fs::File file, bool compressed = false);
 	virtual ~AnimatedSprite();
 
 	void push();
@@ -94,8 +94,9 @@ private:
 	bool onLastFrame = false;
 	void (*loopDoneCallback)() = nullptr;
 	bool alerted = false;
-
 	bool playing = false;
+
+	bool compressed = false;
 };
 
 
