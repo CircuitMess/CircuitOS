@@ -20,7 +20,7 @@ void PiezoImpl::noTone(){
 void PiezoImpl::setMute(bool mute){
 	this->mute = mute;
 
-	if(!mute){
+	if(mute){
 		this->noTone();
 	}
 }
