@@ -1,0 +1,73 @@
+#include "Piezo.h"
+#include <soc/rtc.h>
+
+PiezoImpl Piezo;
+
+#ifndef CIRCUITOS_PIEZO_ESP32_PWM_CHANNEL
+#define CIRCUITOS_PIEZO_ESP32_PWM_CHANNEL 0
+#endif
+
+#define CHANNEL CIRCUITOS_PIEZO_ESP32_PWM_CHANNEL
+
+
+void PiezoImpl::begin(uint8_t pin){
+	this->pin = pin;
+
+	rtc_cpu_freq_config_t freqConfig;
+	rtc_clk_cpu_freq_get_config(&freqConfig);
+
+	timer_config_t config = {
+			.alarm_en = false,
+			.counter_en = false,
+			.intr_type = TIMER_INTR_LEVEL,
+			.counter_dir = TIMER_COUNT_DOWN,
+			.auto_reload = false,
+			.divider = freqConfig.freq_mhz
+	};
+	timer_init(TIMER_GROUP_1, TIMER_0, &config);
+	timer_set_alarm_value(TIMER_GROUP_1, TIMER_0, 0);
+	timer_set_alarm(TIMER_GROUP_1, TIMER_0, TIMER_ALARM_EN);
+	timer_enable_intr(TIMER_GROUP_1, TIMER_0);
+	timer_isr_register(TIMER_GROUP_1, TIMER_0, PiezoImpl::interrupt, this, 0, &timer);
+
+	ledcAttachPin(pin, CHANNEL);
+}
+
+void PiezoImpl::tone(uint16_t freq, uint16_t duration){
+	if(pin == (uint8_t) -1) return;
+	if(mute) return;
+
+	uint32_t loadValue = duration * 1000;
+	timer_set_counter_value(TIMER_GROUP_1, TIMER_0, loadValue);
+	timer_set_alarm(TIMER_GROUP_1, TIMER_0, TIMER_ALARM_EN);
+	timer_start(TIMER_GROUP_1, TIMER_0);
+
+	ledcAttachPin(pin, CHANNEL);
+	ledcWriteTone(CHANNEL, freq);
+}
+
+void PiezoImpl::noTone(){
+	if(pin == (uint8_t) -1) return;
+	ledcDetachPin(pin);
+}
+
+void PiezoImpl::setMute(bool mute){
+	this->mute = mute;
+
+	if(!mute){
+		this->noTone();
+	}
+}
+
+bool PiezoImpl::isMuted() const{
+	return mute;
+}
+
+void PiezoImpl::interrupt(void *arg){
+	TIMERG1.int_clr_timers.t0 = 1;
+	TIMERG1.hw_timer[0].config.alarm_en = 0;
+	TIMERG1.hw_timer[0].config.enable = 0;
+
+	PiezoImpl* piezo = static_cast<PiezoImpl *>(arg);
+	ledcDetachPin(piezo->pin);
+}
