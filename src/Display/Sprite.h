@@ -2,7 +2,6 @@
 #define SWTEST_SPRITE_H
 
 
-#include <TFT_eSPI.h>
 #include <FS.h>
 #include "Display.h"
 #include "Color.h"
