@@ -13,7 +13,7 @@
 
 /** Use the LovyanGFX library (https://github.com/lovyan03/LovyanGFX) instead of TFT_eSPI
  * The library has better performance on higher-res screens (320x240 and above). */
- #define CIRCUITOS_LOVYANGFX
+// #define CIRCUITOS_LOVYANGFX
 
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
 // #define CIRCUITOS_NVS
