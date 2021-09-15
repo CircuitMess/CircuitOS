@@ -1,6 +1,6 @@
 
 /** ### Features ### */
- #define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
+// #define CIRCUITOS_FREERTOS // Uncomment this line if you're compiling for a core with FreeRTOS
 
 /** Task and synchronization classes are only available if we're compiling with FreeRTOS */
 #ifdef CIRCUITOS_FREERTOS
@@ -24,8 +24,9 @@
 /** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
 // #define CIRCUITOS_TONE
 
-/** If I2S amplifier chip is present (e.g. TFA9882UK). Required for Audio/Piezo */
- #define CIRCUITOS_I2S
+/** Enable Piezo for ESP32 using timed interrupts */
+// #define CIRCUITOS_PIEZO_ESP32
+#define CIRCUITOS_PIEZO_ESP32_PWM_CHANNEL 0
 
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
 // #define CIRCUITOS_LOWRAM
