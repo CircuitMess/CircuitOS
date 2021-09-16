@@ -30,12 +30,8 @@ void TextElement::draw(){
 	canvas->setTextColor(textColor);
 	canvas->setTextSize(textSize);
 
-	canvas->setCursor(-255, -255);
-	canvas->print(text.c_str());
-	uint textWidth = canvas->getCursorX() + 255;
-	canvas->setCursor(-255, -255);
-	canvas->println(text.c_str());
-	uint textHeight = canvas->getCursorY() + 255;
+	uint textWidth = canvas->textWidth(text.c_str());
+	uint textHeight = canvas->fontHeight();
 
 	uint textX;
 	switch(textAlignment){
