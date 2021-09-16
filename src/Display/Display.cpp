@@ -18,10 +18,15 @@ void Display::begin()
 		digitalWrite(blPin, HIGH);
 	}
 
+#ifndef CIRCUITOS_LOVYANGFX
 	tft.setAttribute(PSRAM_ENABLE, false);
+#endif
 	tft.init();
+	tft.setRotation(3);
+	tft.setColorDepth(16);
+#ifndef CIRCUITOS_LOVYANGFX
 	tft.setAttribute(PSRAM_ENABLE, false);
-
+#endif
 
 	tft.writecommand(17); //wakeup command in case display driver is in sleep mode
 
@@ -31,7 +36,7 @@ void Display::begin()
 	}
 	tft.fillScreen(TFT_BLACK);
 	baseSprite->clear(TFT_BLACK);
-	static_cast<TFT_eSprite*>(baseSprite)->setSwapBytes(true);
+	static_cast<TFT_eSprite*>(baseSprite)->setSwapBytes(false);
 
 	if(mirror){
 		mirrorBuffer = static_cast<uint16_t*>(malloc(sizeof(uint16_t) * getWidth() * getHeight()));
@@ -53,8 +58,13 @@ void Display::commit(){
 
 		baseSprite->drawIcon(mirrorBuffer, 0, 0, getWidth(), getHeight());
 	}
-
+#ifdef CIRCUITOS_LOVYANGFX
+	tft.startWrite();
+	baseSprite->pushRotateZoom(161, 121, 0, 2, 2);
+	tft.endWrite();
+#else
 	baseSprite->push();
+#endif
 }
 
 void Display::clear(uint32_t color){
