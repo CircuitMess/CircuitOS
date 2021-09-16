@@ -3,31 +3,23 @@
 #include "../Util/Debug.h"
 #include <pgmspace.h>
 
-#ifndef CIRCUITOS_LOVYANGFX
 #ifdef CIRCUITOS_U8G2FONTS
 FontWriter u8f;
-#endif
 #endif
 
 Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi){
 	parent = nullptr;
 	parentSPI = spi;
-	setColorDepth(16);
-	setPsram(true);
 	createSprite(width, height);
 }
 
 Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()){
 	parent = display.getBaseSprite();
-	setColorDepth(16);
-	setPsram(true);
 	createSprite(width, height);
 }
 
 Sprite::Sprite(Sprite* sprite, uint16_t width, uint16_t height) : TFT_eSprite(sprite){
 	parent = sprite;
-	setColorDepth(16);
-	setPsram(true);
 	createSprite(width, height);
 }
 
@@ -36,7 +28,7 @@ void Sprite::cleanup(){
 }
 
 bool Sprite::created(){
-	return (_img != nullptr);
+	return _created;
 }
 
 void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
@@ -45,7 +37,7 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 
 	for(int i = 0; i < width; i++){
 		for(int j = 0; j < height; j++){
-			uint16_t color = pgm_read_word(&icon[j * width + i]);
+			uint32_t color = pgm_read_word(&icon[j * width + i]);
 
 			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
 				fillRect(x + i * scale, y + j * scale, scale, scale, color);
@@ -54,7 +46,38 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
+
+void Sprite::drawIcon(File& icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
+	if(!icon){
+		return;
+	}
+
+	icon.seek(0);
+
+	// TODO: fast bg draw function. pixel bytes of the image should be swapped
+	/*if(width == this->width() && height == this->height() && scale == 1 && maskingColor == -1){
+		icon.read(reinterpret_cast<uint8_t *>(_img), width * height * 2);
+		return;
+	}*/
+
+	Color c = chromaKey;
+	setChroma(TFT_TRANSPARENT);
+
+	for(int j = 0; j < height; j++){
+		for(int i = 0; i < width; i++){
+			uint32_t color = 0;
+			icon.read(reinterpret_cast<uint8_t *>(&color), 2);
+
+			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
+				fillRect(x + i * scale, y + j * scale, scale, scale, color);
+			}
+		}
+	}
+	setChroma(c);
+}
+
+
+void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
@@ -83,7 +106,8 @@ void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
-void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
+
+void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint32_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
 
@@ -96,56 +120,57 @@ void Sprite::drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width
 	}
 	setChroma(c);
 }
-void Sprite::printCenter(const char* text)
-{
-	int8_t cursorBuffer = getCursorY();
+
+void Sprite::printCenter(const char* text){
+	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
-	uint16_t textLength = getCursorX();
+	uint16_t textLength = cursor_x;
 	print(text);
-	textLength = getCursorX() - textLength;
+	textLength = cursor_x - textLength;
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(String text)
-{
-	int8_t cursorBuffer = getCursorY();
+
+void Sprite::printCenter(String text){
+	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
-	uint16_t textLength = getCursorX();
+	uint16_t textLength = cursor_x;
 	print(text);
-	textLength = getCursorX() - textLength;
+	textLength = cursor_x - textLength;
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(uint32_t text)
-{
-	int8_t cursorBuffer = getCursorY();
+
+void Sprite::printCenter(uint32_t text){
+	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
-	uint16_t textLength = getCursorX();
+	uint16_t textLength = cursor_x;
 	print(text);
-	textLength = getCursorX() - textLength;
+	textLength = cursor_x - textLength;
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(int text)
-{
-	int8_t cursorBuffer = getCursorY();
+
+void Sprite::printCenter(int text){
+	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
-	uint16_t textLength = getCursorX();
+	uint16_t textLength = cursor_x;
 	print(text);
-	textLength = getCursorX() - textLength;
+	textLength = cursor_x - textLength;
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
-void Sprite::printCenter(float text)
-{
-	int8_t cursorBuffer = getCursorY();
+
+void Sprite::printCenter(float text){
+	int8_t cursorBuffer = cursor_y;
 	setCursor(-50, -50);
-	uint16_t textLength = getCursorX();
+	uint16_t textLength = cursor_x;
 	print(text);
-	textLength = getCursorX() - textLength;
+	textLength = cursor_x - textLength;
 	setCursor(int((width() - textLength) / 2), cursorBuffer);
 	print(text);
 }
+
 void Sprite::rotate(uint times){
 	if(width() != height()) return;
 	uint N = width();
@@ -159,30 +184,27 @@ void Sprite::rotate(uint times){
 			// current square
 			for(int y = x; y < N - x - 1; y++){
 				// store current cell in temp variable
-				uint16_t temp = ((uint16_t*)(_img))[x * N + y];
+				uint16_t temp = _img[x * N + y];
 
 				// move values from right to top
-				((uint16_t*)(_img))[x * N + y] = ((uint16_t*)(_img))[y * N + N - 1 - x];
+				_img[x * N + y] = _img[y * N + N - 1 - x];
 
 				// move values from bottom to right
-				((uint16_t*)(_img))[y * N + N - 1 - x] = ((uint16_t*)(_img))[N * (N - 1 - x) + N - 1 - y];
+				_img[y * N + N - 1 - x] = _img[N * (N - 1 - x) + N - 1 - y];
 
 				// move values from left to bottom
-				((uint16_t*)(_img))[N * (N - 1 - x) + N - 1 - y] = ((uint16_t*)(_img))[N * (N - 1 - y) + x];
+				_img[N * (N - 1 - x) + N - 1 - y] = _img[N * (N - 1 - y) + x];
 
 				// assign temp to left
-				((uint16_t*)(_img))[N * (N - 1 - y) + x] = temp;
+				_img[N * (N - 1 - y) + x] = temp;
 			}
 		}
 	}
 }
 
 Sprite& Sprite::push(){
-	if((_img == nullptr) || _bpp != 16) return *this;
-#ifdef CIRCUITOS_LOVYANGFX
-	TFT_eSprite::pushSprite(x, y);
-	return *this;
-#else
+	if(!_created || _bpp != 16) return *this;
+
 	if(parent == nullptr){
 		TFT_eSprite::pushSprite(x, y);
 		return *this;
@@ -198,17 +220,16 @@ Sprite& Sprite::push(){
 	}
 
 	if(chroma){
-		parent->pushImage(x, y, width(), height(), _img, (uint32_t) chromaKey);
+		parent->pushImage(x, y, _iwidth, _iheight, _img, (uint32_t) chromaKey);
 	}else{
-		static_cast<TFT_eSprite*>(parent)->pushImage(x, y, width(), height(), _img);
+		static_cast<TFT_eSprite*>(parent)->pushImage(x, y, _iwidth, _iheight, _img);
 	}
 	parent->setSwapBytes(oldSwapBytes);
 
 	return *this;
-#endif
 }
 
-Sprite& Sprite::clear(uint16_t color){
+Sprite& Sprite::clear(uint32_t color){
 	TFT_eSprite::fillSprite(color);
 	return *this;
 }
@@ -220,18 +241,18 @@ Sprite& Sprite::setPos(int32_t x, int32_t y){
 }
 
 Sprite& Sprite::resize(uint width, uint height){
-	if(!(_img != nullptr)){
+	if(!_created){
 		createSprite(width, height);
 		return *this;
 	}
 
 	deleteSprite();
 	logln("Resizing sprite to [" + String(width) + ", " + String(height) + "]");
-	if(createSprite(width, height) == nullptr){
+	if(createSprite(width, height, 1) == nullptr){
 		logln("CreateSprite failed");
 	}
 
-	if((_img != nullptr) == false){
+	if(_created == false){
 		logln("Sprite not cretaed");
 	}
 }
@@ -248,9 +269,9 @@ Sprite& Sprite::setChroma(Color color){
 void Sprite::pushData(uint width, uint height, uint16_t* data){
 	memcpy(_img, data, sizeof(uint16_t) * width * height);
 }
-#ifndef CIRCUITOS_LOVYANGFX
-void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma){
-	if((x >= width()) || (y >= height()) || (w == 0) || (h == 0) || !(_img != nullptr) || _bpp != 16) return;
+
+void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t* data, uint32_t chroma){
+	if((x >= _iwidth) || (y >= _iheight) || (w == 0) || (h == 0) || !_created || _bpp != 16) return;
 	if((x + w < 0) || (y + h < 0)) return;
 
 	int32_t xo = 0;
@@ -262,11 +283,19 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 	int32_t ws = w;
 	int32_t hs = h;
 
-	if(x < 0){ xo = -x; ws += x; xs = 0; }
-	if(y < 0){ yo = -y; hs += y; ys = 0; }
+	if(x < 0){
+		xo = -x;
+		ws += x;
+		xs = 0;
+	}
+	if(y < 0){
+		yo = -y;
+		hs += y;
+		ys = 0;
+	}
 
-	if(xs + ws >= (int32_t) width()) ws = width() - xs;
-	if(ys + hs >= (int32_t) height()) hs = height() - ys;
+	if(xs + ws >= (int32_t) _iwidth) ws = _iwidth - xs;
+	if(ys + hs >= (int32_t) _iheight) hs = _iheight - ys;
 
 	chroma = (uint16_t) (chroma >> 8 | chroma << 8);
 
@@ -280,13 +309,13 @@ void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *dat
 			}
 
 			if(!getSwapBytes()) color = color << 8 | color >> 8;
-			((uint16_t*)(_img))[x + ys * width()] = color;
+			_img[x + ys * _iwidth] = color;
 			x++;
 		}
 		ys++;
 	}
 }
-#endif
+
 int32_t Sprite::getX() const{
 	return x;
 }
@@ -297,13 +326,6 @@ int32_t Sprite::getY() const{
 
 void Sprite::setParent(Sprite* parent){
 	Sprite::parent = parent;
-#ifdef CIRCUITOS_LOVYANGFX
-	if(parent == nullptr){
-		TFT_eSprite::_parent = parentSPI;
-	}else{
-		TFT_eSprite::_parent = parent;
-	}
-#endif
 }
 
 Sprite* Sprite::getParent() const{
@@ -314,11 +336,10 @@ Sprite::~Sprite(){
 	deleteSprite();
 }
 
-#ifndef CIRCUITOS_LOVYANGFX
+
 #ifdef CIRCUITOS_U8G2FONTS
 FontWriter& Sprite::startU8g2Fonts(){
 	u8f.begin(*this);
 	return u8f;
 }
-#endif
 #endif
