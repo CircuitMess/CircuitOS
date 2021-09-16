@@ -26,10 +26,10 @@ public:
 			cfg.spi_3wire = false;
 			cfg.use_lock = true;
 			cfg.dma_channel = 1;
-			cfg.pin_sclk = 26;
-			cfg.pin_mosi = 32;
-			cfg.pin_miso = 5;
-			cfg.pin_dc = 25;
+			cfg.pin_sclk = LOVYAN_SCK;
+			cfg.pin_mosi = LOVYAN_MOSI;
+			cfg.pin_miso = LOVYAN_MISO;
+			cfg.pin_dc = LOVYAN_DC;
 
 			_bus_instance.config(cfg);
 			_panel_instance.setBus(&_bus_instance);
@@ -38,16 +38,16 @@ public:
 		{
 			auto cfg = _panel_instance.config();
 
-			cfg.pin_cs = 33;
-			cfg.pin_rst = 27;
+			cfg.pin_cs = LOVYAN_CS;
+			cfg.pin_rst = LOVYAN_RST;
 			cfg.pin_busy = -1;
 
 
 
-			cfg.memory_width = 240;
-			cfg.memory_height = 320;
-			cfg.panel_width = 240;
-			cfg.panel_height = 320;
+			cfg.memory_width = LOVYAN_WIDTH;
+			cfg.memory_height = LOVYAN_HEIGHT;
+			cfg.panel_width = LOVYAN_WIDTH;
+			cfg.panel_height = LOVYAN_HEIGHT;
 			cfg.offset_x = 0;
 			cfg.offset_y = 0;
 			cfg.offset_rotation = 0;
