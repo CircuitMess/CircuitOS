@@ -23,9 +23,10 @@ void Display::begin()
 #endif
 	tft.init();
 	tft.setRotation(3);
-	tft.setColorDepth(16);
 #ifndef CIRCUITOS_LOVYANGFX
 	tft.setAttribute(PSRAM_ENABLE, false);
+#else
+	tft.setColorDepth(16);
 #endif
 
 	tft.writecommand(17); //wakeup command in case display driver is in sleep mode

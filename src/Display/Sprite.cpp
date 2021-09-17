@@ -13,21 +13,27 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 	parent = nullptr;
 	parentSPI = spi;
 	setColorDepth(16);
+#ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
+#endif
 	createSprite(width, height);
 }
 
 Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()){
 	parent = display.getBaseSprite();
 	setColorDepth(16);
+#ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
+#endif
 	createSprite(width, height);
 }
 
 Sprite::Sprite(Sprite* sprite, uint16_t width, uint16_t height) : TFT_eSprite(sprite){
 	parent = sprite;
 	setColorDepth(16);
+#ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
+#endif
 	createSprite(width, height);
 }
 
