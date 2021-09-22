@@ -186,7 +186,7 @@ void Sprite::rotate(uint times){
 Sprite& Sprite::push(){
 	if((_img == nullptr) || _bpp != 16) return *this;
 #ifdef CIRCUITOS_LOVYANGFX
-	TFT_eSprite::pushSprite(x, y);
+	TFT_eSprite::pushSprite(x, y, TFT_TRANSPARENT);
 	return *this;
 #else
 	if(parent == nullptr){
