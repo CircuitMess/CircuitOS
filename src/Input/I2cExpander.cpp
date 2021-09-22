@@ -40,6 +40,7 @@ uint16_t I2cExpander::portRead()
 	uint16_t readValue = Wire.read();
 	readValue |= Wire.read() << 8;
 	// Wire.readBytes((uint8_t*)readValue, 2);
+	portState = readValue;
 	return readValue;
 }
 void I2cExpander::portConfig(uint16_t _portData)
@@ -79,4 +80,8 @@ void I2cExpander::pinWrite(uint8_t pin, bool state)
 I2cExpander* I2cExpander::getInstance()
 {
 	return instance;
+}
+
+uint16_t I2cExpander::getPortState() const{
+	return portState;
 }

@@ -20,15 +20,16 @@ public:
 	void pinWrite(uint8_t pin, bool state);
 	void portWrite(uint16_t _portData);
 	void portConfig(uint16_t _portData);
+	uint16_t getPortState() const;
 
 	static I2cExpander* getInstance();
-	
+
 private:
 	void _write(uint16_t port, uint8_t reg);
 	uint8_t address = 0;
 	uint16_t configState = 0;
 	uint16_t outputState = 0;
-
+	uint16_t portState = 0;
 	static I2cExpander* instance;
 };
 
