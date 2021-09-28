@@ -4,8 +4,8 @@
 #include "Piezo.impl"
 #else
 
-#ifdef CIRCUITOS_PIEZO_ESP32
-#include "PiezoESP32.impl"
+#ifdef CIRCUITOS_PIEZO_PWM
+#include "PiezoPWM.impl"
 #endif
 
 #endif
