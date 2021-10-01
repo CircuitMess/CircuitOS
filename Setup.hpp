@@ -26,6 +26,7 @@
 
 /** Enable Piezo for ESP32 using timed interrupts */
 // #define CIRCUITOS_PIEZO_PWM
+// #define CIRCUITOS_PIEZO_DAC
 #define CIRCUITOS_PIEZO_PWM_CHANNEL 0
 
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */

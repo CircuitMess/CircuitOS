@@ -1,0 +1,104 @@
+#include "Piezo.h"
+#include <soc/rtc.h>
+volatile uint16_t frequency = 0;
+volatile uint32_t dur = 0;
+volatile uint32_t counter = 0;
+volatile uint8_t vol = 0;
+hw_timer_t * testTimer;
+hw_timer_t * testTimer2;
+PiezoImpl Piezo;
+void PiezoImpl::begin(uint8_t pin){
+	this->pin = pin;
+	// Set up interrupt routine
+
+	// Set up interrupt routine
+	DACtimer = timerBegin(0, 80, true);          // use timer TimerNo, pre-scaler is 80 (divide by 8000), count up
+	timerAttachInterrupt(DACtimer, &DACInterrupt, true);    // P3= edge triggered
+
+	durationTimer = timerBegin(1, 80, true);          // use timer TimerNo, pre-scaler is 80 (divide by 8000), count up
+	timerAttachInterrupt(durationTimer, &durationInterrupt, true);    // P3= edge triggered
+
+	dacWrite(pin, 127);					// Set speaker to mid point, stops click at start of first sound
+	noTone();
+	testTimer = DACtimer;
+}
+
+void PiezoImpl::tone(uint16_t freq, uint16_t duration){
+	if(pin == (uint8_t) -1) return;
+	if(mute) return;
+	digitalWrite(13, LOW);
+	frequency = freq;
+	vol = getVolume();
+	dur = duration;
+
+
+	timerAlarmWrite(DACtimer, 100000, true);               // will trigger 250,000 times per second,
+	timerAlarmWrite(durationTimer, duration*1000 + 1000000, false);               // will trigger 250,000 times per second,
+	timerAlarmEnable(durationTimer);                        // enable
+	counter = 0;
+
+	timerAlarmEnable(DACtimer);                        // enable
+	delay(1);                             			// Allow system to settle, otherwise garbage can play for first second
+
+}
+
+void PiezoImpl::noTone(){
+	if(pin == (uint8_t) -1) return;
+	timerAlarmDisable(DACtimer);
+	timerAlarmDisable(durationTimer);
+}
+
+void PiezoImpl::setMute(bool mute){
+	this->mute = mute;
+
+	if(mute){
+		this->noTone();
+	}
+}
+
+bool PiezoImpl::isMuted() const{
+	return mute;
+}
+
+void IRAM_ATTR PiezoImpl::DACInterrupt(){
+	uint8_t value = (uint8_t)((double)(vol)*sin(2*frequency*PI * counter / 1000000.0) + 127);
+	CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL1_REG, SENS_SW_TONE_EN);  //Disable Tone
+//	if(piezo->pin==25) {
+		CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL2_REG, SENS_DAC_CW_EN1_M);
+		SET_PERI_REG_BITS(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_DAC, value, RTC_IO_PDAC1_DAC_S);
+		SET_PERI_REG_MASK(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_XPD_DAC | RTC_IO_PDAC1_DAC_XPD_FORCE);
+//	}
+//	else if(piezo->pin==26) {
+//		CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL2_REG, SENS_DAC_CW_EN2_M);
+//		SET_PERI_REG_BITS(RTC_IO_PAD_DAC2_REG, RTC_IO_PDAC2_DAC, value, RTC_IO_PDAC2_DAC_S);
+//		SET_PERI_REG_MASK(RTC_IO_PAD_DAC2_REG, RTC_IO_PDAC2_XPD_DAC | RTC_IO_PDAC2_DAC_XPD_FORCE);
+//	}
+	delay(0);
+	counter+=40;
+	if(counter >= dur * 1000){
+//		digitalWrite(13, HIGH);
+		timerAlarmDisable(testTimer);
+		CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL1_REG, SENS_SW_TONE_EN);  //Disable Tone
+		CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL2_REG, SENS_DAC_CW_EN1_M);
+		SET_PERI_REG_BITS(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_DAC, 127, RTC_IO_PDAC1_DAC_S);
+		SET_PERI_REG_MASK(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_XPD_DAC | RTC_IO_PDAC1_DAC_XPD_FORCE);
+		return;
+	}
+}
+
+void IRAM_ATTR PiezoImpl::durationInterrupt(){
+//	Serial.println("duration interrupt");
+
+//	PiezoImpl* piezo = static_cast<PiezoImpl *>(arg);
+//	timer_pause(TIMER_GROUP_1, TIMER_0);
+//	timer_pause(TIMER_GROUP_1, TIMER_1);
+	timerAlarmDisable(testTimer);
+	delay(1);
+//	timerAlarmDisable(testTimer2);
+//	dacWrite(piezo->pin, 0);
+
+	CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL1_REG, SENS_SW_TONE_EN);  //Disable Tone
+	CLEAR_PERI_REG_MASK(SENS_SAR_DAC_CTRL2_REG, SENS_DAC_CW_EN1_M);
+	SET_PERI_REG_BITS(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_DAC, 0, RTC_IO_PDAC1_DAC_S);
+	SET_PERI_REG_MASK(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_XPD_DAC | RTC_IO_PDAC1_DAC_XPD_FORCE);
+}
