@@ -36,7 +36,7 @@ uint16_t I2cExpander::portRead()
 	Wire.beginTransmission(address);
 	Wire.write(INPUT_REG);
 	Wire.endTransmission();
-	Wire.requestFrom(address, 2);
+	Wire.requestFrom((uint8_t) address, (uint8_t) 2);
 	uint16_t readValue = Wire.read();
 	readValue |= Wire.read() << 8;
 	// Wire.readBytes((uint8_t*)readValue, 2);
