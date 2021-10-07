@@ -1,5 +1,5 @@
-#ifndef CIRCUITOS_NET_H
-#define CIRCUITOS_NET_H
+#ifndef CIRCUITOS_STRHTTPCLIENT_H
+#define CIRCUITOS_STRHTTPCLIENT_H
 
 
 #include <HTTPClient.h>
@@ -19,4 +19,4 @@ private:
 };
 
 
-#endif //CIRCUITOS_NET_H
+#endif //CIRCUITOS_STRHTTPCLIENT_H
