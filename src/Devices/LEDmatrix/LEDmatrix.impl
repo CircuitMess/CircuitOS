@@ -307,6 +307,11 @@ void LEDmatrixImpl::drawString(int32_t x, int32_t y, const char* c, uint8_t _bri
 	}
 }
 
+void LEDmatrixImpl::drawString(int32_t x, int32_t y, String s, uint8_t _brightness, bool bigFont)
+{
+	drawString(x, y, s.c_str(), _brightness, bigFont);
+}
+
 /**************************************************************************/
 /*!
 	@brief  Sets global brightness for the matrix.
