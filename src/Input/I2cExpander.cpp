@@ -36,13 +36,29 @@ uint16_t I2cExpander::portRead()
 	Wire.beginTransmission(address);
 	Wire.write(INPUT_REG);
 	Wire.endTransmission();
-	Wire.requestFrom(address, 2);
+	Wire.requestFrom((uint8_t) address, (uint8_t) 2);
 	uint16_t readValue = Wire.read();
 	readValue |= Wire.read() << 8;
 	// Wire.readBytes((uint8_t*)readValue, 2);
 	portState = readValue;
 	return readValue;
 }
+
+bool I2cExpander::portRead(uint16_t& state){
+	Wire.beginTransmission(address);
+	Wire.write(INPUT_REG);
+	if(Wire.endTransmission() != 0) return false;
+
+	Wire.requestFrom((uint8_t) address, (uint8_t) 2);
+	if(Wire.readBytes(reinterpret_cast<char*>(&state), 2) != 2){
+		state = 0;
+		return false;
+	}
+	portState = state;
+	return true;
+
+}
+
 void I2cExpander::portConfig(uint16_t _portData)
 {
 	configState = _portData;

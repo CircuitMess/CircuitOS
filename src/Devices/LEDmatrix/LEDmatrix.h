@@ -47,6 +47,7 @@ public:
 	uint8_t getRotation();
 	void drawChar(int32_t x, int32_t y, unsigned char c, uint8_t brightness = 255, bool bigFont = 1);
 	void drawString(int32_t x, int32_t y, const char* c, uint8_t brightness = 255, bool bigFont = 1);
+	void drawString(int32_t x, int32_t y, String s, uint8_t brightness = 255, bool bigFont = 1);
 	void setBrightness(uint8_t _brightness);
 	uint8_t getBrightness();
 	void push();
