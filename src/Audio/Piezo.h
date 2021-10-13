@@ -26,21 +26,23 @@ public:
 	static void interrupt(void* arg);
 	timer_isr_handle_t timer;
 #elif defined CIRCUITOS_PIEZO_DAC
-//	static void IRAM_ATTR DACInterrupt(void* arg);
-//	static void IRAM_ATTR durationInterrupt(void* arg);
-//	timer_isr_handle_t DACtimer;
-//	timer_isr_handle_t durationTimer;
-
-	static void IRAM_ATTR DACInterrupt();
-	static void IRAM_ATTR durationInterrupt();
-	hw_timer_t * DACtimer;
-	hw_timer_t * durationTimer;
+	static void IRAM_ATTR timerInterrupt();
 #endif
 
 private:
 	volatile uint8_t pin = -1;
 	bool mute = false;
 	volatile uint8_t volume = 5;
+
+#ifdef CIRCUITOS_PIEZO_DAC
+	hw_timer_t* timer = nullptr;
+	const uint16_t powerHold = 2000; // How long to keep DAC powered on after last tone [ms]
+	const uint16_t DACbootTime = 1000; // How long it takes DAC to power on [ms]
+	volatile enum { OFF, POWERING, ON, IDLE } state = OFF;
+	volatile uint32_t currentFreq = 0;
+	volatile uint32_t currentDuration = 0;
+	volatile uint32_t counter = 0;
+#endif
 
 };
 

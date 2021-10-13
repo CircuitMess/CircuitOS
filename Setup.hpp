@@ -24,9 +24,13 @@
 /** Whether global `tone` and `noTone` functions are available. Required for Audio/Piezo */
 // #define CIRCUITOS_TONE
 
-/** Enable Piezo for ESP32 using timed interrupts */
-// #define CIRCUITOS_PIEZO_PWM
+/** Enable Piezo using DAC */
 // #define CIRCUITOS_PIEZO_DAC
+#define CIRCUITOS_PIEZO_DAC_TIMER 0 // Timer # to use
+#define CIRCUITOS_PIEZO_DAC_SD 13 // DAC shutdown IO pin
+
+/** Enable Piezo for using PWM */
+// #define CIRCUITOS_PIEZO_PWM
 #define CIRCUITOS_PIEZO_PWM_CHANNEL 0
 
 /** Context transitions for devices with little RAM won't keep both context sprites in RAM at the same time. */
