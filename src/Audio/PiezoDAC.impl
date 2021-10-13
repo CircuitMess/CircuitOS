@@ -119,7 +119,7 @@ void PiezoImpl::tone(uint16_t freq, uint16_t duration){
 		state = POWERING;
 		digitalWrite(DAC_SD, LOW);
 
-		timerAlarmWrite(timer, DACbootTime * 1000, true);
+		timerAlarmWrite(timer, ampBootTime * 1000, true);
 		timerAlarmEnable(timer);
 		timerStart(timer);
 	}else if(state == IDLE){
