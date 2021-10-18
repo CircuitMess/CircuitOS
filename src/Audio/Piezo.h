@@ -36,8 +36,8 @@ private:
 
 #ifdef CIRCUITOS_PIEZO_DAC
 	hw_timer_t* timer = nullptr;
-	const uint16_t powerHold = 1000; // How long to keep amp powered on after last tone [ms]
-	const uint16_t ampBootTime = 100; // How long it takes amp to power on [ms]
+	const uint16_t ampBootTime = 50; // How long it takes amp to power on [ms]
+	const uint16_t powerHold = 20; // How long to keep amp powered on after last tone [ms]
 	volatile enum { OFF, POWERING, ON, IDLE } state = OFF;
 	volatile uint32_t currentFreq = 0;
 	volatile uint32_t currentDuration = 0;
