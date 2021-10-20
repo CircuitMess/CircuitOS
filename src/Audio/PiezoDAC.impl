@@ -176,8 +176,8 @@ void IRAM_ATTR PiezoImpl::timerInterrupt(){
 	}
 
 	double value = sin((double) piezo->currentFreq * 2.0 * M_PI * ((double) piezo->counter / 20000.0)); // wave [-1, 1]
-	value /= 3.0; // counter voltage amplification
-	value /= 3.0; // make sure we don't draw too much current
+	// value /= 3.0; // counter voltage amplification
+	// value /= 3.0; // make sure we don't draw too much current
 	value *= (double) piezo->volume / 255.0; // apply volume [-1, 1]
 	value = value / 2.0 + 0.5; // bring to [0, 1]
 	value *= 255.0; // bring to [0, 255]

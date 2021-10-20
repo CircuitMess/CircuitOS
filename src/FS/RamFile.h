@@ -51,6 +51,8 @@ private:
 	uint8_t* data = nullptr;
 	size_t dataSize;
 	size_t cursor = 0;
+	const char* filename = nullptr;
+
 };
 
 

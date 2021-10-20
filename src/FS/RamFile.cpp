@@ -5,7 +5,7 @@ RamFile::RamFile(uint8_t* data, size_t size) : data(data), dataSize(size){
 }
 
 RamFile::~RamFile(){
-	delete data;
+	RamFile::close();
 }
 
 fs::File RamFile::open(uint8_t* data, size_t size){
@@ -22,7 +22,16 @@ fs::File RamFile::open(fs::File file){
 
 	file.seek(0);
 	file.readBytes(reinterpret_cast<char*>(data), file.size());
-	return File(std::make_shared<RamFile>(data, file.size()));
+
+	auto f = std::make_shared<RamFile>(data, file.size());
+
+	String name = file.name();
+	char* fstr = static_cast<char*>(malloc(name.length() + 1));
+	memcpy(fstr, name.c_str(), name.length());
+	fstr[name.length()] = 0;
+	f->filename = fstr;
+
+	return File(f);
 }
 
 size_t RamFile::write(uint8_t data){
@@ -95,8 +104,12 @@ size_t RamFile::size() const{
 }
 
 void RamFile::close(){
+	delete data;
+	delete filename;
+
 	data = nullptr;
 	dataSize = 0;
+	filename = nullptr;
 }
 
 RamFile::operator bool(){
@@ -112,7 +125,7 @@ time_t RamFile::getLastWrite(){
 }
 
 const char* RamFile::name() const {
-	return nullptr;
+	return filename;
 }
 
 void RamFile::rewindDirectory() {
