@@ -170,6 +170,16 @@ void Input::setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (
 	btnHoldRepeatValue[pin] = periodTime;
 }
 
+void Input::removeButtonHeldCallback(uint8_t pin){
+	btnHoldCallback[pin] = nullptr;
+	btnHoldValue[pin] = 0;
+}
+
+void Input::removeButtonHeldRepeatCallback(uint8_t pin){
+	btnHoldRepeatCallback[pin] = nullptr;
+	btnHoldRepeatValue[pin] = 0;
+}
+
 uint32_t Input::getButtonHeldMillis(uint8_t pin){
 	if(pin >= pinNumber) return 0;
 	return millis() - btnHoldStart[pin];

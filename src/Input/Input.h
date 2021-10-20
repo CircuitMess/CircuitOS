@@ -50,6 +50,9 @@ public:
 	 */
 	virtual void setButtonHeldRepeatCallback(uint8_t pin, uint32_t periodTime, void (* callback)(uint));
 
+	virtual void removeButtonHeldCallback(uint8_t pin);
+	virtual void removeButtonHeldRepeatCallback(uint8_t pin);
+
 	/**
 	 * Returns the time in milliseconds a button is being held down.
 	 * @param pin Input pin of the button.
