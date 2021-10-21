@@ -107,6 +107,7 @@ void PiezoImpl::begin(uint8_t pin){
 void PiezoImpl::tone(uint16_t freq, uint16_t duration){
 	if(pin == (uint8_t) -1) return;
 	if(mute) return;
+	if(volume == 0) return;
 
 	currentFreq = freq;
 	currentDuration = duration;
