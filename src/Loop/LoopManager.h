@@ -1,9 +1,8 @@
 #ifndef CIRCUITOS_LOOPMANAGER_H
 #define CIRCUITOS_LOOPMANAGER_H
 
-
+#include <Arduino.h>
 #include <unordered_set>
-#include "../Util/Vector.h"
 #include "../../Setup.hpp"
 
 class LoopListener;
@@ -42,7 +41,7 @@ public:
 #endif
 
 private:
-	static Vector<LoopListener*> listeners;
+	static std::unordered_set<LoopListener*> listeners;
 	static std::unordered_set<LoopListener*> removedListeners;
 
 	static uint lastMicros;
