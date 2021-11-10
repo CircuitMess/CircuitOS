@@ -42,6 +42,10 @@ void ContextTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int pos
 }
 
 void ContextTransition::loop(uint micros){
+	if(time == 0){
+		time+=1;
+		return;
+	}
 	time += micros;
 
 	uint scroll = time / (1.5 * 1000.0);

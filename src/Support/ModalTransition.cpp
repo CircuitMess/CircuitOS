@@ -53,6 +53,10 @@ void ModalTransition::copySprite(Sprite* sprite, Sprite* targetSprite, int x, in
 }
 
 void ModalTransition::loop(uint micros){
+	if(time == 0){
+		time+=1;
+		return;
+	}
 	time += micros;
 
 	int scroll = time / (1.5 * 1000.0);
