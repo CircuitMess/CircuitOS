@@ -29,7 +29,7 @@ uint8_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftP
 
 void InputShift::scanButtons(){
 	for(uint i = 0; i < buttons.size(); i++){
-		if(shiftInput(dataPin_, clockPin_, shiftPin_) == buttons[i]){
+		if((shiftInput(dataPin_, clockPin_, shiftPin_) & (1 << buttons[i]))){
 			if(digitalRead(buttons[i])){
 				//released
 				Input::btnRelease(i);
