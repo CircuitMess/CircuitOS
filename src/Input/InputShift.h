@@ -13,9 +13,10 @@ public:
 	uint8_t shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin);
 
 private:
-	uint8_t dataPin_;
-	uint8_t clockPin_;
-	uint8_t shiftPin_ = 1;
+	uint8_t dataPin;
+	uint8_t clockPin;
+	uint8_t shiftPin = 1;
+	uint8_t shiftsNum;
 protected:
 	void scanButtons() override;
 
