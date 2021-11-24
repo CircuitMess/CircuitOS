@@ -28,14 +28,14 @@ uint16_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shift
 }
 
 void InputShift::scanButtons(){
-	for(uint i = 0; i < buttons.size(); i++){
-		if((shiftInput(dataPin_, clockPin_, shiftPin_) & (1 << buttons[i]))){
-			if(digitalRead(buttons[i])){
-				//released
-				Input::btnRelease(i);
+		uint16_t state = shiftInput(dataPin, clockPin, shiftPin);
+
+		for(uint j = 0; j < buttons.size(); j++){
+			if((state & (1 << buttons[j]))){
+				Input::btnRelease(buttons[j]);
 			}else{
-				Input::btnPress(i);
+				Input::btnPress(buttons[j]);
 			}
 		}
 	}
-}
+
