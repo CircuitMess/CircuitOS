@@ -1,10 +1,10 @@
 #include "InputShift.h"
 
-InputShift::InputShift( uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin) : Input(REG_PIN_MAX) ,dataPin_(dataPin), clockPin_(clockPin), shiftPin_(shiftPin){
+InputShift::InputShift(uint8_t shiftNum,uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin = 1) : shiftsNum(shiftNum), dataPin(dataPin), clockPin(clockPin), shiftPin(shiftPin), Input(shiftNum * 8){
 
 }
 
-uint8_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin){
+uint16_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin){
 	uint16_t value = 0;
 	uint8_t i;
 
@@ -16,7 +16,7 @@ uint8_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftP
 
 	delayMicroseconds(PERIOD);
 
-	for(i = 0; i < 8; ++i){
+	for(i = 0; i < shiftsNum*8; ++i){
 		//digitalWrite(clockPin, HIGH);
 		value |= ((uint16_t) digitalRead(dataPin)) << i;
 		digitalWrite(clockPin, HIGH);
