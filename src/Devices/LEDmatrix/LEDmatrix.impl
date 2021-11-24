@@ -34,8 +34,8 @@ LEDmatrixImpl::LEDmatrixImpl(uint8_t _width, uint8_t _height)
 */
 /**************************************************************************/
 bool LEDmatrixImpl::begin(uint8_t sda, uint8_t scl, uint8_t addr) {
-	Wire.begin(sda, scl, addr);
-	Wire.setClock(400000);
+	Wire.begin(sda, scl);
+	//Wire.setClock(400000);
 
 	_i2caddr = addr;
 	_frame = 0;
