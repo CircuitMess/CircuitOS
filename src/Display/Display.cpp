@@ -37,7 +37,7 @@ void Display::begin()
 	}
 	tft.fillScreen(TFT_BLACK);
 	baseSprite->clear(TFT_BLACK);
-	static_cast<TFT_eSprite*>(baseSprite)->setSwapBytes(false);
+	swapBytes(true);
 
 	if(mirror){
 		mirrorBuffer = static_cast<uint16_t*>(malloc(sizeof(uint16_t) * getWidth() * getHeight()));
@@ -86,4 +86,8 @@ uint Display::getWidth() const{
 
 uint Display::getHeight() const{
 	return height;
+}
+
+void Display::swapBytes(bool swap){
+	static_cast<TFT_eSprite*>(baseSprite)->setSwapBytes(swap);
 }
