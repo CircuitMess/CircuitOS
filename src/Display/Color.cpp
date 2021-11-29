@@ -68,7 +68,7 @@ uint32_t HSVtoRGB888(HSV hsv){
 				break;
 		}
 	}
-	out = (uint32_t)(255.0 * r) | (((uint32_t)(255.0 * g)) << 8) | (((uint32_t)(255.0 * b)) << 16);
+	out = (((uint32_t)(r * 255.0) & 0xff) << 16) + (((uint32_t)(g * 255.0) & 0xff) << 8) + ((uint32_t)(b * 255.0) & 0xff);
 
 	return out;
 }
