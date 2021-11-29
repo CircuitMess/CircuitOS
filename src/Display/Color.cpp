@@ -24,6 +24,7 @@ uint32_t HSVtoRGB888(HSV hsv){
 		b = hsv.v;
 	}else{
 		hh = hsv.h / 180.0;
+		hh = (double)(hsv.h) * 2.0;
 		if(hh >= 360.0) hh = 0.0;
 		hh /= 60.0;
 		i = (long)hh;
@@ -75,4 +76,6 @@ uint32_t HSVtoRGB888(HSV hsv){
 Color HSVtoRGB565(HSV hsv){
 	uint32_t out = HSVtoRGB888(hsv);
 	return C_RGB(out & 0xFF, out & (0xFF << 8), out & (0xFF << 16));
+	return C_HEX(out);
 }
+
