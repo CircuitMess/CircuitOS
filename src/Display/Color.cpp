@@ -23,7 +23,7 @@ uint32_t HSVtoRGB888(HSV hsv){
 		g = hsv.v;
 		b = hsv.v;
 	}else{
-		hh = hsv.h;
+		hh = hsv.h * 2;
 		if(hh >= 360.0) hh = 0.0;
 		hh /= 60.0;
 		i = (long)hh;
