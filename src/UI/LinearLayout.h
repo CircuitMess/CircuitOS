@@ -12,8 +12,6 @@ public:
 	void reflow() override;
 	void reposChildren() override;
 
-	void draw() override;
-
 private:
 
 	LayoutDirection direction;

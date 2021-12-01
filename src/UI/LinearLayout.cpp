@@ -22,32 +22,6 @@ void LinearLayout::reposChildren(){
 	}
 }
 
-void LinearLayout::draw(){
-	logln("Drawing linear layout");
-
-	if(!strictPos){
-		Layout::draw();
-		return;
-	}
-
-	int x = padding;
-	int y = padding;
-
-	for(Element* el : children){
-		el->setPos(x, y);
-		logln("LL Setting pos [" + String(x) + ", " + String(y) + "]");
-		el->draw();
-
-		if(direction == VERTICAL){
-			y += gutter + el->getHeight();
-		}else if(direction == HORIZONTAL){
-			x += gutter + el->getWidth();
-		}
-	}
-
-	Element::draw();
-}
-
 void LinearLayout::reflow(){
 	if(direction == HORIZONTAL){
 		reflowHorizontal();
