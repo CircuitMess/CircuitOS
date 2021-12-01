@@ -9,7 +9,6 @@ public:
 
 	void reposChildren() override;
 	void reflow() override;
-	void draw() override;
 
 private:
 

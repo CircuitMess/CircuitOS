@@ -83,31 +83,3 @@ void GridLayout::reposChildren(){
 		}
 	}
 }
-
-void GridLayout::draw(){
-	if(!strictPos){
-		Layout::draw();
-		return;
-	}
-
-	uint x = padding;
-	uint y = padding;
-
-	uint col = 0;
-	uint maxHeight = 0;
-	for(Element* el : children){
-		el->setPos(x, y);
-		logln("GL Setting pos [" + String(x) + ", " + String(y) + "]");
-		el->draw();
-
-		x += el->getWidth() + gutter;
-		maxHeight = max(maxHeight, el->getHeight());
-
-		if(++col == cols){
-			y += maxHeight + gutter;
-			x = padding;
-			maxHeight = 0;
-			col = 0;
-		}
-	}
-}
