@@ -118,3 +118,11 @@ uint Layout::getPadding() const{
 void Layout::setStrictPos(bool strictPos){
 	this->strictPos = strictPos;
 }
+
+void Layout::setVerticalCentering(bool verticalCentering){
+	Layout::verticalCentering = verticalCentering;
+}
+
+void Layout::setHorizontalCentering(bool horizontalCentering){
+	Layout::horizontalCentering = horizontalCentering;
+}

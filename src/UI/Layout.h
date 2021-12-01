@@ -36,6 +36,9 @@ public:
 	uint getHeight() override;
 
 	void setStrictPos(bool strictPos);
+	void setHorizontalCentering(bool horizontalCentering);
+	void setVerticalCentering(bool verticalCentering);
+
 
 protected:
 	uint gutter = 0;
@@ -45,6 +48,9 @@ protected:
 	WHType hType = FIXED;
 
 	bool strictPos = false;
+
+	bool verticalCentering = false;
+	bool horizontalCentering = false;
 
 private:
 	uint width = 0;

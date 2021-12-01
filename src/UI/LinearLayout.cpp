@@ -11,7 +11,20 @@ void LinearLayout::reposChildren(){
 	int x = padding;
 	int y = padding;
 
+
 	for(Element* el : children){
+		if(direction == VERTICAL && horizontalCentering && el->getWidth() < getAvailableWidth()){
+			x = padding + (Layout::getAvailableWidth() - el->getWidth())/2;
+		}else if(direction == VERTICAL){
+			x = padding;
+		}
+
+		if(direction == HORIZONTAL && verticalCentering && el->getHeight() < getAvailableHeight()){
+			y = padding + (Layout::getAvailableHeight() - el->getHeight())/2;
+		}else if(direction == HORIZONTAL){
+			y = padding;
+		}
+
 		el->setPos(x, y);
 
 		if(direction == VERTICAL){
