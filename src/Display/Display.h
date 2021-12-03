@@ -40,6 +40,8 @@ public:
 
 	uint getHeight() const;
 
+	void swapBytes(bool swap);
+
 private:
 	TFT_eSPI tft; 
 	uint16_t width;
