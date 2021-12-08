@@ -18,7 +18,7 @@ public:
 	void setBorderColor(Color borderColor);
 	void setBorderWidth(uint borderWidth);
 
-	Color background;
+	Color background = TFT_BLACK;
 	Color borderColor;
 	uint borderWidth = 0;
 

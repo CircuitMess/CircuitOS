@@ -197,10 +197,8 @@ Sprite& Sprite::push(){
 	logln("Pushing sprite at [" + String(x) + ", " + String(y) + "]");
 
 	bool oldSwapBytes = parent->getSwapBytes();
-	if(parent->getSwapBytes() && getSwapBytes()){
-		parent->setSwapBytes(false);
-	}else{
-		parent->setSwapBytes(true);
+	if(getSwapBytes()){
+		parent->setSwapBytes(!parent->getSwapBytes());
 	}
 
 	if(chroma){

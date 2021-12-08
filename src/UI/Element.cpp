@@ -85,7 +85,7 @@ void Element::setPos(int x, int y){
 }
 
 void Element::clear(){
-	getSprite()->fillRect(getTotalX(), getTotalY(), getWidth(), getHeight(), TFT_BLACK);
+	getSprite()->fillRect(getTotalX(), getTotalY(), getWidth(), getHeight(), background);
 }
 
 void Element::setParent(ElementContainer* parent){
