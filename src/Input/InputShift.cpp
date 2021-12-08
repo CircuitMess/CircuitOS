@@ -1,41 +1,39 @@
 #include "InputShift.h"
 
-InputShift::InputShift(uint8_t shiftNum,uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin = 1) : shiftsNum(shiftNum), dataPin(dataPin), clockPin(clockPin), shiftPin(shiftPin), Input(shiftNum * 8){
+#define PERIOD 1
+#define LH(pin) do { digitalWrite((pin), LOW); delayMicroseconds(PERIOD); digitalWrite((pin), HIGH); delayMicroseconds(PERIOD); } while(0)
+#define HL(pin) do { digitalWrite((pin), HIGH); delayMicroseconds(PERIOD); digitalWrite((pin), LOW); delayMicroseconds(PERIOD); } while(0)
 
+InputShift::InputShift(uint8_t dataPin, uint8_t clockPin, uint8_t loadPin, uint8_t numButtons) : dataPin(dataPin), clockPin(clockPin), loadPin(loadPin),
+numButtons(numButtons), numShifts(ceil((float) numButtons / 8.0f)), Input(numButtons){
+
+	for(int i = 0; i < numButtons; i++){
+		InputShift::registerButton(i);
+	}
 }
 
-uint16_t InputShift::shiftInput(uint8_t dataPin, uint8_t clockPin, uint8_t shiftPin){
-	uint16_t value = 0;
-	uint8_t i;
-
-	digitalWrite(clockPin, LOW);
-
-	digitalWrite(shiftPin, LOW);
-	delayMicroseconds(PERIOD);
-	digitalWrite(shiftPin, HIGH);
-
-	delayMicroseconds(PERIOD);
-
-	for(i = 0; i < shiftsNum*8; ++i){
-		//digitalWrite(clockPin, HIGH);
-		value |= ((uint16_t) digitalRead(dataPin)) << i;
-		digitalWrite(clockPin, HIGH);
-		delayMicroseconds(PERIOD);
-		digitalWrite(clockPin, LOW);
-		delayMicroseconds(PERIOD);
-	}
-	return value;
+void InputShift::begin(){
+	pinMode(dataPin, INPUT);
+	pinMode(clockPin, OUTPUT);
+	pinMode(loadPin, OUTPUT);
 }
 
 void InputShift::scanButtons(){
-		uint16_t state = shiftInput(dataPin, clockPin, shiftPin);
+	digitalWrite(clockPin, LOW);
+	LH(loadPin);
 
-		for(uint j = 0; j < buttons.size(); j++){
-			if((state & (1 << buttons[j]))){
-				Input::btnRelease(buttons[j]);
-			}else{
-				Input::btnPress(buttons[j]);
-			}
+	std::vector<bool> states(numShifts * 8, true);
+	for(int i = 0; i < numShifts * 8; i++){
+		states[i] = digitalRead(dataPin) == HIGH;
+		HL(clockPin);
+	}
+
+	for(int i = 0; i < numButtons; i++){
+		if(states[i]){
+			Input::btnRelease(i);
+		}else{
+			Input::btnPress(i);
 		}
 	}
+}
 
