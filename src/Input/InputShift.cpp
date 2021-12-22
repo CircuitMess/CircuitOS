@@ -24,7 +24,7 @@ void InputShift::scanButtons(){
 
 	std::vector<bool> states(numShifts * 8, true);
 	for(int i = 0; i < numShifts * 8; i++){
-		states[i] = digitalRead(dataPin) == HIGH;
+		states[numShifts * 8 - i - 1] = digitalRead(dataPin) == HIGH;
 		HL(clockPin);
 	}
 
