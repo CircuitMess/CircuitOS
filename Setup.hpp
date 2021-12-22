@@ -15,6 +15,9 @@
  * The library has better performance on higher-res screens (320x240 and above). */
 // #define CIRCUITOS_LOVYANGFX
 
+/** Zoom factor for the display buffer, 2 means every pixel in the buffer equates to 4 pixels on-screen. */
+// #define CIRCUITOS_LOVYANGFX_ZOOM 1
+
 /** Whether NVS (non-volatile storage) is present in the core. Enables NVS variant of Settings */
 // #define CIRCUITOS_NVS
 

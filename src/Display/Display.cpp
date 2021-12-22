@@ -61,7 +61,11 @@ void Display::commit(){
 	}
 #ifdef CIRCUITOS_LOVYANGFX
 	tft.startWrite();
-	baseSprite->pushRotateZoom(161, 121, 0, 2, 2);
+#ifdef CIRCUITOS_LOVYANGFX_ZOOM
+	baseSprite->pushRotateZoom(width + 1, height + 1, 0, CIRCUITOS_LOVYANGFX_ZOOM, CIRCUITOS_LOVYANGFX_ZOOM);
+#else
+	baseSprite->push();
+#endif
 	tft.endWrite();
 #else
 	baseSprite->push();
