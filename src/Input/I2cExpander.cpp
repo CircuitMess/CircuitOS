@@ -14,13 +14,21 @@ I2cExpander::I2cExpander()
 I2cExpander::~I2cExpander()
 {
 }
-void I2cExpander::begin(uint8_t _address, uint8_t _sda, uint8_t _scl)
+bool I2cExpander::begin(uint8_t _address, uint8_t _sda, uint8_t _scl)
 {
 	address = _address;
 	Wire.begin(_sda, _scl);
+
+	Wire.beginTransmission(address);
+	if(Wire.endTransmission() != 0){
+		return false;
+	}
+
 	portWrite(0xFFFF);
 	_write(0x0000, INVERT_REG);
 	portConfig(0xFFFF);
+
+	return true;
 }
 void I2cExpander::_write(uint16_t _portData, uint8_t reg)
 {
