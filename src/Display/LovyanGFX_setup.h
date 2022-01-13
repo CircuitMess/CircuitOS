@@ -9,7 +9,7 @@
 namespace lgfx {
 class LGFX : public lgfx::LGFX_Device {
 
-	lgfx::Panel_ILI9341 _panel_instance;
+	lgfx::LOVYAN_PANEL _panel_instance;
 	lgfx::Bus_SPI _bus_instance;
 
 public:
@@ -21,8 +21,8 @@ public:
 
 			cfg.spi_host = VSPI_HOST;
 			cfg.spi_mode = 0;
-			cfg.freq_write = 60000000;
-			cfg.freq_read = 60000000;
+			cfg.freq_write = LOVYAN_FREQ;
+			cfg.freq_read = LOVYAN_FREQ;
 			cfg.spi_3wire = false;
 			cfg.use_lock = true;
 			cfg.dma_channel = 1;
