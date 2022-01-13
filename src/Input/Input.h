@@ -82,6 +82,8 @@ public:
 
 	void removeListener(InputListener* listener);
 
+	bool getButtonState(uint8_t pin);
+
 protected:
 	uint8_t pinNumber = 0;
 
