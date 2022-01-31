@@ -81,16 +81,12 @@ void RamFile::flush(){
 }
 
 bool RamFile::seek(uint32_t pos, fs::SeekMode mode){
-	switch(mode){
-		case fs::SeekSet:
-			cursor = pos;
-			break;
-		case fs::SeekEnd:
-			cursor = dataSize - pos - 1;
-			break;
-		case fs::SeekCur:
-			cursor += pos;
-			break;
+	if(mode == fs::SeekSet){
+		cursor = pos;
+	}else if(mode == fs::SeekEnd){
+		cursor = dataSize - pos;
+	}else if(mode == fs::SeekCur){
+		cursor += pos;
 	}
 }
 
