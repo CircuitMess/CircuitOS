@@ -16,11 +16,11 @@ public:
 	void rewindDirectory() ;
 	operator bool() ;
 #endif
-	RamFile(uint8_t* data, size_t size);
+	RamFile(uint8_t* data, size_t size, bool readonly = true);
 	virtual ~RamFile();
 
-	static fs::File open(uint8_t* data, size_t size);
-	static fs::File open(fs::File file);
+	static fs::File open(uint8_t* data, size_t size, bool readonly = true);
+	static fs::File open(fs::File& file, bool readonly = true);
 
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
@@ -51,6 +51,7 @@ private:
 	uint8_t* data = nullptr;
 	size_t dataSize;
 	size_t cursor = 0;
+	bool readonly;
 	const char* filename = nullptr;
 
 };

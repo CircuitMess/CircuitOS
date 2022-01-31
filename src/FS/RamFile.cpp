@@ -1,6 +1,6 @@
 #include "RamFile.h"
 
-RamFile::RamFile(uint8_t* data, size_t size) : data(data), dataSize(size){
+RamFile::RamFile(uint8_t* data, size_t size, bool readonly) : data(data), dataSize(size), readonly(readonly){
 
 }
 
@@ -8,11 +8,11 @@ RamFile::~RamFile(){
 	RamFile::close();
 }
 
-fs::File RamFile::open(uint8_t* data, size_t size){
-	return File(std::make_shared<RamFile>(data, size));
+fs::File RamFile::open(uint8_t* data, size_t size, bool readonly){
+	return File(std::make_shared<RamFile>(data, size, readonly));
 }
 
-fs::File RamFile::open(fs::File file){
+fs::File RamFile::open(fs::File& file, bool readonly){
 	uint8_t* data;
 #ifdef CONFIG_SPIRAM_SUPPORT
 	data = static_cast<uint8_t*>(ps_malloc(file.size()));
@@ -23,7 +23,7 @@ fs::File RamFile::open(fs::File file){
 	file.seek(0);
 	file.readBytes(reinterpret_cast<char*>(data), file.size());
 
-	auto f = std::make_shared<RamFile>(data, file.size());
+	auto f = std::make_shared<RamFile>(data, file.size(), readonly);
 
 	String name = file.name();
 	char* fstr = static_cast<char*>(malloc(name.length() + 1));
@@ -35,17 +35,37 @@ fs::File RamFile::open(fs::File file){
 }
 
 size_t RamFile::write(uint8_t data){
+	if(readonly) return 0;
+
+	if(cursor == dataSize){
+		dataSize++;
+	}
+
 	this->data[cursor++] = data;
 	return 1;
 }
 
 size_t RamFile::write(const uint8_t* buf, size_t size){
+	if(readonly) return 0;
+	if(size == 0) return 0;
+
+	if(cursor + size > dataSize){
+		dataSize = size + cursor;
+#ifdef CONFIG_SPIRAM_SUPPORT
+		data = static_cast<uint8_t*>(ps_realloc(data, dataSize));
+#else
+		data = static_cast<uint8_t*>(realloc(data, dataSize));
+#endif
+	}
+
 	memcpy(data + cursor, buf, size);
 	cursor += size;
+
+	return size;
 }
 
 int RamFile::available(){
-	return cursor < dataSize;
+	return dataSize - cursor;
 }
 
 int RamFile::read(){
