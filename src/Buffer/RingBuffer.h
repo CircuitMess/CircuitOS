@@ -14,6 +14,15 @@ public:
 	size_t read(uint8_t* destination, size_t n);
 	size_t write(uint8_t* source, size_t n);
 
+	template<typename T>
+	const T* peek(size_t offset = 0){
+		if(offset + sizeof(T) > readAvailable()) return nullptr;
+		offset = (beginning + offset) % size;
+		return (T*) (buffer + offset);
+	}
+
+	size_t skip(size_t n);
+
 	void clear();
 
 private:

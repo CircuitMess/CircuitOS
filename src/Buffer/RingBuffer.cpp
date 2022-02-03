@@ -58,6 +58,13 @@ size_t RingBuffer::write(uint8_t* source, size_t n){
 	return n;
 }
 
+size_t RingBuffer::skip(size_t n){
+	n = min(n, readAvailable());
+	if(n == 0) return 0;
+	beginning = (beginning + n) % size;
+	return n;
+}
+
 void RingBuffer::clear(){
 	beginning = end = 0;
 }
