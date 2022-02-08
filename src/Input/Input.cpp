@@ -64,6 +64,8 @@ void Input::btnPress(uint i){
 			}
 
 			for(auto listener : listeners){
+				if(mask.find(listener) != mask.end()) continue;
+
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonPressed(buttons[i]);
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
@@ -139,6 +141,8 @@ void Input::loop(uint _time){
 			}
 
 			for(auto listener : listeners){
+				if(mask.find(listener) != mask.end()) continue;
+
 				auto search = listener->holdTimes.find(buttons[i]);
 				if(search != listener->holdTimes.end() && holdTime >= search->second.time && !search->second.holdingOver){
 					listener->buttonHeld(buttons[i]);
@@ -215,6 +219,7 @@ void Input::addListener(InputListener* listener){
 void Input::removeListener(InputListener* listener){
 	if(listeners.indexOf(listener) == -1 || removedListeners.find(listener) != removedListeners.end()) return;
 	removedListeners.insert(listener);
+	mask.erase(listener);
 }
 
 void Input::clearListeners(){
@@ -225,4 +230,23 @@ void Input::clearListeners(){
 	}
 
 	removedListeners.clear();
+	mask.clear();
+}
+
+void Input::maskAll(){
+	for(auto listener : listeners){
+		mask.insert(listener);
+	}
+}
+
+void Input::unmaskAll(){
+	mask.clear();
+}
+
+void Input::addMask(InputListener* listener){
+	mask.insert(listener);
+}
+
+void Input::removeMask(InputListener* listener){
+	mask.erase(listener);
 }
