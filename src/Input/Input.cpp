@@ -104,6 +104,8 @@ void Input::btnRelease(uint i){
 			btnHoldRepeatCounter[buttons[i]] = 0;
 
 			for(auto listener : listeners){
+				if(mask.find(listener) != mask.end()) continue;
+
 				if(removedListeners.find(listener) != removedListeners.end()) continue;
 				listener->buttonReleased(buttons[i]);
 				if(listener->holdTimes.find(buttons[i]) != listener->holdTimes.end()){
@@ -230,7 +232,6 @@ void Input::clearListeners(){
 	}
 
 	removedListeners.clear();
-	mask.clear();
 }
 
 void Input::maskAll(){
