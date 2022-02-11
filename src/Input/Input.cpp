@@ -216,6 +216,14 @@ void Input::addListener(InputListener* listener){
 	if(l != removedListeners.end()){
 		removedListeners.erase(l);
 	}
+
+	for(auto pair : listener->holdTimes){
+		pair.second.holdingOver = false;
+	}
+
+	for(auto pair : listener->holdAndRepeatTimes){
+		pair.second.repeatCounter = 0;
+	}
 }
 
 void Input::removeListener(InputListener* listener){
