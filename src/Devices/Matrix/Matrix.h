@@ -6,9 +6,9 @@
 #include <Loop/LoopListener.h>
 #include "MatrixOutput.h"
 
-class LEDmatrixImpl : public LoopListener {
+class Matrix : public LoopListener {
 public:
-	LEDmatrixImpl(MatrixOutput &output, uint8_t width = 16, uint8_t height = 9);
+	Matrix(MatrixOutput &output, uint8_t width = 16, uint8_t height = 9);
 	void setOutput(MatrixOutput &output);
 	void begin();
 	void drawPixel(int16_t x, int16_t y, uint16_t color);

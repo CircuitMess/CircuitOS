@@ -18,7 +18,7 @@
 */
 /**************************************************************************/
 
-LEDmatrixImpl::LEDmatrixImpl(MatrixOutput &output, uint8_t _width, uint8_t _height) : output(output){
+Matrix::Matrix(MatrixOutput &output, uint8_t _width, uint8_t _height) : output(output){
 	width = _width;
 	height = _height;
 	matrixBuffer = (uint8_t*)calloc(width * height, sizeof(uint8_t));
@@ -30,15 +30,15 @@ LEDmatrixImpl::LEDmatrixImpl(MatrixOutput &output, uint8_t _width, uint8_t _heig
 	@brief Initialize hardware and clear display.
 */
 /**************************************************************************/
-void LEDmatrixImpl::begin(){
+void Matrix::begin(){
 	output.init();
 	clear(); // set each led to 0 PWM
 	push();
 	clear();
 }
 
-void LEDmatrixImpl::setOutput(MatrixOutput &output){
-	LEDmatrixImpl::output = output;
+void Matrix::setOutput(MatrixOutput &output){
+	Matrix::output = output;
 }
 
 /**************************************************************************/
@@ -46,7 +46,7 @@ void LEDmatrixImpl::setOutput(MatrixOutput &output){
 	@brief Sets all LEDs on & 0 PWM for current frame.
 */
 /**************************************************************************/
-void LEDmatrixImpl::clear(){
+void Matrix::clear(){
 	memset(matrixBuffer, 0, width * height);
 }
 
@@ -59,7 +59,7 @@ void LEDmatrixImpl::clear(){
 	@param color Despite being a 16-bit value, takes 0 (off) to 255 (max on)
 */
 /**************************************************************************/
-void LEDmatrixImpl::drawPixel(int16_t x, int16_t y, uint16_t color){
+void Matrix::drawPixel(int16_t x, int16_t y, uint16_t color){
 	switch(getRotation()){
 		case 1:_swap_int16_t(x, y);
 			x = width - x - 1;
@@ -92,7 +92,7 @@ void LEDmatrixImpl::drawPixel(int16_t x, int16_t y, uint16_t color){
 	@param   bigFont Flag to use bigger 5x7 or the smaller 3x5 font: true - big font, false - small font.
 */
 /**************************************************************************/
-void LEDmatrixImpl::drawChar(int32_t x, int32_t y, unsigned char c, uint8_t _brightness, bool bigFont){
+void Matrix::drawChar(int32_t x, int32_t y, unsigned char c, uint8_t _brightness, bool bigFont){
 	if(bigFont){
 		uint8_t column[6];
 		uint8_t mask = 0x1;
@@ -152,7 +152,7 @@ void LEDmatrixImpl::drawChar(int32_t x, int32_t y, unsigned char c, uint8_t _bri
 	@param   bigFont Flag to use bigger 5x7 or the smaller 3x5 font: true - big font, false - small font.
 */
 /**************************************************************************/
-void LEDmatrixImpl::drawString(int32_t x, int32_t y, const char* c, uint8_t _brightness, bool bigFont){
+void Matrix::drawString(int32_t x, int32_t y, const char* c, uint8_t _brightness, bool bigFont){
 	size_t length = strlen(c);
 	for(size_t i = 0; i < length; i++){
 		drawChar(x, y, c[i], _brightness, bigFont);
@@ -160,7 +160,7 @@ void LEDmatrixImpl::drawString(int32_t x, int32_t y, const char* c, uint8_t _bri
 	}
 }
 
-void LEDmatrixImpl::drawString(int32_t x, int32_t y, const String &s, uint8_t _brightness, bool bigFont){
+void Matrix::drawString(int32_t x, int32_t y, const String &s, uint8_t _brightness, bool bigFont){
 	drawString(x, y, s.c_str(), _brightness, bigFont);
 }
 
@@ -170,7 +170,7 @@ void LEDmatrixImpl::drawString(int32_t x, int32_t y, const String &s, uint8_t _b
 	@param   _brightness Global brightness for the matrix. Ranges from 0 to 255.
 */
 /**************************************************************************/
-void LEDmatrixImpl::setBrightness(uint8_t _brightness){
+void Matrix::setBrightness(uint8_t _brightness){
 	output.setBrightness(_brightness);
 }
 
@@ -180,7 +180,7 @@ void LEDmatrixImpl::setBrightness(uint8_t _brightness){
 	@return   Global brightness of the matrix.
 */
 /**************************************************************************/
-uint8_t LEDmatrixImpl::getBrightness() const{
+uint8_t Matrix::getBrightness() const{
 	return output.getBrightness();
 }
 
@@ -190,7 +190,7 @@ uint8_t LEDmatrixImpl::getBrightness() const{
 	@param   rot Desired rotation in clockwise direction (0-3).
 */
 /**************************************************************************/
-void LEDmatrixImpl::setRotation(uint8_t rot){
+void Matrix::setRotation(uint8_t rot){
 	if(rot > 3) return;
 	rotation = rot;
 }
@@ -201,7 +201,7 @@ void LEDmatrixImpl::setRotation(uint8_t rot){
 	@return   Matrix rotation (0-3).
 */
 /**************************************************************************/
-uint8_t LEDmatrixImpl::getRotation() const{
+uint8_t Matrix::getRotation() const{
 	return rotation;
 }
 
@@ -210,7 +210,7 @@ uint8_t LEDmatrixImpl::getRotation() const{
 	@brief  Push the matrix buffer onto the matrix.
 */
 /**************************************************************************/
-void LEDmatrixImpl::push(){
+void Matrix::push(){
 	output.push(matrixBuffer);
 }
 
@@ -221,7 +221,7 @@ void LEDmatrixImpl::push(){
 	@param  loop Sets animation loop. True - loop until stopAnimation() or another startAnimation(), False - no looping.
 */
 /**************************************************************************/
-void LEDmatrixImpl::startAnimation(Animation* _animation, bool loop){
+void Matrix::startAnimation(Animation* _animation, bool loop){
 	stopAnimation();
 
 	animation = _animation;
@@ -238,7 +238,7 @@ void LEDmatrixImpl::startAnimation(Animation* _animation, bool loop){
 	@brief  Stops running animation.
 */
 /**************************************************************************/
-void LEDmatrixImpl::stopAnimation(){
+void Matrix::stopAnimation(){
 	delete animation;
 	animation = nullptr;
 	animationFrame = nullptr;
@@ -251,7 +251,7 @@ void LEDmatrixImpl::stopAnimation(){
 	@param  _time Current millis() time, used for frame duration calculation.
 */
 /**************************************************************************/
-void LEDmatrixImpl::loop(uint _time){
+void Matrix::loop(uint _time){
 	if(animationFrame != nullptr && animation != nullptr){
 		currentFrameTime += _time;
 		if(currentFrameTime >= animationFrame->duration * 1000){
@@ -299,7 +299,7 @@ void LEDmatrixImpl::loop(uint _time){
 	@param   data Pointer to the bitmap.
 */
 /**************************************************************************/
-void LEDmatrixImpl::drawBitmap(int x, int y, uint width, uint height, uint8_t* data){
+void Matrix::drawBitmap(int x, int y, uint width, uint height, uint8_t* data){
 	for(int i = 0; i < height; i++){
 		for(int j = 0; j < width; j++){
 			drawPixel(x + j, y + i, data[i * width + j]);
@@ -317,7 +317,7 @@ void LEDmatrixImpl::drawBitmap(int x, int y, uint width, uint height, uint8_t* d
 	@param   data Pointer to the bitmap.
 */
 /**************************************************************************/
-void LEDmatrixImpl::drawBitmap(int x, int y, uint width, uint height, RGBpixel* data){
+void Matrix::drawBitmap(int x, int y, uint width, uint height, RGBpixel* data){
 	for(int i = 0; i < height; i++){
 		for(int j = 0; j < width; j++){
 			drawPixel(x + j, y + i, data[i * width + j].r);
@@ -331,11 +331,11 @@ void LEDmatrixImpl::drawBitmap(int x, int y, uint width, uint height, RGBpixel* 
 	@return  Completion rate (in percentage 0-100) for the current animation. If none are played, then defaults to zero.
 */
 /**************************************************************************/
-float LEDmatrixImpl::getAnimationCompletionRate(){
+float Matrix::getAnimationCompletionRate(){
 	if(animationFrame == nullptr || animation == nullptr) return 0.0;
 	return ((float)(micros() - animationStartMicros)) / ((float)(animation->getLoopDuration() * 1000)) * 100;
 }
 
-void LEDmatrixImpl::drawPixel(uint8_t i, uint8_t brightness){
+void Matrix::drawPixel(uint8_t i, uint8_t brightness){
 	matrixBuffer[i] = brightness;
 }
