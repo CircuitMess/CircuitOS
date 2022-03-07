@@ -69,11 +69,11 @@ int RamFile::available(){
 }
 
 int RamFile::read(){
-	return pgm_read_byte(data + cursor++);
+	return *(data + cursor++);
 }
 
 int RamFile::peek(){
-	return pgm_read_byte(data + cursor);
+	return *(data + cursor);
 }
 
 void RamFile::flush(){
