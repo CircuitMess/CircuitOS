@@ -1,6 +1,6 @@
 #include "CompressedFile.h"
 
-CompressedFile::CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize) : f(f), fileBuffer(f, readBufferSize){
+CompressedFile::CompressedFile(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize) : f(f), fileBuffer(f, readBufferSize){
 	decoder = heatshrink_decoder_alloc(readBufferSize, expansionBits, lookaheadBits);
 }
 

@@ -12,7 +12,7 @@ fs::File RamFile::open(uint8_t* data, size_t size, bool readonly){
 	return File(std::make_shared<RamFile>(data, size, readonly));
 }
 
-fs::File RamFile::open(fs::File& file, bool readonly){
+fs::File RamFile::open(fs::File file, bool readonly){
 	uint8_t* data;
 #ifdef CONFIG_SPIRAM_SUPPORT
 	data = static_cast<uint8_t*>(ps_malloc(file.size()));

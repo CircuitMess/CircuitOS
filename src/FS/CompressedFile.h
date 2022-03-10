@@ -23,7 +23,7 @@ public:
 	void rewindDirectory(void) ;
 	operator bool() ;
 #endif
-	CompressedFile(fs::File& f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
+	CompressedFile(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 	~CompressedFile();
 	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 
