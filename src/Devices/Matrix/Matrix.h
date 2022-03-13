@@ -40,8 +40,8 @@ public:
 	void drawBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t* data, const MatrixPixel& color = { 255, 255, 255, 255 });
 	void drawBitmap(uint16_t x, uint16_t y, const MatrixPixelData& data);
 
-	MatrixAnimation& startAnimation(fs::File file);
-	MatrixAnimation& getAnimation();
+	MatrixAnimation* startAnimation(fs::File file);
+	MatrixAnimation* getAnimation();
 	void stopAnimation();
 
 private:
@@ -51,7 +51,7 @@ private:
 	uint8_t width, height, rotation = 0;
 	Font font = BIG;
 
-	MatrixAnimation animation;
+	MatrixAnimation* animation = nullptr;
 
 };
 

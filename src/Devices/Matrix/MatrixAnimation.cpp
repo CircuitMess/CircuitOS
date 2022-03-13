@@ -1,10 +1,11 @@
 #include "MatrixAnimation.h"
+#include <utility>
 #include "Matrix.h"
 #include "../../Loop/LoopManager.h"
 
 MatrixAnimation::MatrixAnimation(){ }
 
-MatrixAnimation::MatrixAnimation(Matrix* matrix, fs::File file) : matrix(matrix), gif(file){
+MatrixAnimation::MatrixAnimation(Matrix* matrix, fs::File file) : matrix(matrix), gif(std::move(file)){
 	if(!gif) return;
 	gif.nextFrame();
 }
@@ -83,9 +84,5 @@ void MatrixAnimation::pushFrame(){
 }
 
 GIF& MatrixAnimation::getGIF(){
-	return gif;
-}
-
-MatrixAnimation::operator bool(){
 	return gif;
 }

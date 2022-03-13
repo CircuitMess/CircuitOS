@@ -12,10 +12,9 @@ class MatrixAnimation : public LoopListener {
 public:
 	MatrixAnimation();
 	MatrixAnimation(Matrix* matrix, fs::File file);
-	~MatrixAnimation();
+	~MatrixAnimation() override;
 
 	GIF& getGIF();
-	operator bool();
 
 	void start();
 	void stop();
