@@ -2,23 +2,25 @@
 #define CIRCUITOS_MATRIXOUTPUT_H
 
 #include <Arduino.h>
+#include "MatrixPixel.h"
 
 class MatrixOutput {
 public:
-	MatrixOutput(uint width, uint height) : width(width), height(height){};
+
+	MatrixOutput(uint16_t width, uint16_t height);
+
 	virtual void init() = 0;
-	virtual void push(void* data) = 0;
+	virtual void push(const MatrixPixelData& data) = 0;
 
-	void setBrightness(uint8_t brightness){
-		MatrixOutput::brightness = brightness;
-	}
-	uint8_t getBrightness() const{
-		return brightness;
-	}
+	uint16_t getWidth() const;
+	uint16_t getHeight() const;
+	virtual uint8_t getBrightness() const;
+	virtual void setBrightness(uint8_t brightness);
 
-protected:
-	uint width, height;
+private:
+	uint16_t width, height;
 	uint8_t brightness = 255;
+
 };
 
 
