@@ -7,31 +7,43 @@ Modified version of Adafruits IS31FL3731 library (https://github.com/adafruit/Ad
 This is a stripped-down version with no Adafruit-GFX library inheritance.
 */
 
+#include <Wire.h>
 #include "MatrixOutput.h"
-
-#define ISSI_ADDR_DEFAULT 0x74
 
 class IS31FL3731 : public MatrixOutput {
 public:
-	IS31FL3731(uint width, uint height);
+	IS31FL3731(TwoWire& Wire = ::Wire, uint8_t addr = 0x74);
 	void init() override;
-	void push(void* data) override;
-
-	void setI2C(uint8_t sda = 22, uint8_t scl = 21, uint8_t addr = ISSI_ADDR_DEFAULT);
+	void push(const MatrixPixelData& data) override;
 
 private:
-	uint8_t sda, scl,
-			_i2caddr, ///< The I2C address we expect to find the chip
-	_frame;       ///< The frame (of 8) we are currently addressing
+	TwoWire& Wire;
+	uint8_t addr;
 
-	void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
 	void audioSync(bool sync);
-	void setFrame(uint8_t b);
-	void displayFrame(uint8_t frame);
 
-	void selectBank(uint8_t bank);
+	/**
+	 * Write one byte to a register located in a given bank.
+	 * @param bank IS31 bank to write the register location
+	 * @param reg Offset into the bank to write
+	 * @param data Byte value
+	 */
 	void writeRegister8(uint8_t bank, uint8_t reg, uint8_t data);
+
+	/**
+	 * Read one byte from a register located in a given bank.
+	 * @param bank IS31 bank to read the register location
+	 * @param reg Offset into the bank to read
+	 * @return 1 byte value
+	 */
 	uint8_t readRegister8(uint8_t bank, uint8_t reg);
+
+	/**
+	 * Select bank for future reads and writes.
+	 * @param bank IS31 bank index
+	 */
+	void selectBank(uint8_t bank);
+
 };
 
 
