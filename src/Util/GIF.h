@@ -8,7 +8,7 @@
 class GIF {
 public:
 	GIF();
-	GIF(fs::File& file);
+	GIF(fs::File file);
 	virtual ~GIF();
 
 	operator bool() const;

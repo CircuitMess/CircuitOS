@@ -2,7 +2,7 @@
 
 GIF::GIF(){ }
 
-GIF::GIF(fs::File& file){
+GIF::GIF(fs::File file){
 	gif = gd_open_gif(file);
 }
 
