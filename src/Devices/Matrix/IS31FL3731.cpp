@@ -65,7 +65,7 @@ void IS31FL3731::push(const MatrixPixelData& data){
 		Wire.beginTransmission(addr);
 		Wire.write((byte) 0x24 + i * 77);
 
-		for(int j = 0; j < 144; j++){
+		for(int j = 0; j < 77; j++){
 			int index = i * 77 + j;
 			int y = index / 16;
 			int x = index - y * 16;
