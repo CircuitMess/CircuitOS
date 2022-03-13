@@ -1,5 +1,4 @@
 #include "AnimatedSprite.h"
-#include "gifdec.h"
 
 AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool compressed) : canvas(canvas), file(file), compressed(compressed){
 	if(!file){
