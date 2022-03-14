@@ -1,8 +1,8 @@
 #include "GIFAnimatedSprite.h"
-#include "gifdec.h"
+#include "../Util/gifdec.h"
 
 GIFAnimatedSprite::GIFAnimatedSprite(Sprite* parentSprite, fs::File _gifFile) : parentSprite(parentSprite), gifFile(_gifFile){
-	gif = gd_open_gif(&gifFile);
+	gif = gd_open_gif(gifFile);
 	if(gif == nullptr){
 		Serial.println("Failed opening gif");
 		return;
