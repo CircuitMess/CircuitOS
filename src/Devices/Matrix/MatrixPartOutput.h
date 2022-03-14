@@ -11,8 +11,6 @@ public:
 	void init() override;
 	void push(const MatrixPixelData& data) override;
 
-	void setBrightness(uint8_t brightness) override;
-
 protected:
 	virtual std::pair<uint16_t, uint16_t> map(uint16_t x, uint16_t y) = 0;
 

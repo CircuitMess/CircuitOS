@@ -15,14 +15,10 @@ void IRAM_ATTR MatrixPartOutput::push(const MatrixPixelData& data){
 		for(int y = 0; y < getHeight(); y++){
 			auto pixel = data.get(x, y);
 			auto target = map(x, y);
+			pixel.i = pixel.i * getBrightness() / 255;
 			whole.set(target.first, target.second, pixel);
 		}
 	}
 
 	output->push(whole);
-}
-
-void MatrixPartOutput::setBrightness(uint8_t brightness){
-	MatrixOutput::setBrightness(brightness);
-	output->setBrightness(brightness);
 }
