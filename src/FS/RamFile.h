@@ -21,6 +21,7 @@ public:
 
 	static fs::File open(uint8_t* data, size_t size, bool readonly = true);
 	static fs::File open(fs::File file, bool readonly = true);
+	static fs::File create(const String& filename = "");
 
 	size_t write(const uint8_t* buf, size_t size) override;
 	size_t read(uint8_t* buf, size_t size) override;
@@ -52,7 +53,7 @@ private:
 	size_t dataSize;
 	size_t cursor = 0;
 	bool readonly;
-	const char* filename = nullptr;
+	String filename;
 
 };
 
