@@ -1,21 +1,14 @@
-#include "MatrixAnimation.h"
-#include <utility>
+#include <Loop/LoopManager.h>
+#include "MatrixAnimGIF.h"
 #include "Matrix.h"
-#include "../../Loop/LoopManager.h"
 
-MatrixAnimation::MatrixAnimation(){ }
-
-MatrixAnimation::MatrixAnimation(Matrix* matrix, fs::File file) : matrix(matrix), gif(std::move(file)){
+MatrixAnimGIF::MatrixAnimGIF(Matrix* matrix, fs::File file) : MatrixAnim(matrix), gif(std::move(file)){
 	if(!gif) return;
 	gif.nextFrame();
 }
 
-MatrixAnimation::~MatrixAnimation(){
-	stop();
-}
-
-void MatrixAnimation::loop(uint time){
-	if(!started){
+void MatrixAnimGIF::loop(uint time){
+	if(!isStarted()){
 		LoopManager::removeListener(this);
 		return;
 	}
@@ -37,11 +30,20 @@ void MatrixAnimation::loop(uint time){
 	}
 }
 
-void MatrixAnimation::start(){
+void MatrixAnimGIF::pushFrame(){
 	if(!gif) return;
 
-	if(started) return;
-	started = true;
+	Matrix* matrix = getMatrix();
+
+	matrix->drawBitmap(0, 0, gif.getFrame());
+	matrix->push();
+}
+
+void MatrixAnimGIF::onStart(){
+	if(!gif){
+		stop();
+		return;
+	}
 
 	frameTime = millis() - frameRemaining;
 
@@ -50,10 +52,7 @@ void MatrixAnimation::start(){
 	LoopManager::addListener(this);
 }
 
-void MatrixAnimation::stop(){
-	if(!started) return;
-	started = false;
-
+void MatrixAnimGIF::onStop(){
 	LoopManager::removeListener(this);
 
 	if(!gif) return;
@@ -68,7 +67,7 @@ void MatrixAnimation::stop(){
 	frameTime = 0;
 }
 
-void MatrixAnimation::reset(){
+void MatrixAnimGIF::reset(){
 	if(!gif) return;
 
 	frameTime = frameRemaining = 0;
@@ -76,13 +75,6 @@ void MatrixAnimation::reset(){
 	gif.nextFrame();
 }
 
-void MatrixAnimation::pushFrame(){
-	if(!gif) return;
-
-	matrix->drawBitmap(0, 0, gif.getFrame());
-	matrix->push();
-}
-
-GIF& MatrixAnimation::getGIF(){
+GIF& MatrixAnimGIF::getGIF(){
 	return gif;
 }

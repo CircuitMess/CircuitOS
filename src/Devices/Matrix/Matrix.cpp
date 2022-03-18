@@ -1,6 +1,5 @@
 #include "Matrix.h"
 #include "Font.hpp"
-#include <utility>
 
 Matrix::Matrix(MatrixOutput& output) : output(output), width(output.getWidth()), height(output.getHeight()), data(output.getWidth(), output.getHeight()){
 
@@ -124,14 +123,13 @@ void Matrix::drawBitmap(uint16_t xPos, uint16_t yPos, const MatrixPixelData& dat
 	}
 }
 
-MatrixAnimation* Matrix::startAnimation(fs::File file){
+void Matrix::startAnimation(MatrixAnim* animation){
 	stopAnimation();
-	animation = new MatrixAnimation(this, std::move(file));
+	this->animation = animation;
 	animation->start();
-	return animation;
 }
 
-MatrixAnimation* Matrix::getAnimation(){
+MatrixAnim* Matrix::getAnimation(){
 	return animation;
 }
 
