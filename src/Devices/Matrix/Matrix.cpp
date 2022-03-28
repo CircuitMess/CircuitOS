@@ -162,3 +162,11 @@ Matrix::Font Matrix::getFont() const{
 void Matrix::setFont(Matrix::Font font){
 	Matrix::font = font;
 }
+
+const uint16_t Matrix::getWidth() const{
+	return width;
+}
+
+const uint16_t Matrix::getHeight() const{
+	return height;
+}

@@ -44,11 +44,16 @@ public:
 	MatrixAnim* getAnimation();
 	void stopAnimation();
 
+	const uint16_t getWidth() const;
+	const uint16_t getHeight() const;
+
 private:
 	MatrixOutput& output;
 	MatrixPixelData data;
 
-	uint8_t width, height, rotation = 0;
+	const uint16_t width, height;
+
+	uint8_t rotation = 0;
 	Font font = BIG;
 
 	MatrixAnim* animation = nullptr;
