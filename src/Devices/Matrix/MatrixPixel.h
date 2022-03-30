@@ -9,6 +9,9 @@ struct MatrixPixel {
 	uint8_t r, g, b, i;
 };
 
+bool operator==(const MatrixPixel& a, const MatrixPixel& b);
+bool operator!=(const MatrixPixel& a, const MatrixPixel& b);
+
 class MatrixPixelData {
 public:
 	MatrixPixelData(uint16_t width, uint16_t height);

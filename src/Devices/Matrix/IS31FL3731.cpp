@@ -20,7 +20,7 @@
 
 static const char* TAG = "IS31FL3731";
 
-IS31FL3731::IS31FL3731(TwoWire& Wire, uint8_t addr) : MatrixOutput(16, 9), Wire(::Wire), addr(addr){
+IS31FL3731::IS31FL3731(TwoWire& Wire, uint8_t addr) : MatrixOutput(16, 9), Wire(::Wire), addr(addr), currentState(16, 9){
 
 }
 
@@ -45,7 +45,19 @@ void IS31FL3731::init(){
 	// set frame
 	writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTUREFRAME, 0);
 
-	push(MatrixPixelData(16, 9));
+	currentState = MatrixPixelData(16, 9);
+
+	selectBank(0);
+	for(int i = 0; i < 2; i++){
+		Wire.beginTransmission(addr);
+		Wire.write((byte) 0x24 + i * 77);
+
+		for(int j = 0; j < 77; j++){
+			Wire.write((uint8_t) 0);
+		}
+
+		Wire.endTransmission();
+	}
 
 	// all LEDs ON
 	for(int i = 0; i < 8; i++){
@@ -58,26 +70,70 @@ void IS31FL3731::init(){
 }
 
 void IS31FL3731::push(const MatrixPixelData& data){
+	struct ChangedPart {
+		int offset = -1;
+		int size = 0;
+
+		ChangedPart(){}
+		ChangedPart(int offset, int size) : offset(offset), size(size){}
+
+		operator bool() const{
+			return offset != -1;
+		}
+	};
+	std::vector<ChangedPart> parts;
+
+	// determine changed parts
+	ChangedPart current;
+	for(int i = 0; i < 144; i++){
+		int y = i / 16;
+		int x = i - y * 16;
+
+
+		if(data.get(x, y) != currentState.get(x, y)){
+			if(!current){
+				current.offset = i;
+			}
+			current.size++;
+		}else if(current){
+			parts.push_back(current);
+			current = ChangedPart();
+		}
+	}
+
+	if(current){
+		parts.push_back(current);
+	}
+
+	// split big parts into smaller
+	std::vector<ChangedPart> more;
+	for(auto& part : parts){
+		size_t size = part.size;
+		if(size < 70) continue;
+
+		part.size /= 2;
+		more.emplace_back(part.offset + part.size, size - part.size);
+	}
+	parts.insert(parts.end(), more.cbegin(), more.cend());
+
+	// push all parts
 	selectBank(0);
-
-	// send in two parts
-	for(int i = 0; i < 2; i++){
+	for(const auto& part : parts){
 		Wire.beginTransmission(addr);
-		Wire.write((byte) 0x24 + i * 77);
-
-		for(int j = 0; j < 77; j++){
-			int index = i * 77 + j;
-			int y = index / 16;
-			int x = index - y * 16;
+		Wire.write((byte) 0x24 + part.offset);
+		for(int i = part.offset; i - part.offset < part.size; i++){
+			int y = i / 16;
+			int x = i - y * 16;
 
 			auto pix = data.get(x, y);
 			uint8_t val = ((pix.r + pix.g + pix.b) / 3) * pix.i / 255;
 
 			Wire.write((uint8_t) (val * getBrightness() / 255));
 		}
-
 		Wire.endTransmission();
 	}
+
+	currentState = data;
 }
 
 void IS31FL3731::audioSync(bool sync){

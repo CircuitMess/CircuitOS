@@ -1,5 +1,19 @@
 #include "MatrixPixel.h"
 
+bool operator==(const MatrixPixel& a, const MatrixPixel& b){
+	return a.r == b.r
+		   && a.g == b.g
+		   && a.b == b.b
+		   && a.i == b.i;
+}
+
+bool operator!=(const MatrixPixel& a, const MatrixPixel& b){
+	return a.r != b.r
+		   || a.g != b.g
+		   || a.b != b.b
+		   || a.i != b.i;
+}
+
 MatrixPixelData::MatrixPixelData(uint16_t width, uint16_t height) : width(width), height(height){
 	data.resize(width);
 	for(int x = 0; x < width; x++){

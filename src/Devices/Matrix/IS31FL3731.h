@@ -44,6 +44,8 @@ private:
 	 */
 	void selectBank(uint8_t bank);
 
+	MatrixPixelData currentState;
+
 };
 
 
