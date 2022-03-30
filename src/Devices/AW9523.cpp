@@ -20,6 +20,8 @@
 #define BIT(pin) ((pin) <= 7 ? (pin) : (pin) - 8)
 #define MASK(pin) (1 << BIT(pin))
 
+static const char* TAG = "AW9523";
+
 const uint8_t AW9523::dimmap[16] = { 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 12, 13, 14, 15 };
 
 AW9523::AW9523(TwoWire& Wire, uint8_t addr) : Wire(Wire), addr(addr){
@@ -27,8 +29,21 @@ AW9523::AW9523(TwoWire& Wire, uint8_t addr) : Wire(Wire), addr(addr){
 }
 
 bool AW9523::begin(){
+	Wire.beginTransmission(addr);
+	if(Wire.endTransmission() != 0){
+		ESP_LOGE(TAG, "Transmission error");
+		return false;
+	}
+
 	reset();
-	return readReg(REG_ID) == VAL_ID;
+
+	uint8_t id = readReg(REG_ID);
+	if(id != VAL_ID){
+		ESP_LOGE(TAG, "ID missmatch: expected %d, got %d", VAL_ID, id);
+		return false;
+	}
+
+	return true;
 }
 
 void AW9523::reset(){
