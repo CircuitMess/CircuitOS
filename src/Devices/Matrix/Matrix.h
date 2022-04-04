@@ -1,5 +1,5 @@
-#ifndef SPENCER_LEDMATRIX_H
-#define SPENCER_LEDMATRIX_H
+#ifndef CIRCUITOS_MATRIX_H
+#define CIRCUITOS_MATRIX_H
 
 #include <Arduino.h>
 #include "MatrixOutput.h"

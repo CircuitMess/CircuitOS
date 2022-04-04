@@ -5,6 +5,9 @@
 MatrixAnimGIF::MatrixAnimGIF(Matrix* matrix, fs::File file) : MatrixAnim(matrix), gif(std::move(file)){
 	if(!gif) return;
 	gif.nextFrame();
+
+	setHeight(gif.getHeight());
+	setWidth(gif.getWidth());
 }
 
 void MatrixAnimGIF::loop(uint time){
@@ -33,10 +36,8 @@ void MatrixAnimGIF::loop(uint time){
 void MatrixAnimGIF::pushFrame(){
 	if(!gif) return;
 
-	Matrix* matrix = getMatrix();
-
-	matrix->drawBitmap(0, 0, gif.getFrame());
-	matrix->push();
+	drawBitmap(0, 0, gif.getFrame());
+	push();
 }
 
 void MatrixAnimGIF::onStart(){
