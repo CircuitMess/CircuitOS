@@ -21,6 +21,10 @@ public:
 	void setY(int32_t y);
 	void setWidth(uint32_t width);
 	void setHeight(uint32_t height);
+	int32_t getX() const;
+	int32_t getY() const;
+	uint32_t getWidth() const;
+	uint32_t getHeight() const;
 
 protected:
 	void drawPixel(uint16_t x, uint16_t y, const MatrixPixel& color);

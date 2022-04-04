@@ -78,3 +78,19 @@ void MatrixAnim::setWidth(uint32_t width){
 void MatrixAnim::setHeight(uint32_t height){
 	MatrixAnim::height = height;
 }
+
+int32_t MatrixAnim::getX() const{
+	return _x;
+}
+
+int32_t MatrixAnim::getY() const{
+	return _y;
+}
+
+uint32_t MatrixAnim::getWidth() const{
+	return width;
+}
+
+uint32_t MatrixAnim::getHeight() const{
+	return height;
+}
