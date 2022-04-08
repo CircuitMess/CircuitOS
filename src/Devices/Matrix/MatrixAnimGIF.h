@@ -9,7 +9,7 @@
 
 class MatrixAnimGIF : public MatrixAnim, public LoopListener {
 public:
-	MatrixAnimGIF(Matrix* matrix, fs::File file);
+	MatrixAnimGIF(fs::File file, Matrix* matrix = nullptr);
 
 	GIF& getGIF();
 

@@ -1,8 +1,11 @@
 #include "MatrixAnim.h"
 #include "Matrix.h"
 
-MatrixAnim::MatrixAnim(Matrix* matrix) : matrix(matrix), width(matrix->getWidth()), height(matrix->getHeight()){
-
+MatrixAnim::MatrixAnim(Matrix* matrix) : matrix(matrix){
+	if(matrix){
+		width = matrix->getWidth();
+		height = matrix->getHeight();
+	}
 }
 
 MatrixAnim::~MatrixAnim(){
@@ -10,6 +13,8 @@ MatrixAnim::~MatrixAnim(){
 }
 
 void MatrixAnim::start(){
+	if(matrix == nullptr) return;
+
 	if(started) return;
 	started = true;
 
@@ -93,4 +98,13 @@ uint32_t MatrixAnim::getWidth() const{
 
 uint32_t MatrixAnim::getHeight() const{
 	return height;
+}
+
+void MatrixAnim::setMatrix(Matrix* matrix){
+	if(this->matrix == nullptr && width == 0 && height == 0){
+		width = matrix->getWidth();
+		height = matrix->getHeight();
+	}
+
+	this->matrix = matrix;
 }

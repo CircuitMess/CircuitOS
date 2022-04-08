@@ -2,7 +2,7 @@
 #include "MatrixAnimGIF.h"
 #include "Matrix.h"
 
-MatrixAnimGIF::MatrixAnimGIF(Matrix* matrix, fs::File file) : MatrixAnim(matrix), gif(std::move(file)){
+MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix), gif(std::move(file)){
 	if(!gif) return;
 	gif.nextFrame();
 

@@ -8,7 +8,7 @@ class Matrix;
 
 class MatrixAnim {
 public:
-	MatrixAnim(Matrix* matrix);
+	MatrixAnim(Matrix* matrix = nullptr);
 	virtual ~MatrixAnim();
 
 	void start();
@@ -17,6 +17,7 @@ public:
 
 	bool isStarted();
 
+	void setMatrix(Matrix* matrix);
 	void setX(int32_t x);
 	void setY(int32_t y);
 	void setWidth(uint32_t width);
@@ -40,11 +41,11 @@ protected:
 	virtual void onStop() = 0;
 
 private:
-	Matrix* matrix;
+	Matrix* matrix = nullptr;
 	bool started = false;
 
 	int32_t posX = 0, posY = 0;
-	uint32_t width, height;
+	uint32_t width = 0, height = 0;
 };
 
 #endif
