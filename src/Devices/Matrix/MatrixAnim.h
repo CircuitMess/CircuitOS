@@ -43,7 +43,7 @@ private:
 	Matrix* matrix;
 	bool started = false;
 
-	int32_t _x = 0, _y = 0;
+	int32_t posX = 0, posY = 0;
 	uint32_t width, height;
 };
 
