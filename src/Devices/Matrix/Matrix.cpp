@@ -124,18 +124,28 @@ void Matrix::drawBitmap(uint16_t xPos, uint16_t yPos, const MatrixPixelData& dat
 }
 
 void Matrix::startAnimation(MatrixAnim* animation){
-	stopAnimation();
-	this->animation = animation;
+	animation->setMatrix(this);
 	animation->start();
 }
 
-MatrixAnim* Matrix::getAnimation(){
-	return animation;
+void Matrix::stopAnimations(){
+	for(auto anim : animations){
+		anim->stop();
+	}
 }
 
-void Matrix::stopAnimation(){
-	delete animation;
-	animation = nullptr;
+const std::unordered_set<MatrixAnim*>& Matrix::getAnimations(){
+	return animations;
+}
+
+void Matrix::addAnim(MatrixAnim* anim){
+	animations.insert(anim);
+}
+
+void Matrix::removeAnim(MatrixAnim* anim){
+	auto it = animations.find(anim);
+	if(it == animations.end()) return;
+	animations.erase(it);
 }
 
 void Matrix::setBrightness(uint8_t _brightness){

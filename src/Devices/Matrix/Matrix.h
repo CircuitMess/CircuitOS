@@ -2,10 +2,12 @@
 #define CIRCUITOS_MATRIX_H
 
 #include <Arduino.h>
+#include <unordered_set>
 #include "MatrixOutput.h"
 #include "MatrixAnim.h"
 
 class Matrix {
+friend MatrixAnim;
 public:
 	Matrix(MatrixOutput& output);
 	void begin();
@@ -41,8 +43,8 @@ public:
 	void drawBitmap(uint16_t x, uint16_t y, const MatrixPixelData& data);
 
 	void startAnimation(MatrixAnim* animation);
-	MatrixAnim* getAnimation();
-	void stopAnimation();
+	void stopAnimations();
+	const std::unordered_set<MatrixAnim*>& getAnimations();
 
 	const uint16_t getWidth() const;
 	const uint16_t getHeight() const;
@@ -56,7 +58,9 @@ private:
 	uint8_t rotation = 0;
 	Font font = BIG;
 
-	MatrixAnim* animation = nullptr;
+	std::unordered_set<MatrixAnim*> animations;
+	void addAnim(MatrixAnim* anim);
+	void removeAnim(MatrixAnim* anim);
 
 };
 

@@ -18,12 +18,18 @@ void MatrixAnim::start(){
 	if(started) return;
 	started = true;
 
+	matrix->addAnim(this);
+
 	onStart();
 }
 
 void MatrixAnim::stop(){
 	if(!started) return;
 	started = false;
+
+	if(matrix){
+		matrix->removeAnim(this);
+	}
 
 	onStop();
 }
