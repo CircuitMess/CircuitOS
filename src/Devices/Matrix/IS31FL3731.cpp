@@ -126,9 +126,11 @@ void IS31FL3731::push(const MatrixPixelData& data){
 			int x = i - y * 16;
 
 			auto pix = data.get(x, y);
-			uint8_t val = ((pix.r + pix.g + pix.b) / 3) * pix.i / 255;
+			float fval = ((float) (pix.r + pix.g + pix.b) / (3.0f * 255.0f)) * (float) pix.i / 255.0f;
+			fval *= (float) getBrightness() / 255.0f;
+			fval = pow(fval, 2);
 
-			Wire.write((uint8_t) (val * getBrightness() / 255));
+			Wire.write((uint8_t) min((int) round(fval * 255.0f), 255));
 		}
 		Wire.endTransmission();
 	}
