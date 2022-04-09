@@ -129,8 +129,8 @@ void Matrix::startAnimation(MatrixAnim* animation){
 }
 
 void Matrix::stopAnimations(){
-	for(auto anim : animations){
-		anim->stop();
+	while(!animations.empty()){
+		(*animations.begin())->stop();
 	}
 }
 
