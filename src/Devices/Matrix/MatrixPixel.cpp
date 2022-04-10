@@ -1,5 +1,15 @@
 #include "MatrixPixel.h"
 
+const MatrixPixel MatrixPixel::Red = { 255, 0, 0, 255 };
+const MatrixPixel MatrixPixel::Green = { 0, 255, 0, 255 };
+const MatrixPixel MatrixPixel::Blue = { 0, 0, 255, 255 };
+const MatrixPixel MatrixPixel::Yellow = { 255, 255, 0, 255 };
+const MatrixPixel MatrixPixel::Cyan = { 0, 255, 255, 255 };
+const MatrixPixel MatrixPixel::Magenta = { 255, 0, 255, 255 };
+const MatrixPixel MatrixPixel::White = { 255, 255, 255, 255 };
+const MatrixPixel MatrixPixel::Black = { 0, 0, 0, 255 };
+const MatrixPixel MatrixPixel::Off = { 0, 0, 0, 0 };
+
 bool operator==(const MatrixPixel& a, const MatrixPixel& b){
 	return a.r == b.r
 		   && a.g == b.g

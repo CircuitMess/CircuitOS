@@ -7,6 +7,15 @@
 
 struct MatrixPixel {
 	uint8_t r, g, b, i;
+	static const MatrixPixel Red;
+	static const MatrixPixel Green;
+	static const MatrixPixel Blue;
+	static const MatrixPixel Magenta;
+	static const MatrixPixel Cyan;
+	static const MatrixPixel Yellow;
+	static const MatrixPixel White;
+	static const MatrixPixel Black;
+	static const MatrixPixel Off;
 };
 
 bool operator==(const MatrixPixel& a, const MatrixPixel& b);
