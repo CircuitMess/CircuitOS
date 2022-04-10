@@ -129,12 +129,12 @@ void Matrix::startAnimation(MatrixAnim* animation){
 }
 
 void Matrix::stopAnimations(){
-	while(!animations.empty()){
-		(*animations.begin())->stop();
+	for(auto anim : getAnimations()){
+		anim->stop();
 	}
 }
 
-const std::unordered_set<MatrixAnim*>& Matrix::getAnimations(){
+std::unordered_set<MatrixAnim*> Matrix::getAnimations(){
 	return animations;
 }
 

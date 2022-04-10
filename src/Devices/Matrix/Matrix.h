@@ -44,7 +44,7 @@ public:
 
 	void startAnimation(MatrixAnim* animation);
 	void stopAnimations();
-	const std::unordered_set<MatrixAnim*>& getAnimations();
+	std::unordered_set<MatrixAnim*> getAnimations();
 
 	const uint16_t getWidth() const;
 	const uint16_t getHeight() const;
