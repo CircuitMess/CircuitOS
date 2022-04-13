@@ -224,6 +224,15 @@ void Input::addListener(InputListener* listener){
 	for(auto pair : listener->holdAndRepeatTimes){
 		pair.second.repeatCounter = 0;
 	}
+
+	for(int i = 0; i < pinNumber; i++){
+		auto p = listener->holdTimes.find(buttons[i]);
+		if(p == listener->holdTimes.end()) continue;
+
+		if(btnState[buttons[i]]){
+			p->second.holdingOver = true;
+		}
+	}
 }
 
 void Input::removeListener(InputListener* listener){
