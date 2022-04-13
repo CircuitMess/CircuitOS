@@ -5,7 +5,7 @@ MatrixPartOutput::MatrixPartOutput(MatrixOutputBuffer* output, int16_t width, in
 }
 
 void MatrixPartOutput::init(){
-	output->init();
+
 }
 
 void IRAM_ATTR MatrixPartOutput::push(const MatrixPixelData& data){

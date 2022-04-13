@@ -6,7 +6,7 @@ MatrixOutputBuffer::MatrixOutputBuffer(MatrixOutput* output) : MatrixOutput(outp
 }
 
 void MatrixOutputBuffer::init(){
-	output->init();
+
 }
 
 void MatrixOutputBuffer::push(const MatrixPixelData& data){
