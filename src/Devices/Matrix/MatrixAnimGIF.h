@@ -18,6 +18,8 @@ public:
 
 	void loop(uint time);
 
+	void push() override;
+
 protected:
 	void onStart() override;
 	void onStop() override;
@@ -27,9 +29,6 @@ private:
 
 	uint32_t frameTime = 0;
 	uint32_t frameRemaining = 0;
-
-	void pushFrame();
-
 };
 
 
