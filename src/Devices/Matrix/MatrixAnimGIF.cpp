@@ -10,6 +10,10 @@ MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix)
 	setWidth(gif.getWidth());
 }
 
+MatrixAnimGIF::~MatrixAnimGIF(){
+	stop();
+}
+
 void MatrixAnimGIF::loop(uint time){
 	if(!isStarted()){
 		LoopManager::removeListener(this);

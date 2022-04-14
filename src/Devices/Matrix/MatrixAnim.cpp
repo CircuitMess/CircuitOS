@@ -9,7 +9,7 @@ MatrixAnim::MatrixAnim(Matrix* matrix) : matrix(matrix){
 }
 
 MatrixAnim::~MatrixAnim(){
-	stop();
+
 }
 
 void MatrixAnim::start(){
