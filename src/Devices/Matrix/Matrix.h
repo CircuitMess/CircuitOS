@@ -11,7 +11,7 @@ friend MatrixAnim;
 public:
 	Matrix(MatrixOutput& output);
 	void begin();
-	void clear();
+	void clear(MatrixPixel color = MatrixPixel::Off);
 	void push();
 
 	/*void setRotation(uint8_t rotation);
