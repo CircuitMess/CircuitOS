@@ -70,7 +70,7 @@ void MatrixAnim::drawBitmap(uint16_t x, uint16_t y, const MatrixPixelData& data)
 	matrix->drawBitmap(x + posX, y + posY, data);
 }
 
-void MatrixAnim::push(){
+void MatrixAnim::pushMatrix(){
 	matrix->push();
 }
 

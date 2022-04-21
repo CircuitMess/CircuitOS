@@ -14,6 +14,7 @@ public:
 	void start();
 	void stop();
 	virtual void reset() = 0;
+	virtual void push() = 0;
 
 	bool isStarted();
 
@@ -34,7 +35,7 @@ protected:
 	void drawString(int32_t x, int32_t y, const String &text, const MatrixPixel& color = { 255, 255, 255, 255 });
 	void drawBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t* data, const MatrixPixel& color = { 255, 255, 255, 255 });
 	void drawBitmap(uint16_t x, uint16_t y, const MatrixPixelData& data);
-	void push();
+	void pushMatrix();
 	void clear();
 
 	virtual void onStart() = 0;

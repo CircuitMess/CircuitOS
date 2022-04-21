@@ -36,15 +36,15 @@ void MatrixAnimGIF::loop(uint delta){
 			return;
 		}
 
-		pushFrame();
+		push();
 	}
 }
 
-void MatrixAnimGIF::pushFrame(){
+void MatrixAnimGIF::push(){
 	if(!gif) return;
 
 	drawBitmap(0, 0, gif.getFrame());
-	push();
+	pushMatrix();
 }
 
 void MatrixAnimGIF::onStart(){
@@ -55,7 +55,7 @@ void MatrixAnimGIF::onStart(){
 
 	frameTime = millis() - frameRemaining;
 
-	pushFrame();
+	push();
 
 	LoopManager::addListener(this);
 }
@@ -78,9 +78,11 @@ void MatrixAnimGIF::onStop(){
 void MatrixAnimGIF::reset(){
 	if(!gif) return;
 
-	frameTime = frameRemaining = 0;
+	frameTime = millis();
 	gif.reset();
 	gif.nextFrame();
+	frameRemaining = gif.frameDuration();
+	push();
 }
 
 GIF& MatrixAnimGIF::getGIF(){
