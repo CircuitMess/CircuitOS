@@ -1,8 +1,8 @@
 #include "ShiftOutput.h"
 
 #define PERIOD 1
-#define LH(pin) do { GPIO.out_w1tc = ((uint32_t) 1) << (pin); delayNanos(PERIOD); GPIO.out_w1ts = ((uint32_t) 1) << (pin); delayNanos(PERIOD); } while(0)
-#define HL(pin) do { GPIO.out_w1ts = ((uint32_t) 1) << (pin); delayNanos(PERIOD); GPIO.out_w1tc = ((uint32_t) 1) << (pin); delayNanos(PERIOD); } while(0)
+#define LH(pin) do { digitalWrite(pin, LOW); digitalWrite(pin, HIGH); } while(0)
+#define HL(pin) do { digitalWrite(pin, HIGH); digitalWrite(pin, LOW); } while(0)
 
 const float ShiftOutput::nopCycles = (float) ESP.getCpuFreqMHz() / 3.0f;
 

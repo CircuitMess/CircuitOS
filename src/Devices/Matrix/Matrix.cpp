@@ -10,8 +10,8 @@ void Matrix::begin(){
 	push();
 }
 
-void Matrix::clear(){
-	data.clear();
+void Matrix::clear(MatrixPixel color){
+	data.clear(color);
 }
 
 void Matrix::push(){

@@ -14,7 +14,7 @@ MatrixAnimGIF::~MatrixAnimGIF(){
 	stop();
 }
 
-void MatrixAnimGIF::loop(uint time){
+void MatrixAnimGIF::loop(uint delta){
 	if(!isStarted()){
 		LoopManager::removeListener(this);
 		return;
@@ -25,7 +25,11 @@ void MatrixAnimGIF::loop(uint time){
 		return;
 	}
 
-	if(millis() - frameTime >= gif.frameDuration()){
+	uint32_t time = millis();
+	uint32_t elapsed = time - frameTime;
+	if(elapsed >= gif.frameDuration()){
+		frameTime = time - (elapsed - gif.frameDuration());
+
 		if(!gif.nextFrame()){
 			stop();
 			reset();
@@ -33,7 +37,6 @@ void MatrixAnimGIF::loop(uint time){
 		}
 
 		push();
-		frameTime = millis();
 	}
 }
 
