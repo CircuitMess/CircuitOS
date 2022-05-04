@@ -144,6 +144,7 @@ void Input::loop(uint _time){
 
 			for(auto listener : listeners){
 				if(mask.find(listener) != mask.end()) continue;
+				if(removedListeners.find(listener) != removedListeners.end()) continue;
 
 				auto search = listener->holdTimes.find(buttons[i]);
 				if(search != listener->holdTimes.end() && holdTime >= search->second.time && !search->second.holdingOver){
