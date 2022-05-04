@@ -78,10 +78,10 @@ void MatrixAnimGIF::onStop(){
 void MatrixAnimGIF::reset(){
 	if(!gif) return;
 
-	frameTime = millis();
 	gif.reset();
 	gif.nextFrame();
-	frameRemaining = gif.frameDuration();
+	frameTime = millis();
+	frameRemaining = 0;
 	push();
 }
 
