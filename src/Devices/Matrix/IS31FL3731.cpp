@@ -172,3 +172,10 @@ void IS31FL3731::selectBank(uint8_t bank){
 	Wire.write(bank);
 	Wire.endTransmission();
 }
+
+void IS31FL3731::setBrightness(uint8_t brightness){
+	MatrixOutput::setBrightness(brightness);
+	auto data = currentState;
+	currentState = MatrixPixelData(getWidth(), getHeight());
+	push(data);
+}

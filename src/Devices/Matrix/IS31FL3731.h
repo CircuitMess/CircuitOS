@@ -15,6 +15,7 @@ public:
 	IS31FL3731(TwoWire& Wire = ::Wire, uint8_t addr = 0x74);
 	void init() override;
 	void push(const MatrixPixelData& data) override;
+	void setBrightness(uint8_t brightness) override;
 
 private:
 	TwoWire& Wire;
