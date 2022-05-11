@@ -1,6 +1,7 @@
 #include <Loop/LoopManager.h>
 #include "MatrixAnimGIF.h"
 #include "Matrix.h"
+#include <FSImpl.h>
 
 MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix), gif(std::move(file)){
 	if(!gif) return;
@@ -8,6 +9,18 @@ MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix)
 
 	setHeight(gif.getHeight());
 	setWidth(gif.getWidth());
+
+	auto temp = gif.getLoopMode();
+	gif.setLoopMode(GIF::SINGLE);
+	while(gif.nextFrame()){
+		totalDuration+=gif.frameDuration();
+	}
+	gif.reset();
+	gif.setLoopMode(temp);
+}
+
+MatrixAnimGIF::MatrixAnimGIF(fs::FileImpl* file, Matrix* matrix) : MatrixAnimGIF(fs::File(fs::FileImplPtr(file)), matrix){
+
 }
 
 MatrixAnimGIF::~MatrixAnimGIF(){
@@ -53,6 +66,7 @@ void MatrixAnimGIF::onStart(){
 		return;
 	}
 
+	startTime = millis();
 	frameTime = millis() - frameRemaining;
 
 	push();
@@ -83,8 +97,19 @@ void MatrixAnimGIF::reset(){
 	frameTime = millis();
 	frameRemaining = 0;
 	push();
+
+	startTime = millis();
 }
 
 GIF& MatrixAnimGIF::getGIF(){
 	return gif;
+}
+
+float MatrixAnimGIF::getCompletionPercentage(){
+	float elapsed = millis() - startTime;
+	return (elapsed / totalDuration);
+}
+
+uint32_t MatrixAnimGIF::getLoopDuration() const{
+	return totalDuration;
 }
