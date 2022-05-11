@@ -14,8 +14,8 @@ public:
 	void clear(MatrixPixel color = MatrixPixel::Off);
 	void push();
 
-	/*void setRotation(uint8_t rotation);
-	uint8_t getRotation() const;*/
+	void setRotation(uint8_t rotation);
+	uint8_t getRotation() const;
 
 	/**
 	 * Set global brightness.

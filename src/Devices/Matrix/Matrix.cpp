@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include "Font.hpp"
+#include <pgmspace.h>
 
 Matrix::Matrix(MatrixOutput& output) : output(output), width(output.getWidth()), height(output.getHeight()), data(output.getWidth(), output.getHeight()){
 
@@ -156,14 +157,14 @@ uint8_t Matrix::getBrightness() const{
 	return output.getBrightness();
 }
 
-/*void Matrix::setRotation(uint8_t rot){
+void Matrix::setRotation(uint8_t rot){
 	if(rot > 3) return;
 	rotation = rot;
 }
 
 uint8_t Matrix::getRotation() const{
 	return rotation;
-}*/
+}
 
 Matrix::Font Matrix::getFont() const{
 	return font;
