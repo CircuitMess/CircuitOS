@@ -16,6 +16,7 @@ MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix)
 		totalDuration+=gif.frameDuration();
 	}
 	gif.reset();
+	gif.nextFrame();
 	gif.setLoopMode(temp);
 }
 
