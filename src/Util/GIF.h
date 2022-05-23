@@ -44,6 +44,7 @@ public:
 	bool nextFrame();
 	Frame getFrame();
 	uint32_t frameDuration();
+	uint32_t getLoopCount() const;
 
 private:
 	gd_GIF* gif = nullptr;

@@ -77,6 +77,10 @@ void GIF::setLoopMode(GIF::LoopMode loopMode){
 	GIF::loopMode = loopMode;
 }
 
+uint32_t GIF::getLoopCount() const{
+	return loopCount;
+}
+
 GIF::Frame::Frame(){ }
 
 GIF::Frame::Frame(uint16_t width, uint16_t height, uint32_t duration, GIF::Pixel* data) : width(width), height(height), duration(duration), data(data){ }
