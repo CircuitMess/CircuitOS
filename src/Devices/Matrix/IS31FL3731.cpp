@@ -176,15 +176,17 @@ void IS31FL3731::selectBank(uint8_t bank){
 void IS31FL3731::setBrightness(uint8_t brightness){
 	MatrixOutput::setBrightness(brightness);
 
-	auto data = currentState;
-	for(int i = 0; i < data.getWidth(); i++){
-		for(int j = 0; j < data.getHeight(); j++){
-			auto pixel = data.get(i, j);
+	auto currentState = this->currentState;
+
+	auto inverse = currentState;
+	for(int i = 0; i < inverse.getWidth(); i++){
+		for(int j = 0; j < inverse.getHeight(); j++){
+			auto pixel = inverse.get(i, j);
 			pixel.i = 255 - pixel.i;
-			data.set(i, j, pixel);
+			inverse.set(i, j, pixel);
 		}
 	}
-	currentState = MatrixPixelData(getWidth(), getHeight());
+	this->currentState = inverse;
 
-	push(data);
+	push(currentState);
 }
