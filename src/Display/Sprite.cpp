@@ -60,6 +60,29 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 	}
 	setChroma(c);
 }
+
+void Sprite::drawIcon(File& icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
+	Color c = chromaKey;
+	setChroma(TFT_TRANSPARENT);
+
+	for(int i = 0; i < height; i++){
+		for(int j = 0; j < width; j++){
+			uint16_t color = 0;
+			size_t read = icon.read((uint8_t*)&color, 2);
+
+			if(read < 2){
+				setChroma(c);
+				return;
+			}
+
+			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
+				fillRect(x + j * scale, y + i * scale, scale, scale, color);
+			}
+		}
+	}
+	setChroma(c);
+}
+
 void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
 	Color c = chromaKey;
 	setChroma(_color);
