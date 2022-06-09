@@ -6,8 +6,11 @@
 #include "../Loop/LoopListener.h"
 #include "Sprite.h"
 #include <FS.h>
+#include <experimental/functional>
 
 class gd_GIF;
+
+enum class LoopMode { AUTO, SINGLE, INFINITE };
 
 class GIFAnimatedSprite {
 public:
@@ -22,7 +25,11 @@ public:
 
 	void push();
 	void reset();
-	void setLoopDoneCallback(void (*callback)());
+
+	LoopMode getLoopMode() const;
+	void setLoopMode(LoopMode loopMode);
+	void setLoopDoneCallback(std::function<void()> loopDoneCallback);
+
 	bool newFrameReady();
 	void setScale(uint8_t scale);
 
@@ -50,7 +57,9 @@ private:
 	 */
 	bool nextFrame();
 
-	void (*loopDoneCallback)() = nullptr;
+	LoopMode loopMode = LoopMode::SINGLE;
+	uint32_t loopCount = 0;
+	std::function<void()> loopDoneCallback;
 	bool alerted = false;
 };
 

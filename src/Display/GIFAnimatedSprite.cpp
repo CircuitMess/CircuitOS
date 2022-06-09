@@ -73,7 +73,7 @@ void GIFAnimatedSprite::reset(){
 	alerted=false;
 }
 
-void GIFAnimatedSprite::setLoopDoneCallback(void (*callback)()){
+void GIFAnimatedSprite::setLoopDoneCallback(std::function<void()> callback){
 	loopDoneCallback = callback;
 }
 
@@ -96,6 +96,22 @@ bool GIFAnimatedSprite::nextFrame(){
 		currentFrame.data = (uint8_t*)frame;
 		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
 		return true;
+	}else{
+		switch(loopMode){
+			case LoopMode::AUTO:
+				if(gif->loop_count != 0 && loopCount == gif->loop_count) return false;
+				else{
+					reset();
+					return true;
+				}
+				break;
+			case LoopMode::SINGLE:
+				return false;
+			case LoopMode::INFINITE:
+				reset();
+				return true;
+				break;
+		}
 	}
 	return false;
 }
@@ -113,3 +129,12 @@ void GIFAnimatedSprite::setScale(uint8_t scale){
 	GIFAnimatedSprite::scale = scale;
 
 }
+
+LoopMode GIFAnimatedSprite::getLoopMode() const{
+	return LoopMode::AUTO;
+}
+
+void GIFAnimatedSprite::setLoopMode(LoopMode loopMode){
+	this->loopMode = loopMode;
+}
+
