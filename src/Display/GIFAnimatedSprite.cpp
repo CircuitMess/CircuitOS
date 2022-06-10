@@ -54,21 +54,13 @@ void GIFAnimatedSprite::push(){
 	while(cFrameTime + currentFrame.duration < currentTime){
 		cFrameTime += currentFrame.duration;
 		currentFrameTime = currentTime;
-		if(!nextFrame()){
-			if(loopDoneCallback != nullptr && !alerted){
-				loopDoneCallback();
-				alerted = true;
-			}
-		}else{
-			alerted = false;
-		}
+		nextFrame();
 	}
 	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, scale, TFT_TRANSPARENT);
 }
 
 void GIFAnimatedSprite::reset(){
 	gd_rewind(gif);
-	if(!nextFrame()) return;
 	currentFrameTime = 0;
 	alerted=false;
 }
@@ -78,7 +70,8 @@ void GIFAnimatedSprite::setLoopDoneCallback(std::function<void()> callback){
 }
 
 bool GIFAnimatedSprite::nextFrame(){
-	if(gd_get_frame(gif) == 1) {
+	int err = gd_get_frame(gif);
+	if(err == 1) {
 		if(currentFrame.data != nullptr){
 			free(currentFrame.data);
 		}
@@ -95,8 +88,16 @@ bool GIFAnimatedSprite::nextFrame(){
 
 		currentFrame.data = (uint8_t*)frame;
 		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
+
+		alerted = false;
+
 		return true;
-	}else{
+	}else if(err == 0){
+		if(loopDoneCallback != nullptr && !alerted){
+			loopDoneCallback();
+			alerted = true;
+		}
+
 		switch(loopMode){
 			case LoopMode::AUTO:
 				if(gif->loop_count != 0 && loopCount == gif->loop_count) return false;
@@ -112,6 +113,8 @@ bool GIFAnimatedSprite::nextFrame(){
 				return true;
 				break;
 		}
+	}else if(err == -1){
+//		Serial.printf("%s gif error!\n", gifFile.name());
 	}
 	return false;
 }
