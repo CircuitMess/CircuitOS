@@ -10,7 +10,7 @@
 
 class gd_GIF;
 
-enum class LoopMode { AUTO, SINGLE, INFINITE };
+enum class LoopMode { Auto, Single, Infinite };
 
 class GIFAnimatedSprite {
 public:
@@ -57,7 +57,7 @@ private:
 	 */
 	bool nextFrame();
 
-	LoopMode loopMode = LoopMode::SINGLE;
+	LoopMode loopMode = LoopMode::Single;
 	uint32_t loopCount = 0;
 	std::function<void()> loopDoneCallback;
 	bool alerted = false;

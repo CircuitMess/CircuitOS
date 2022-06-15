@@ -61,6 +61,8 @@ void GIFAnimatedSprite::push(){
 
 void GIFAnimatedSprite::reset(){
 	gd_rewind(gif);
+	loopCount = 0;
+	if(!nextFrame()) return;
 	currentFrameTime = 0;
 	alerted=false;
 }
@@ -72,6 +74,7 @@ void GIFAnimatedSprite::setLoopDoneCallback(std::function<void()> callback){
 bool GIFAnimatedSprite::nextFrame(){
 	int err = gd_get_frame(gif);
 	if(err == 1) {
+		loopCount++;
 		if(currentFrame.data != nullptr){
 			free(currentFrame.data);
 		}
@@ -99,16 +102,16 @@ bool GIFAnimatedSprite::nextFrame(){
 		}
 
 		switch(loopMode){
-			case LoopMode::AUTO:
+			case LoopMode::Auto:
 				if(gif->loop_count != 0 && loopCount == gif->loop_count) return false;
 				else{
 					reset();
 					return true;
 				}
 				break;
-			case LoopMode::SINGLE:
+			case LoopMode::Single:
 				return false;
-			case LoopMode::INFINITE:
+			case LoopMode::Infinite:
 				reset();
 				return true;
 				break;
@@ -134,7 +137,7 @@ void GIFAnimatedSprite::setScale(uint8_t scale){
 }
 
 LoopMode GIFAnimatedSprite::getLoopMode() const{
-	return LoopMode::AUTO;
+	return LoopMode::Auto;
 }
 
 void GIFAnimatedSprite::setLoopMode(LoopMode loopMode){
