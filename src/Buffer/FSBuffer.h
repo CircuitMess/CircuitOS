@@ -6,7 +6,7 @@
 
 class FSBuffer {
 public:
-	FSBuffer(const fs::File& file, const size_t size);
+	FSBuffer(File file, const size_t size);
 	virtual ~FSBuffer();
 
 	size_t available();
@@ -15,7 +15,7 @@ public:
 	void clear();
 
 	const uint8_t* data();
-	fs::File& getFile();
+	File getFile() const;
 
 private:
 	fs::File file;

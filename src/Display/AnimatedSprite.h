@@ -71,7 +71,7 @@ private:
 
 	class Table {
 	public:
-		explicit Table(fs::File& file);
+		explicit Table(File file);
 		~Table();
 
 		Color getColor(uint8_t i) const;

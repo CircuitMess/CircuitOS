@@ -1,6 +1,6 @@
 #include "FSBuffer.h"
 
-FSBuffer::FSBuffer(const File& file, const size_t size) : file(file), size(size){
+FSBuffer::FSBuffer(File file, const size_t size) : file(file), size(size){
 #ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));
@@ -48,6 +48,6 @@ const uint8_t* FSBuffer::data(){
 	return buffer + cursor;
 }
 
-File& FSBuffer::getFile(){
+File FSBuffer::getFile() const{
 	return file;
 }
