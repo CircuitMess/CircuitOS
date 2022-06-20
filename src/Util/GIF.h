@@ -42,8 +42,8 @@ public:
 
 	void reset();
 	bool nextFrame();
-	Frame getFrame();
-	uint32_t frameDuration();
+	Frame getFrame() const;
+	uint32_t frameDuration() const;
 	uint32_t getLoopCount() const;
 
 private:

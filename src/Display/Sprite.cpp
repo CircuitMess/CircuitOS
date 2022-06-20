@@ -61,7 +61,7 @@ void Sprite::drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t
 	setChroma(c);
 }
 
-void Sprite::drawIcon(File& icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
+void Sprite::drawIcon(File icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, int32_t maskingColor){
 	Color c = chromaKey;
 	setChroma(TFT_TRANSPARENT);
 

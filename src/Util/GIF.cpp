@@ -41,7 +41,7 @@ bool GIF::nextFrame(){
 	return true;
 }
 
-GIF::Frame GIF::getFrame(){
+GIF::Frame GIF::getFrame() const{
 	if(gif == nullptr) return { };
 
 	Pixel* data = new Pixel[getWidth() * getHeight()];
@@ -50,7 +50,7 @@ GIF::Frame GIF::getFrame(){
 	return { getWidth(), getHeight(), (uint32_t) gif->gce.delay * 10, data };
 }
 
-uint32_t GIF::frameDuration(){
+uint32_t GIF::frameDuration() const{
 	if(gif == nullptr) return 0;
 	return gif->gce.delay * 10;
 }
