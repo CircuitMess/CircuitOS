@@ -22,16 +22,16 @@ bool GIF::nextFrame(){
 		loopCount++;
 
 		switch(loopMode){
-			case AUTO:
+			case Auto:
 				if(gif->loop_count != 0 && loopCount == gif->loop_count) return false;
 				else{
 					gd_rewind(gif);
 					gd_get_frame(gif);
 				}
 				break;
-			case SINGLE:
+			case Single:
 				return false;
-			case INFINITE:
+			case Infinite:
 				gd_rewind(gif);
 				gd_get_frame(gif);
 				break;
@@ -83,7 +83,7 @@ uint32_t GIF::getLoopCount() const{
 
 GIF::Frame::Frame(){ }
 
-GIF::Frame::Frame(uint16_t width, uint16_t height, uint32_t duration, GIF::Pixel* data) : width(width), height(height), duration(duration), data(data){ }
+GIF::Frame::Frame(uint16_t width, uint16_t height, uint32_t duration, Pixel* data) : width(width), height(height), duration(duration), data(data){ }
 
 GIF::Frame::Frame(const GIF::Frame& other) : Frame(other.width, other.height, other.duration, new Pixel[other.width * other.height]){
 	*this = other;
@@ -119,6 +119,6 @@ uint32_t GIF::Frame::getDuration() const{
 	return duration;
 }
 
-const GIF::Pixel* GIF::Frame::getData() const{
+const Pixel* GIF::Frame::getData() const{
 	return data;
 }

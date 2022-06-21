@@ -11,7 +11,7 @@ MatrixAnimGIF::MatrixAnimGIF(fs::File file, Matrix* matrix) : MatrixAnim(matrix)
 	setWidth(gif.getWidth());
 
 	auto temp = gif.getLoopMode();
-	gif.setLoopMode(GIF::SINGLE);
+	gif.setLoopMode(GIF::Single);
 	while(gif.nextFrame()){
 		totalDuration+=gif.frameDuration();
 	}

@@ -1,68 +1,64 @@
 #ifndef CIRCUITOS_GIFANIMATEDSPRITE_H
 #define CIRCUITOS_GIFANIMATEDSPRITE_H
 
-
 #include <vector>
 #include "../Loop/LoopListener.h"
 #include "Sprite.h"
 #include <FS.h>
 #include <experimental/functional>
+#include "../Util/GIF.h"
 
-class gd_GIF;
-
-enum class LoopMode { Auto, Single, Infinite };
-
-class GIFAnimatedSprite {
+class GIFAnimatedSprite : private LoopListener {
 public:
-	GIFAnimatedSprite(Sprite* parentSprite, fs::File gifFile);
+	GIFAnimatedSprite(Sprite* parentSprite, const fs::File& gifFile);
 	virtual ~GIFAnimatedSprite();
+	void loop(uint micros) override;
+
+	void start();
+	void stop();
+
+	/**
+	 * @brief Pushes the current GIF frame onto the parentSprite defined in the constructor,
+	 * 		  on the position selected by the setter/getters
+	 */
+	void push() const;
+
+	/**
+	 * @brief Pushes the current GIF frame onto the sprite and position provided, overriding the previously set parentSprite and position.
+	 * @param sprite Sprite to be pushed on
+	 * @param x, y Relative position on the sprite.
+	 */
+	void push(Sprite* sprite, int x, int y) const;
+
+	void reset();
 
 	int getX() const;
 	void setX(int x);
 	int getY() const;
 	void setY(int y);
 	void setXY(int x, int y);
+	uint16_t getWidth() const;
+	uint16_t getHeight() const;
 
-	void push();
-	void reset();
+	GIF::LoopMode getLoopMode() const;
+	void setLoopMode(GIF::LoopMode loopMode);
+	uint32_t getLoopCount() const;
 
-	LoopMode getLoopMode() const;
-	void setLoopMode(LoopMode loopMode);
 	void setLoopDoneCallback(std::function<void()> loopDoneCallback);
-
-	bool newFrameReady();
 	void setScale(uint8_t scale);
 
 private:
+	GIF gif;
 	Sprite* parentSprite = nullptr;
-	int x = 0, y = 0;
-	uint16_t width, height;
+	int16_t x = 0, y = 0;
 
-	gd_GIF* gif;
-	fs::File gifFile;
-	uint32_t currentFrameTime = 0;
-	uint8_t scale=1;
-
-	struct Frame {
-		uint8_t* data = nullptr;
-		uint32_t duration = 0;
-	};
-	Frame currentFrame;
-
-	/**
-	 * @brief Function to load the next frame of the GIF, if available.
-	 *
-	 * @return true New frame is loaded successfully.
-	 * @return false Reached the end of GIF, no more frames available.
-	 */
-	bool nextFrame();
-
-	LoopMode loopMode = LoopMode::Single;
+	uint32_t frameCounter = 0;
 	uint32_t loopCount = 0;
-	std::function<void()> loopDoneCallback;
-	bool alerted = false;
-};
 
+	uint8_t scale = 1;
+
+	std::function<void()> loopDoneCallback;
+};
 
 
 #endif //CIRCUITOS_GIFANIMATEDSPRITE_H
