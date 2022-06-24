@@ -1,24 +1,62 @@
+#include <Loop/LoopManager.h>
 #include "GIFAnimatedSprite.h"
-#include "../Util/gifdec.h"
 
-GIFAnimatedSprite::GIFAnimatedSprite(Sprite* parentSprite, fs::File _gifFile) : parentSprite(parentSprite), gifFile(_gifFile){
-	gif = gd_open_gif(gifFile);
-	if(gif == nullptr){
+GIFAnimatedSprite::GIFAnimatedSprite(Sprite* parentSprite, const fs::File& gifFile) : parentSprite(parentSprite), gif(gifFile){
+	if(!gif){
 		Serial.println("Failed opening gif");
 		return;
 	}
-
-	width = gif->width;
-	height = gif->height;
-
-	if(!nextFrame()) return;
-
 }
 
 GIFAnimatedSprite::~GIFAnimatedSprite(){
-	gd_close_gif(gif);
-	free(currentFrame.data);
-	gifFile.close();
+	stop();
+}
+
+void GIFAnimatedSprite::loop(uint micros){
+	if(!gif) return;
+
+	frameCounter += micros;
+
+	while(frameCounter / 1000 >= gif.frameDuration()){
+		frameCounter -= gif.frameDuration()*1000;
+		gif.nextFrame();
+
+		if(gif.getLoopCount() > loopCount){
+			loopCount = gif.getLoopCount();
+
+			if(loopDoneCallback){
+				loopDoneCallback();
+			}
+		}
+	}
+}
+
+void GIFAnimatedSprite::start(){
+	LoopManager::addListener(this);
+}
+
+void GIFAnimatedSprite::stop(){
+	LoopManager::removeListener(this);
+
+}
+
+void GIFAnimatedSprite::push() const{
+	if(!gif) return;
+
+	parentSprite->drawIcon(gif.getFrame().getData(), getX(), getY(), getWidth(), getHeight(), scale);
+}
+
+void GIFAnimatedSprite::push(Sprite* sprite, int x, int y) const{
+	if(!gif) return;
+
+	sprite->drawIcon(gif.getFrame().getData(), x, y, getWidth(), getHeight(), scale);
+}
+
+void GIFAnimatedSprite::reset(){
+	gif.reset();
+
+	frameCounter = 0;
+	loopCount = 0;
 }
 
 int GIFAnimatedSprite::getX() const{
@@ -42,74 +80,30 @@ void GIFAnimatedSprite::setXY(int x, int y){
 	GIFAnimatedSprite::y = y;
 }
 
-void GIFAnimatedSprite::push(){
-	if(currentFrameTime == 0){
-		parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, scale, TFT_TRANSPARENT);
-		currentFrameTime = millis();
-		return;
-	}
-
-	uint cFrameTime = currentFrameTime;
-	uint currentTime = millis();
-	while(cFrameTime + currentFrame.duration < currentTime){
-		cFrameTime += currentFrame.duration;
-		currentFrameTime = currentTime;
-		if(!nextFrame()){
-			if(loopDoneCallback != nullptr && !alerted){
-				loopDoneCallback();
-				alerted = true;
-			}
-		}else{
-			alerted = false;
-		}
-	}
-	parentSprite->drawIcon(reinterpret_cast<const unsigned short*>(currentFrame.data), x, y, width, height, scale, TFT_TRANSPARENT);
+uint16_t GIFAnimatedSprite::getWidth() const{
+	return gif.getWidth();
 }
 
-void GIFAnimatedSprite::reset(){
-	gd_rewind(gif);
-	if(!nextFrame()) return;
-	currentFrameTime = 0;
-	alerted=false;
+uint16_t GIFAnimatedSprite::getHeight() const{
+	return gif.getHeight();
 }
 
-void GIFAnimatedSprite::setLoopDoneCallback(void (*callback)()){
+GIF::LoopMode GIFAnimatedSprite::getLoopMode() const{
+	return gif.getLoopMode();
+}
+
+void GIFAnimatedSprite::setLoopMode(GIF::LoopMode loopMode){
+	gif.setLoopMode(loopMode);
+}
+
+uint32_t GIFAnimatedSprite::getLoopCount() const{
+	return gif.getLoopCount();
+}
+
+void GIFAnimatedSprite::setLoopDoneCallback(std::function<void()> callback){
 	loopDoneCallback = callback;
-}
-
-bool GIFAnimatedSprite::nextFrame(){
-	if(gd_get_frame(gif) == 1) {
-		if(currentFrame.data != nullptr){
-			free(currentFrame.data);
-		}
-		uint8_t *buffer = (uint8_t*) malloc(width * height * 3);
-		//render 24-bit color frame into buffer
-
-		gd_render_frame(gif, buffer, false);
-
-		uint16_t* frame = static_cast<uint16_t*>(malloc(width * height * sizeof(uint16_t)));
-		for(int i = 0; i < width * height; i++){
-			frame[i] = C_RGB(buffer[i*3], buffer[i*3+1], buffer[i*3+2]);
-		}
-		free(buffer);
-
-		currentFrame.data = (uint8_t*)frame;
-		currentFrame.duration = static_cast<uint>(gif->gce.delay*10);
-		return true;
-	}
-	return false;
-}
-
-bool GIFAnimatedSprite::newFrameReady(){
-	uint cFrameTime = currentFrameTime;
-	uint currentTime = millis();
-	if(cFrameTime + currentFrame.duration < currentTime){
-		return true;
-	}
-	return false;
 }
 
 void GIFAnimatedSprite::setScale(uint8_t scale){
 	GIFAnimatedSprite::scale = scale;
-
 }

@@ -1,4 +1,5 @@
 #include "MatrixPixel.h"
+#include "../../Display/Color.h"
 
 const MatrixPixel MatrixPixel::Red = { 255, 0, 0, 255 };
 const MatrixPixel MatrixPixel::Green = { 0, 255, 0, 255 };
@@ -34,7 +35,7 @@ MatrixPixelData::MatrixPixelData(uint16_t width, uint16_t height) : width(width)
 MatrixPixelData::MatrixPixelData(const GIF::Frame& frame) : MatrixPixelData(frame.getWidth(), frame.getHeight()){
 	for(int x = 0; x < width; x++){
 		for(int y = 0; y < height; y++){
-			GIF::Pixel pix = frame.getData()[y * frame.getWidth() + x];
+			Pixel pix = frame.getData()[y * frame.getWidth() + x];
 			data[x][y] = { pix.r, pix.g, pix.b, 255 };
 		}
 	}

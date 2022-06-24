@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <FS.h>
 #include "gifdec.h"
+#include "../Display/Color.h"
 
 class GIF {
 public:
@@ -16,11 +17,10 @@ public:
 	uint16_t getWidth() const;
 	uint16_t getHeight() const;
 
-	enum LoopMode { AUTO, SINGLE, INFINITE };
+	enum LoopMode { Auto, Single, Infinite };
 	LoopMode getLoopMode() const;
 	void setLoopMode(LoopMode loopMode);
 
-	struct Pixel { uint8_t r, g, b; };
 	struct Frame {
 	public:
 		Frame();
@@ -49,7 +49,7 @@ public:
 private:
 	gd_GIF* gif = nullptr;
 
-	LoopMode loopMode = AUTO;
+	LoopMode loopMode = Auto;
 	uint32_t loopCount = 0;
 
 };
