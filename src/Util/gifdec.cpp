@@ -434,6 +434,10 @@ render_frame_rect(gd_GIF *gif, uint8_t *buffer, bool monochrome)
 				{
 					memcpy(&buffer[(i+k)*3], color, 3);
 				}
+			}else if(!monochrome){
+				uint8_t c[3] { 0, 0x24, 0 };
+				color = c;
+				memcpy(&buffer[(i+k)*3], color, 3);
 			}
 		}
 		i += gif->width;
@@ -492,6 +496,12 @@ gd_render_frame(gd_GIF *gif, uint8_t *buffer, bool monochrome)
 	}
 	else
 	{
+		for(int i = 0; i < gif->width * gif->height; i++){
+			uint8_t* pixel = &gif->canvas[i * 3];
+			pixel[0] = pixel[2] = 0;
+			pixel[1] = 0x24;
+		}
+
 		memcpy(buffer, gif->canvas, gif->width * gif->height * 3);
 	}
 	render_frame_rect(gif, buffer, monochrome);
