@@ -46,10 +46,10 @@ void GIFAnimatedSprite::push() const{
 	parentSprite->drawIcon(gif.getFrame().getData(), getX(), getY(), getWidth(), getHeight(), scale);
 }
 
-void GIFAnimatedSprite::push(Sprite* sprite, int x, int y) const{
+void GIFAnimatedSprite::push(Sprite* sprite, int x, int y, Color maskingColor) const{
 	if(!gif) return;
 
-	sprite->drawIcon(gif.getFrame().getData(), x, y, getWidth(), getHeight(), scale);
+	sprite->drawIcon(gif.getFrame().getData(), x, y, getWidth(), getHeight(), scale, maskingColor);
 }
 
 void GIFAnimatedSprite::reset(){

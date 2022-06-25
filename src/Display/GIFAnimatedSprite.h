@@ -28,7 +28,7 @@ public:
 	 * @param sprite Sprite to be pushed on
 	 * @param x, y Relative position on the sprite.
 	 */
-	void push(Sprite* sprite, int x, int y) const;
+	void push(Sprite* sprite, int x, int y, Color maskingColor = TFT_TRANSPARENT) const;
 
 	void reset();
 
