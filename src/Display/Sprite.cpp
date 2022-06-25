@@ -82,15 +82,24 @@ void Sprite::drawIcon(File icon, int16_t x, int16_t y, uint16_t width, uint16_t 
 	Color c = chromaKey;
 	setChroma(TFT_TRANSPARENT);
 
+	icon.seek(0);
+	Color* buffer = (Color*) malloc(1024);
+	size_t bufferPos = 0;
+	size_t available = icon.read(reinterpret_cast<uint8_t*>(buffer), 1024) / 2;
+
 	for(int i = 0; i < height; i++){
 		for(int j = 0; j < width; j++){
-			uint16_t color = 0;
-			size_t read = icon.read((uint8_t*)&color, 2);
-
-			if(read < 2){
-				setChroma(c);
-				return;
+			if(bufferPos == available){
+				available = icon.read(reinterpret_cast<uint8_t*>(buffer), 1024) / 2;
+				if(available == 0){
+					setChroma(c);
+					free(buffer);
+					return;
+				}
+				bufferPos = 0;
 			}
+
+			uint16_t color = buffer[bufferPos++];
 
 			if((!chroma || color != chromaKey) && (color != maskingColor || maskingColor == -1)){
 				fillRect(x + j * scale, y + i * scale, scale, scale, color);
@@ -98,6 +107,7 @@ void Sprite::drawIcon(File icon, int16_t x, int16_t y, uint16_t width, uint16_t 
 		}
 	}
 	setChroma(c);
+	free(buffer);
 }
 
 void Sprite::drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale, uint16_t _color){
