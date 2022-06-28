@@ -44,7 +44,7 @@ public:
 	void setLoopMode(GIF::LoopMode loopMode);
 	uint32_t getLoopCount() const;
 
-	void setLoopDoneCallback(std::function<void()> loopDoneCallback);
+	void setLoopDoneCallback(std::function<void(uint32_t loopCount)> loopDoneCallback);
 	void setScale(uint8_t scale);
 
 private:
@@ -57,7 +57,7 @@ private:
 
 	uint8_t scale = 1;
 
-	std::function<void()> loopDoneCallback;
+	std::function<void(uint32_t loopCount)> loopDoneCallback;
 };
 
 

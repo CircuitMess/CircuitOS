@@ -25,7 +25,7 @@ void GIFAnimatedSprite::loop(uint micros){
 			loopCount = gif.getLoopCount();
 
 			if(loopDoneCallback){
-				loopDoneCallback();
+				loopDoneCallback(loopCount);
 			}
 		}
 	}
@@ -100,7 +100,7 @@ uint32_t GIFAnimatedSprite::getLoopCount() const{
 	return gif.getLoopCount();
 }
 
-void GIFAnimatedSprite::setLoopDoneCallback(std::function<void()> callback){
+void GIFAnimatedSprite::setLoopDoneCallback(std::function<void(uint32_t loopCount)> callback){
 	loopDoneCallback = callback;
 }
 
