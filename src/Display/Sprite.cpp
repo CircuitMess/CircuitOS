@@ -13,6 +13,8 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 	parent = nullptr;
 	parentSPI = spi;
 	setColorDepth(16);
+	this->myWidth = width;
+	this->myHeight = height;
 #ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
 #endif
@@ -22,6 +24,8 @@ Sprite::Sprite(TFT_eSPI* spi, uint16_t width, uint16_t height) : TFT_eSprite(spi
 Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(display.getBaseSprite()){
 	parent = display.getBaseSprite();
 	setColorDepth(16);
+	this->myWidth = width;
+	this->myHeight = height;
 #ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
 #endif
@@ -31,6 +35,8 @@ Sprite::Sprite(Display& display, uint16_t width, uint16_t height) : TFT_eSprite(
 Sprite::Sprite(Sprite* sprite, uint16_t width, uint16_t height) : TFT_eSprite(sprite){
 	parent = sprite;
 	setColorDepth(16);
+	this->myWidth = width;
+	this->myHeight = height;
 #ifdef CIRCUITOS_LOVYANGFX
 	setPsram(true);
 #endif
@@ -304,7 +310,14 @@ void Sprite::pushData(uint width, uint height, uint16_t* data){
 }
 
 void Sprite::push(Sprite* canvas, int16_t x, int16_t y) const{
-	canvas->drawIcon((uint16_t*) _img8, x, y, _sw, _sh, 1, TFT_TRANSPARENT);
+	if(!canvas) return;
+	if(!_img8) return;
+
+	auto canvasSprite = static_cast<TFT_eSprite*>(canvas);
+	bool old = canvasSprite->getSwapBytes();
+	canvasSprite->setSwapBytes(false);
+	canvas->pushImage(x, y, myWidth, myHeight, (uint16_t*) _img8, TFT_TRANSPARENT);
+	canvasSprite->setSwapBytes(old);
 }
 
 #ifndef CIRCUITOS_LOVYANGFX
