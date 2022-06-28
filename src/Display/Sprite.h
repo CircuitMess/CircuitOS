@@ -47,6 +47,8 @@ public:
 
 	void pushData(uint width, uint height, uint16_t* data);
 
+	void push(Sprite* canvas, int16_t x, int16_t y) const;
+
 	void rotate(uint times);
 	// void drawIcon(const unsigned short* icon, uint x, uint y, uint width, uint height, uint scale);
 	void drawMonochromeIcon(bool* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint16_t color = TFT_BLACK);

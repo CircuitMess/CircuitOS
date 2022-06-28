@@ -302,6 +302,11 @@ Sprite& Sprite::setChroma(Color color){
 void Sprite::pushData(uint width, uint height, uint16_t* data){
 	memcpy(_img, data, sizeof(uint16_t) * width * height);
 }
+
+void Sprite::push(Sprite* canvas, int16_t x, int16_t y) const{
+	canvas->drawIcon((uint16_t*) _img8, x, y, _sw, _sh, 1, TFT_TRANSPARENT);
+}
+
 #ifndef CIRCUITOS_LOVYANGFX
 void Sprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint32_t chroma){
 	if((x >= width()) || (y >= height()) || (w == 0) || (h == 0) || !(_img != nullptr) || _bpp != 16) return;
