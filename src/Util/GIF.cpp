@@ -15,6 +15,24 @@ GIF::operator bool() const{
 	return gif != nullptr;
 }
 
+GIF& GIF::operator=(const GIF& other){
+	if(this == &other) return *this;
+
+	if(gif){
+		gd_close_gif(gif);
+		gif = nullptr;
+	}
+
+	loopMode = other.loopMode;
+	loopCount = 0;
+
+	File file = other.gif->fd;
+	file.seek(0);
+	gif = gd_open_gif(file);
+
+	return *this;
+}
+
 bool GIF::nextFrame(){
 	if(gif == nullptr) return false;
 

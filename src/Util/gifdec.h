@@ -49,4 +49,4 @@ int gd_is_bgcolor(gd_GIF *gif, uint8_t color[3]);
 void gd_rewind(gd_GIF *gif);
 void gd_close_gif(gd_GIF *gif);
 
-#endif /* SPENCER_GIFDEC_H */
+#endif /* CIRCUITOS_GIFDEC_H */
