@@ -33,6 +33,7 @@ void GIFAnimatedSprite::loop(uint micros){
 
 void GIFAnimatedSprite::start(){
 	LoopManager::addListener(this);
+	gif.nextFrame();
 }
 
 void GIFAnimatedSprite::stop(){

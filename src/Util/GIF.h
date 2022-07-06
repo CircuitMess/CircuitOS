@@ -13,6 +13,7 @@ public:
 	virtual ~GIF();
 
 	operator bool() const;
+	GIF& operator=(const GIF& other);
 
 	uint16_t getWidth() const;
 	uint16_t getHeight() const;

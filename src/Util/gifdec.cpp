@@ -522,6 +522,6 @@ gd_rewind(gd_GIF *gif)
 void
 gd_close_gif(gd_GIF *gif)
 {
-	gif->fd.close();
+	gif->fd = File(); //needed to renounce ownership of shared_ptr within file
 	free(gif);
 }
