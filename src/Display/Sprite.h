@@ -47,6 +47,12 @@ public:
 
 	void pushData(uint width, uint height, uint16_t* data);
 
+	/**
+	 * Pushes sprite to another given sprite, at the specified position, ignoring previously set parent and position
+	 * @param canvas Sprite to get pushed onto
+	 * @param x
+	 * @param y
+	 */
 	void push(Sprite* canvas, int16_t x, int16_t y) const;
 
 	void rotate(uint times);
@@ -82,6 +88,9 @@ private:
 	Sprite* parent = nullptr;
 	TFT_eSPI* parentSPI = nullptr;
 	int32_t x = 0, y = 0;
+
+	//Defined copies of width/height because TFT_eSprite doesn't have const width/height getters
+	uint16_t myWidth, myHeight;
 
 	bool chroma = false;
 	Color chromaKey = TFT_TRANSPARENT;
