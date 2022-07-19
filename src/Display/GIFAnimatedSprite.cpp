@@ -53,6 +53,18 @@ void GIFAnimatedSprite::push(Sprite* sprite, int x, int y, Color maskingColor) c
 	sprite->drawIcon(gif.getFrame().getData(), x, y, getWidth(), getHeight(), scale, maskingColor);
 }
 
+#ifdef CIRCUITOS_LOVYANGFX
+void GIFAnimatedSprite::pushRotate(Sprite* sprite, int x, int y, float rot, Color maskingColor) const{
+	if(!gif) return;
+
+	Sprite temp = Sprite(sprite, getWidth(), getHeight());
+	temp.clear(TFT_TRANSPARENT);
+	temp.drawIcon(gif.getFrame().getData(), 0, 0, getWidth(), getHeight(), 1, maskingColor);
+	temp.pushRotateZoomWithAA(x + getWidth() / 2, y + getHeight() / 2, rot, scale, scale, TFT_TRANSPARENT);
+//	sprite->pushImageRotateZoomWithAA(x, y, getWidth() / 2, getHeight() / 2, rot, scale, scale, getWidth(), getHeight(), (uint8_t*)gif.getFrame().getData(), maskingColor);
+}
+#endif
+
 void GIFAnimatedSprite::reset(){
 	gif.reset();
 

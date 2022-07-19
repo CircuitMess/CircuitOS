@@ -71,6 +71,7 @@ public:
 	Sprite* getParent() const;
 #ifdef CIRCUITOS_LOVYANGFX
 	using TFT_eSprite::pushImage;
+	using TFT_eSprite::pushImageRotateZoomWithAA;
 	using TFT_eSprite::drawBitmap;
 #else
 #ifdef CIRCUITOS_U8G2FONTS
