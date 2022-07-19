@@ -25,11 +25,21 @@ public:
 
 	/**
 	 * @brief Pushes the current GIF frame onto the sprite and position provided, overriding the previously set parentSprite and position.
-	 * @param sprite Sprite to be pushed on
+	 * @param sprite Sprite to be pushed on.
 	 * @param x, y Relative position on the sprite.
 	 */
 	void push(Sprite* sprite, int x, int y, Color maskingColor = TFT_TRANSPARENT) const;
 
+#ifdef CIRCUITOS_LOVYANGFX
+
+	/**
+	 * @brief Applies rotation and pushes the current GIF frame onto the sprite and position provided, overriding the previously set parentSprite and position.
+	 * @param sprite Sprite to be pushed on.
+	 * @param x, y Relative position on the sprite.
+	 * @param rotation Rotation to be applied to the sprite, in degrees. [0-360]
+	 */
+	void pushRotate(Sprite* sprite, int x, int y, float rot, Color maskingColor = TFT_TRANSPARENT) const;
+#endif
 	void reset();
 
 	int getX() const;
