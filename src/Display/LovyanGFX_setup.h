@@ -6,20 +6,29 @@
 
 #include <LovyanGFX.hpp>
 
+#ifndef LOVYAN_HOST
+#define LOVYAN_HOST VSPI_HOST
+#endif
+
 namespace lgfx {
 class LGFX : public lgfx::LGFX_Device {
+private:
 
-	lgfx::LOVYAN_PANEL _panel_instance;
-	lgfx::Bus_SPI _bus_instance;
+	Panel_Device* panel = nullptr;
+	Bus_SPI* bus = nullptr;
 
 public:
 
 	LGFX(void){
+#ifndef LOVYAN_MANUAL
+		bus = new lgfx::Bus_SPI();
+		panel = new lgfx::LOVYAN_PANEL();
+
 		{
-			auto cfg = _bus_instance.config();
+			auto cfg = bus->config();
 
 
-			cfg.spi_host = VSPI_HOST;
+			cfg.spi_host = LOVYAN_HOST;
 			cfg.spi_mode = 0;
 			cfg.freq_write = LOVYAN_FREQ;
 			cfg.freq_read = LOVYAN_FREQ;
@@ -31,17 +40,16 @@ public:
 			cfg.pin_miso = LOVYAN_MISO;
 			cfg.pin_dc = LOVYAN_DC;
 
-			_bus_instance.config(cfg);
-			_panel_instance.setBus(&_bus_instance);
+			bus->config(cfg);
+			panel->setBus(bus);
 		}
 
 		{
-			auto cfg = _panel_instance.config();
+			auto cfg = panel->config();
 
 			cfg.pin_cs = LOVYAN_CS;
 			cfg.pin_rst = LOVYAN_RST;
 			cfg.pin_busy = -1;
-
 
 
 			cfg.memory_width = LOVYAN_WIDTH;
@@ -59,10 +67,15 @@ public:
 			cfg.dlen_16bit = false;
 			cfg.bus_shared = true;
 
-			_panel_instance.config(cfg);
+#ifdef LOVYAN_BGR
+			cfg.rgb_order = true;
+#endif
+
+			panel->config(cfg);
 		}
 
-		setPanel(&_panel_instance);
+		setPanel(panel);
+#endif
 	}
 };
 }
