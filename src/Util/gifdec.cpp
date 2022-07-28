@@ -4,6 +4,8 @@
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 
+uint8_t transparentColor[3] = {0, 0x24, 0};
+
 typedef struct Entry {
 	uint16_t length;
 	uint16_t prefix;
@@ -92,12 +94,16 @@ gd_open_gif(fs::File fd)
 	gif->bgindex = bgidx;
 	gif->canvas = (uint8_t *) &gif[1];
 	gif->frame = &gif->canvas[3 * width * height];
-	if (gif->bgindex)
+	if (gif->bgindex){
 		memset(gif->frame, gif->bgindex, gif->width * gif->height);
-	bgcolor = &gif->palette->colors[gif->bgindex*3];
-	if (bgcolor[0] || bgcolor[1] || bgcolor [2])
-		for (i = 0; i < gif->width * gif->height; i++)
-			memcpy(&gif->canvas[i*3], bgcolor, 3);
+		bgcolor = &gif->palette->colors[gif->bgindex*3];
+	}else{
+		bgcolor = &transparentColor[0];
+	}
+	if (bgcolor[0] || bgcolor[1] || bgcolor [2]){
+		for(i = 0; i < gif->width * gif->height; i++)
+			memcpy(&gif->canvas[i * 3], bgcolor, 3);
+	}
 	gif->anim_start = fd.position();
 	goto ok;
 fail:
@@ -434,10 +440,6 @@ render_frame_rect(gd_GIF *gif, uint8_t *buffer, bool monochrome)
 				{
 					memcpy(&buffer[(i+k)*3], color, 3);
 				}
-			}else if(!monochrome){
-				uint8_t c[3] { 0, 0x24, 0 };
-				color = c;
-				memcpy(&buffer[(i+k)*3], color, 3);
 			}
 		}
 		i += gif->width;
@@ -454,8 +456,9 @@ dispose(gd_GIF *gif)
 		bgcolor = &gif->palette->colors[gif->bgindex*3];
 		i = gif->fy * gif->width + gif->fx;
 		for (j = 0; j < gif->fh; j++) {
-			for (k = 0; k < gif->fw; k++)
-				memcpy(&gif->canvas[(i+k)*3], bgcolor, 3);
+			for (k = 0; k < gif->fw; k++){
+				memcpy(&gif->canvas[(i + k) * 3], transparentColor, 3);
+			}
 			i += gif->width;
 		}
 		break;
@@ -496,12 +499,6 @@ gd_render_frame(gd_GIF *gif, uint8_t *buffer, bool monochrome)
 	}
 	else
 	{
-		for(int i = 0; i < gif->width * gif->height; i++){
-			uint8_t* pixel = &gif->canvas[i * 3];
-			pixel[0] = pixel[2] = 0;
-			pixel[1] = 0x24;
-		}
-
 		memcpy(buffer, gif->canvas, gif->width * gif->height * 3);
 	}
 	render_frame_rect(gif, buffer, monochrome);
