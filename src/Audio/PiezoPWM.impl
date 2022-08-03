@@ -38,10 +38,12 @@ void PiezoImpl::tone(uint16_t freq, uint16_t duration){
 	if(mute) return;
 	if(volume == 0) return;
 
-	uint32_t loadValue = duration * 1000;
-	timer_set_counter_value(TIMER_GROUP_1, TIMER_0, loadValue);
-	timer_set_alarm(TIMER_GROUP_1, TIMER_0, TIMER_ALARM_EN);
-	timer_start(TIMER_GROUP_1, TIMER_0);
+	if(duration > 0){
+		uint32_t loadValue = duration * 1000;
+		timer_set_counter_value(TIMER_GROUP_1, TIMER_0, loadValue);
+		timer_set_alarm(TIMER_GROUP_1, TIMER_0, TIMER_ALARM_EN);
+		timer_start(TIMER_GROUP_1, TIMER_0);
+	}
 
 	ledcAttachPin(pin, CHANNEL);
 	ledcWriteTone(CHANNEL, freq);
