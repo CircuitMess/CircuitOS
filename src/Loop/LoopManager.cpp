@@ -9,53 +9,33 @@ Task* LoopManager::task = nullptr;
 #endif
 
 std::unordered_set<LoopListener*> LoopManager::listeners;
-std::unordered_set<LoopListener*> LoopManager::removedListeners;
 uint LoopManager::lastMicros = micros();
 
-void LoopManager::addListener(LoopListener* listener){
-	if(listeners.find(listener) == listeners.end()){
-		listeners.insert(listener);
-	}
-
-	auto l = removedListeners.find(listener);
-	if(l != removedListeners.end()){
-		removedListeners.erase(l);
-	}
-}
-
-void LoopManager::removeListener(LoopListener* listener){
-	if(listeners.find(listener) == listeners.end() || removedListeners.find(listener) != removedListeners.end()) return;
-	removedListeners.insert(listener);
-}
 
 void LoopManager::loop(){
+	Serial.println("---------loopman loop-----------");
 	uint m = micros();
 	uint delta = m - lastMicros;
-	clearListeners();
 
-	for(auto listener : listeners){
-		if(removedListeners.find(listener) != removedListeners.end()){
-			continue;
-		}
+	auto listenersCopy(listeners);
+	for(auto listener : listenersCopy){
 		listener->loop(delta);
 	}
-
-	clearListeners();
 
 	//if any listeners have called LoopManager::loop(), the recursion will have set lastMicros to a newer value by now
 	if(lastMicros < m){
 		//no recursion has occured
 		lastMicros = m;
 	}
+	Serial.println("--------loopman loop end--------");
 }
 
-void LoopManager::clearListeners(){
-	for(const auto& listener : removedListeners){
-		listeners.erase(listener);
-	}
-	if(!removedListeners.empty()){
-		removedListeners.clear();
-	}
+void LoopManager::addListener(LoopListener* listener){
+	listeners.insert(listener);
+}
+
+void LoopManager::removeListener(LoopListener* listener){
+	listeners.erase(listener);
 }
 
 #ifdef CIRCUITOS_TASK
