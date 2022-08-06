@@ -31,7 +31,6 @@ void LoopManager::removeListener(LoopListener* listener){
 void LoopManager::loop(){
 	uint m = micros();
 	uint delta = m - lastMicros;
-	clearListeners();
 
 	for(auto listener : listeners){
 		if(removedListeners.find(listener) != removedListeners.end()){
@@ -40,12 +39,13 @@ void LoopManager::loop(){
 		listener->loop(delta);
 	}
 
-	clearListeners();
 
 	//if any listeners have called LoopManager::loop(), the recursion will have set lastMicros to a newer value by now
 	if(lastMicros < m){
 		//no recursion has occured
 		lastMicros = m;
+	}else{
+		clearListeners();
 	}
 }
 
