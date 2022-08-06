@@ -13,7 +13,6 @@ uint LoopManager::lastMicros = micros();
 
 
 void LoopManager::loop(){
-	Serial.println("---------loopman loop-----------");
 	uint m = micros();
 	uint delta = m - lastMicros;
 
@@ -27,7 +26,6 @@ void LoopManager::loop(){
 		//no recursion has occured
 		lastMicros = m;
 	}
-	Serial.println("--------loopman loop end--------");
 }
 
 void LoopManager::addListener(LoopListener* listener){
