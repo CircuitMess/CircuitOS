@@ -14,6 +14,10 @@ struct Pixel { uint8_t r, g, b;
 	static const Pixel Yellow;
 	static const Pixel White;
 	static const Pixel Black;
+
+	bool operator==(const Pixel& right) const {
+		return r == right.r && g == right.g && b == right.b;
+	}
 };
 
 Color C_RGB(uint8_t r, uint8_t g, uint8_t b);
