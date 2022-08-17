@@ -3,6 +3,7 @@
 GIF::GIF(){ }
 
 GIF::GIF(fs::File file){
+	if(!file) return;
 	file.seek(0);
 	gif = gd_open_gif(file);
 }

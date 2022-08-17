@@ -32,6 +32,7 @@ void GIFAnimatedSprite::loop(uint micros){
 }
 
 void GIFAnimatedSprite::start(){
+	if(!gif) return;
 	LoopManager::addListener(this);
 	gif.nextFrame();
 }
@@ -66,6 +67,8 @@ void GIFAnimatedSprite::pushRotate(Sprite* sprite, int x, int y, float rot, Colo
 #endif
 
 void GIFAnimatedSprite::reset(){
+	if(!gif) return;
+
 	gif.reset();
 
 	frameCounter = 0;
@@ -94,22 +97,27 @@ void GIFAnimatedSprite::setXY(int x, int y){
 }
 
 uint16_t GIFAnimatedSprite::getWidth() const{
+	if(!gif) return 0;
 	return gif.getWidth();
 }
 
 uint16_t GIFAnimatedSprite::getHeight() const{
+	if(!gif) return 0;
 	return gif.getHeight();
 }
 
 GIF::LoopMode GIFAnimatedSprite::getLoopMode() const{
+	if(!gif) GIF::LoopMode::Auto;
 	return gif.getLoopMode();
 }
 
 void GIFAnimatedSprite::setLoopMode(GIF::LoopMode loopMode){
+	if(!gif) return;
 	gif.setLoopMode(loopMode);
 }
 
 uint32_t GIFAnimatedSprite::getLoopCount() const{
+	if(!gif) 0;
 	return gif.getLoopCount();
 }
 
