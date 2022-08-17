@@ -9,28 +9,62 @@ Task* LoopManager::task = nullptr;
 #endif
 
 std::unordered_set<LoopListener*> LoopManager::listeners;
+std::unordered_set<LoopListener*> LoopManager::addedListeners;
 std::unordered_set<LoopListener*> LoopManager::removedListeners;
-uint LoopManager::lastMicros = micros();
+uint LoopManager::lastMicros = 0;
+volatile bool LoopManager::iterating = false;
 
 void LoopManager::addListener(LoopListener* listener){
-	if(listeners.find(listener) == listeners.end()){
+	if(!iterating){
 		listeners.insert(listener);
+		addedListeners.erase(listener);
+		removedListeners.erase(listener);
+		return;
 	}
 
-	auto l = removedListeners.find(listener);
-	if(l != removedListeners.end()){
-		removedListeners.erase(l);
+	// Check if queued for removing
+	if(removedListeners.find(listener) != removedListeners.end()){
+		removedListeners.erase(listener);
 	}
+
+	// Skip if already added
+	if(listeners.find(listener) != listeners.end()) return;
+
+	addedListeners.insert(listener);
 }
 
 void LoopManager::removeListener(LoopListener* listener){
-	if(listeners.find(listener) == listeners.end() || removedListeners.find(listener) != removedListeners.end()) return;
+	if(!iterating){
+		listeners.erase(listener);
+		addedListeners.erase(listener);
+		removedListeners.erase(listener);
+		return;
+	}
+
+	// Check if queued for adding
+	if(addedListeners.find(listener) != addedListeners.end()){
+		addedListeners.erase(listener);
+	}
+
+	// Skip if not added
+	if(listeners.find(listener) == listeners.end()) return;
+
 	removedListeners.insert(listener);
 }
 
 void LoopManager::loop(){
+	if(iterating){
+		return;
+	}
+
+	iterating = true;
+
+	uint lastMicros = LoopManager::lastMicros;
 	uint m = micros();
 	uint delta = m - lastMicros;
+	if(lastMicros == 0){
+		delta = 0;
+	}
 
 	for(auto listener : listeners){
 		if(removedListeners.find(listener) != removedListeners.end()){
@@ -39,22 +73,30 @@ void LoopManager::loop(){
 		listener->loop(delta);
 	}
 
+	clearListeners();
+	insertListeners();
 
-	//if any listeners have called LoopManager::loop(), the recursion will have set lastMicros to a newer value by now
-	if(lastMicros < m){
-		//no recursion has occured
-		clearListeners();
-		lastMicros = m;
+	iterating = false;
+	if(LoopManager::lastMicros == lastMicros){
+		LoopManager::lastMicros = m;
 	}
+}
+
+void LoopManager::insertListeners(){
+	listeners.insert(addedListeners.begin(), addedListeners.end());
+	addedListeners.clear();
 }
 
 void LoopManager::clearListeners(){
 	for(const auto& listener : removedListeners){
 		listeners.erase(listener);
 	}
-	if(!removedListeners.empty()){
-		removedListeners.clear();
-	}
+
+	removedListeners.clear();
+}
+
+void LoopManager::resetTime(){
+	lastMicros = micros();
 }
 
 #ifdef CIRCUITOS_TASK

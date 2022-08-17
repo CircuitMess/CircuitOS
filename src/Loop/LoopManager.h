@@ -16,6 +16,8 @@ public:
 
 	static void loop();
 
+	static void resetTime();
+
 #ifdef CIRCUITOS_TASK
 	/**
 	 * Start the LoopManager as a separate task. The default stack size for the task is 10kb.
@@ -42,9 +44,12 @@ public:
 
 private:
 	static std::unordered_set<LoopListener*> listeners;
+	static std::unordered_set<LoopListener*> addedListeners;
 	static std::unordered_set<LoopListener*> removedListeners;
 
+	volatile static bool iterating;
 	static uint lastMicros;
+	static void insertListeners();
 	static void clearListeners();
 
 #ifdef CIRCUITOS_TASK
