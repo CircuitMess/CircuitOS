@@ -43,9 +43,8 @@ void LoopManager::loop(){
 	//if any listeners have called LoopManager::loop(), the recursion will have set lastMicros to a newer value by now
 	if(lastMicros < m){
 		//no recursion has occured
-		lastMicros = m;
-	}else{
 		clearListeners();
+		lastMicros = m;
 	}
 }
 
