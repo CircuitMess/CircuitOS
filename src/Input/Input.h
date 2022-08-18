@@ -126,6 +126,7 @@ protected:
 
 	Vector<InputListener*> listeners;
 	std::unordered_set<InputListener*> removedListeners;
+	std::unordered_set<InputListener*> addedListeners;
 
 	void clearListeners();
 

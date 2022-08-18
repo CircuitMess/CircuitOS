@@ -209,31 +209,9 @@ void Input::preregisterButtons(Vector<uint8_t> pins){
 }
 
 void Input::addListener(InputListener* listener){
-	if(listeners.indexOf(listener) == (uint) -1){
-		listeners.push_back(listener);
-	}
-
-	auto l = removedListeners.find(listener);
-	if(l != removedListeners.end()){
-		removedListeners.erase(l);
-	}
-
-	for(auto pair : listener->holdTimes){
-		pair.second.holdingOver = false;
-	}
-
-	for(auto pair : listener->holdAndRepeatTimes){
-		pair.second.repeatCounter = 0;
-	}
-
-	for(int i = 0; i < pinNumber; i++){
-		auto p = listener->holdTimes.find(buttons[i]);
-		if(p == listener->holdTimes.end()) continue;
-
-		if(btnState[buttons[i]]){
-			p->second.holdingOver = true;
-		}
-	}
+	if(listeners.indexOf(listener) != -1 || addedListeners.find(listener) != removedListeners.end()) return;
+	addedListeners.insert(listener);
+	removedListeners.erase(listener);
 }
 
 void Input::removeListener(InputListener* listener){
@@ -250,6 +228,36 @@ void Input::clearListeners(){
 	}
 
 	removedListeners.clear();
+
+	for(const auto& listener : addedListeners){
+		uint i = listeners.indexOf(listener);
+		if(i != (uint) -1) continue;
+		listeners.push_back(listener);
+
+		auto l = removedListeners.find(listener);
+		if(l != removedListeners.end()){
+			removedListeners.erase(l);
+		}
+
+		for(auto pair : listener->holdTimes){
+			pair.second.holdingOver = false;
+		}
+
+		for(auto pair : listener->holdAndRepeatTimes){
+			pair.second.repeatCounter = 0;
+		}
+
+		for(int i = 0; i < pinNumber; i++){
+			auto p = listener->holdTimes.find(buttons[i]);
+			if(p == listener->holdTimes.end()) continue;
+
+			if(btnState[buttons[i]]){
+				p->second.holdingOver = true;
+			}
+		}
+	}
+
+	addedListeners.clear();
 }
 
 void Input::maskAll(){
