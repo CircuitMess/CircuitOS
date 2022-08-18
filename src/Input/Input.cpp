@@ -234,11 +234,6 @@ void Input::clearListeners(){
 		if(i != (uint) -1) continue;
 		listeners.push_back(listener);
 
-		auto l = removedListeners.find(listener);
-		if(l != removedListeners.end()){
-			removedListeners.erase(l);
-		}
-
 		for(auto pair : listener->holdTimes){
 			pair.second.holdingOver = false;
 		}
