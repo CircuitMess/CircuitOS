@@ -26,6 +26,7 @@ void GIFAnimatedSprite::loop(uint micros){
 
 			if(loopDoneCallback){
 				loopDoneCallback(loopCount);
+				return;
 			}
 		}
 	}
