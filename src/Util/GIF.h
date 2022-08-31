@@ -25,19 +25,18 @@ public:
 	struct Frame {
 	public:
 		Frame();
-		Frame(uint16_t width, uint16_t height, uint32_t duration, Pixel* data);
+		Frame(uint16_t width, uint16_t height, uint32_t duration, std::shared_ptr<Pixel> data);
 		Frame(const Frame& other);
 		Frame& operator=(const Frame& other);
 		uint16_t getWidth() const;
 		uint16_t getHeight() const;
 		uint32_t getDuration() const;
 		const Pixel* getData() const;
-		virtual ~Frame();
 
 	private:
 		uint16_t width = 0, height = 0;
 		uint32_t duration = 0; // [ms]
-		Pixel* data = nullptr;
+		std::shared_ptr<Pixel> data;
 
 	};
 
@@ -49,6 +48,8 @@ public:
 
 private:
 	CircuitOS::gd_GIF* gif = nullptr;
+
+	std::shared_ptr<Pixel> data;
 
 	LoopMode loopMode = Auto;
 	uint32_t loopCount = 0;

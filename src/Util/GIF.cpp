@@ -1,4 +1,5 @@
 #include "GIF.h"
+#include <esp_heap_caps.h>
 
 GIF::GIF(){ }
 
@@ -6,6 +7,7 @@ GIF::GIF(fs::File file){
 	if(!file) return;
 	file.seek(0);
 	gif = CircuitOS::gd_open_gif(file);
+	data = std::shared_ptr<Pixel>(new Pixel[getWidth()*getHeight()], std::default_delete<Pixel[]>());
 }
 
 GIF::~GIF(){
@@ -64,8 +66,8 @@ bool GIF::nextFrame(){
 GIF::Frame GIF::getFrame() const{
 	if(gif == nullptr) return { };
 
-	Pixel* data = new Pixel[getWidth() * getHeight()];
-	gd_render_frame(gif, reinterpret_cast<uint8_t*>(data), false);
+
+	gd_render_frame(gif, reinterpret_cast<uint8_t*>(data.get()), false);
 
 	return { getWidth(), getHeight(), (uint32_t) gif->gce.delay * 10, data };
 }
@@ -103,9 +105,9 @@ uint32_t GIF::getLoopCount() const{
 
 GIF::Frame::Frame(){ }
 
-GIF::Frame::Frame(uint16_t width, uint16_t height, uint32_t duration, Pixel* data) : width(width), height(height), duration(duration), data(data){ }
+GIF::Frame::Frame(uint16_t width, uint16_t height, uint32_t duration, std::shared_ptr<Pixel> data) : width(width), height(height), duration(duration), data(data){ }
 
-GIF::Frame::Frame(const GIF::Frame& other) : Frame(other.width, other.height, other.duration, new Pixel[other.width * other.height]){
+GIF::Frame::Frame(const GIF::Frame& other) : Frame(other.width, other.height, other.duration, other.data){
 	*this = other;
 }
 
@@ -116,15 +118,10 @@ GIF::Frame& GIF::Frame::operator=(const GIF::Frame& other){
 	height = other.height;
 	duration = other.duration;
 
-	delete data;
-	data = new Pixel[width * height];
-	memcpy(data, other.data, width * height * 3);
+	data.reset();
+	data = other.data;
 
 	return *this;
-}
-
-GIF::Frame::~Frame(){
-	delete data;
 }
 
 uint16_t GIF::Frame::getWidth() const{
@@ -140,5 +137,5 @@ uint32_t GIF::Frame::getDuration() const{
 }
 
 const Pixel* GIF::Frame::getData() const{
-	return data;
+	return data.get();
 }
