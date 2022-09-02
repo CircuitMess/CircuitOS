@@ -117,6 +117,13 @@ bool AnimatedSprite::nextFrame(){
 	bool newFrame = false;
 
 	uint currentTime = millis();
+
+	if(currentFrameTime + gifFrame.duration*10 < currentTime){
+		reset();
+
+		return nextFrame();
+	}
+
 	while(currentFrameTime + gifFrame.duration < currentTime){
 		currentFrameTime += gifFrame.duration;
 		currentFrame++;

@@ -17,6 +17,18 @@ void GIFAnimatedSprite::loop(uint micros){
 
 	frameCounter += micros;
 
+	if(frameCounter / 1000 >= gif.frameDuration() * 10){
+		reset();
+		loopCount = gif.getLoopCount();
+		gif.nextFrame();
+
+		if(loopDoneCallback){
+			loopDoneCallback(loopCount);
+		}
+
+		return;
+	}
+
 	while(frameCounter / 1000 >= gif.frameDuration()){
 		frameCounter -= gif.frameDuration()*1000;
 		gif.nextFrame();
