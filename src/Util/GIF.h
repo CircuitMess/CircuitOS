@@ -48,7 +48,7 @@ public:
 	uint32_t getLoopCount() const;
 
 private:
-	gd_GIF* gif = nullptr;
+	CircuitOS::gd_GIF* gif = nullptr;
 
 	LoopMode loopMode = Auto;
 	uint32_t loopCount = 0;

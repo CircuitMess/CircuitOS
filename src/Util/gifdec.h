@@ -8,6 +8,8 @@ Library is modified to work with the filesystem File class from ESP's core.
 #include <Arduino.h>
 #include <FS.h>
 
+namespace CircuitOS {
+
 typedef struct gd_Palette {
     int size;
     uint8_t colors[0x100 * 3];
@@ -48,5 +50,7 @@ void gd_render_frame(gd_GIF *gif, uint8_t *buffer, bool monochrome = 1);
 int gd_is_bgcolor(gd_GIF *gif, uint8_t color[3]);
 void gd_rewind(gd_GIF *gif);
 void gd_close_gif(gd_GIF *gif);
+
+};
 
 #endif /* CIRCUITOS_GIFDEC_H */

@@ -5,7 +5,7 @@ GIF::GIF(){ }
 GIF::GIF(fs::File file){
 	if(!file) return;
 	file.seek(0);
-	gif = gd_open_gif(file);
+	gif = CircuitOS::gd_open_gif(file);
 }
 
 GIF::~GIF(){
@@ -30,7 +30,7 @@ GIF& GIF::operator=(const GIF& other){
 
 	File file = other.gif->fd;
 	file.seek(0);
-	gif = gd_open_gif(file);
+	gif = CircuitOS::gd_open_gif(file);
 
 	return *this;
 }
