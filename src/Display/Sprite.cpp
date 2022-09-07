@@ -89,14 +89,14 @@ void Sprite::drawIcon(File icon, int16_t x, int16_t y, uint16_t width, uint16_t 
 	setChroma(TFT_TRANSPARENT);
 
 	icon.seek(0);
-	Color buffer[1024];
+	Color buffer[512];
 	size_t bufferPos = 0;
-	size_t available = icon.read(reinterpret_cast<uint8_t*>(buffer), 1024) / 2;
+	size_t available = icon.read(reinterpret_cast<uint8_t*>(buffer), 512) / 2;
 
 	for(int i = 0; i < height; i++){
 		for(int j = 0; j < width; j++){
 			if(bufferPos == available){
-				available = icon.read(reinterpret_cast<uint8_t*>(buffer), 1024) / 2;
+				available = icon.read(reinterpret_cast<uint8_t*>(buffer), 512) / 2;
 				if(available == 0){
 					setChroma(c);
 					return;
