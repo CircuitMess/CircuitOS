@@ -7,6 +7,8 @@
 InputShift::InputShift(uint8_t dataPin, uint8_t clockPin, uint8_t loadPin, uint8_t numButtons) : dataPin(dataPin), clockPin(clockPin), loadPin(loadPin),
 numButtons(numButtons), numShifts(ceil((float) numButtons / 8.0f)), Input(numButtons){
 
+	states.resize(numShifts * 8, true);
+
 	for(int i = 0; i < numButtons; i++){
 		InputShift::registerButton(i);
 	}
@@ -22,7 +24,6 @@ void InputShift::scanButtons(){
 	digitalWrite(clockPin, LOW);
 	LH(loadPin);
 
-	std::vector<bool> states(numShifts * 8, true);
 	for(int i = 0; i < numShifts * 8; i++){
 		states[numShifts * 8 - i - 1] = digitalRead(dataPin) == HIGH;
 		HL(clockPin);

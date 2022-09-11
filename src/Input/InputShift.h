@@ -19,6 +19,8 @@ private:
 	uint8_t numButtons;
 	uint8_t numShifts;
 
+	std::vector<bool> states;
+
 };
 
 #endif //CIRCUITOS_INPUTSHIFT_H
