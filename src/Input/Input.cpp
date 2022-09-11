@@ -10,6 +10,10 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 								   btnHoldValue(pinNumber, 0), btnHoldRepeatValue(pinNumber, 0),
 								   btnHoldOver(pinNumber, 0), anyKeyCallback(nullptr), anyKeyCallbackReturn(0){
 	instance = this;
+
+	listeners.reserve(8);
+	addedListeners.reserve(4);
+	removedListeners.reserve(4);
 }
 
 void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
