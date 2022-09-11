@@ -31,7 +31,7 @@ fs::File RamFile::open(fs::File file, bool readonly){
 }
 
 fs::File RamFile::create(const String& filename){
-	auto f = std::make_shared<RamFile>((uint8_t*) malloc(1), 0, false);
+	auto f = std::make_shared<RamFile>(nullptr, 0, false);
 	f->filename = filename;
 	return File(f);
 }
