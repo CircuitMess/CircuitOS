@@ -31,6 +31,10 @@ protected:
 		}
 	}
 
+	void reserve(size_t count){
+		listeners.reserve(count);
+	}
+
 private:
 	std::unordered_set<T*> listeners;
 };
