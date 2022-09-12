@@ -28,6 +28,12 @@ void Settings::store(){
 
 	if(err != ESP_OK){
 		Serial.println("Non-volatile storage store error: %d");
+		return;
+	}
+
+	err = nvs_commit(handle);
+	if(err != ESP_OK){
+		Serial.println("Non-volatile storage commit error: %d");
 	}
 }
 
