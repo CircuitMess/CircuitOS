@@ -11,6 +11,7 @@ Task* LoopManager::task = nullptr;
 std::unordered_set<LoopListener*> LoopManager::listeners;
 std::unordered_set<LoopListener*> LoopManager::addedListeners;
 std::unordered_set<LoopListener*> LoopManager::removedListeners;
+std::vector<std::function<void(uint32_t)>> LoopManager::deferred;
 uint LoopManager::lastMicros = 0;
 volatile bool LoopManager::iterating = false;
 
@@ -72,6 +73,9 @@ void LoopManager::loop(){
 		delta = 0;
 	}
 
+	std::vector<std::function<void(uint32_t)>> deferred = LoopManager::deferred;
+	LoopManager::deferred.clear();
+
 	for(auto listener : listeners){
 		if(removedListeners.find(listener) != removedListeners.end()){
 			continue;
@@ -81,6 +85,11 @@ void LoopManager::loop(){
 
 	clearListeners();
 	insertListeners();
+
+	for(auto def : deferred){
+		def(delta);
+	}
+	deferred.clear();
 
 	iterating = false;
 	if(LoopManager::lastMicros == lastMicros){
@@ -103,6 +112,10 @@ void LoopManager::clearListeners(){
 
 void LoopManager::resetTime(){
 	lastMicros = micros();
+}
+
+void LoopManager::defer(std::function<void(uint32_t)> func){
+	deferred.push_back(func);
 }
 
 #ifdef CIRCUITOS_TASK

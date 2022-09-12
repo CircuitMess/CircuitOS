@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <unordered_set>
 #include "../../Setup.hpp"
+#include <functional>
 
 class LoopListener;
 class Task;
@@ -22,6 +23,11 @@ public:
 	static void loop();
 
 	static void resetTime();
+
+	/**
+	 * Run later. The function will be ran after the next loop iteration is completed.
+	 */
+	static void defer(std::function<void(uint32_t)>);
 
 #ifdef CIRCUITOS_TASK
 	/**
@@ -56,6 +62,8 @@ private:
 	static uint lastMicros;
 	static void insertListeners();
 	static void clearListeners();
+
+	static std::vector<std::function<void(uint32_t)>> deferred;
 
 #ifdef CIRCUITOS_TASK
 	static Task* task;
