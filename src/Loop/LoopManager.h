@@ -10,6 +10,11 @@ class Task;
 
 class LoopManager {
 public:
+	/**
+	 * Reserve listener vector slots.
+	 * @param count Expected listener count
+	 */
+	static void reserve(size_t count);
 
 	static void addListener(LoopListener* listener);
 	static void removeListener(LoopListener* listener);

@@ -14,6 +14,12 @@ std::unordered_set<LoopListener*> LoopManager::removedListeners;
 uint LoopManager::lastMicros = 0;
 volatile bool LoopManager::iterating = false;
 
+void LoopManager::reserve(size_t count){
+	listeners.reserve(count);
+	addedListeners.reserve(count);
+	removedListeners.reserve(count);
+}
+
 void LoopManager::addListener(LoopListener* listener){
 	if(!iterating){
 		listeners.insert(listener);
