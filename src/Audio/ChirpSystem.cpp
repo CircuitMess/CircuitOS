@@ -1,7 +1,7 @@
 #include "ChirpSystem.h"
 #include "Piezo.h"
 
-ChirpSystem::ChirpSystem() : task("audioSystem", [](Task* task){ static_cast<ChirpSystem*>(task->arg)->playbackFunc(); }, 2048, this){
+ChirpSystem::ChirpSystem() : task("ChirpSystem", [](Task* task){ static_cast<ChirpSystem*>(task->arg)->playbackFunc(); }, 2048, this){
 
 }
 
@@ -30,7 +30,7 @@ void ChirpSystem::play(const Sound& sound){
 }
 
 void ChirpSystem::stop(){
-	task.stop();
+	task.stop(true);
 	queued.clear();
 	Piezo.noTone();
 }
