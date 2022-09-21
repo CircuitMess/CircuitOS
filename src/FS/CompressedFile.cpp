@@ -16,7 +16,7 @@ size_t CompressedFile::write(const uint8_t* buf, size_t size){
 	return 0;
 }
 
-size_t CompressedFile::read(uint8_t* buf, size_t size){
+RETURN_TYPE CompressedFile::read(uint8_t* buf, size_t size){
 	size_t bytesWritten = 0;
 	fileBuffer.refill();
 

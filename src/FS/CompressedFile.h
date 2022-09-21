@@ -10,6 +10,12 @@
 
 #define FSBUFFER_SIZE 512
 
+#ifdef ESP8266
+#define RETURN_TYPE int
+#elif defined(ESP32)
+#define RETURN_TYPE size_t
+#endif
+
 class CompressedFile : public fs::FileImpl {
 public:
 #ifdef ESP32
@@ -28,7 +34,7 @@ public:
 	static fs::File open(fs::File f, uint8_t expansionBits, uint8_t lookaheadBits, size_t readBufferSize = FSBUFFER_SIZE);
 
 	size_t write(const uint8_t* buf, size_t size) override;
-	size_t read(uint8_t* buf, size_t size) override;
+	RETURN_TYPE read(uint8_t* buf, size_t size) override;
 	void flush() override;
 	bool seek(uint32_t pos, fs::SeekMode mode = fs::SeekMode::SeekSet) override;
 	size_t position() const override;

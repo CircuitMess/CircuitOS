@@ -1,3 +1,5 @@
+#ifdef ESP32
+
 #include "ShiftOutput.h"
 
 #define PERIOD 1
@@ -105,3 +107,5 @@ void IRAM_ATTR ShiftOutput::delayNanos(uint32_t nanos){
 	uint32_t cycles = round((float) nanos / nopCycles);
 	for(volatile uint32_t i = 0; i < cycles; i++);
 }
+
+#endif

@@ -54,7 +54,7 @@ void Matrix::drawChar(int32_t x, int32_t y, unsigned char c, const MatrixPixel& 
 		uint8_t column[6];
 		uint8_t mask = 0x1;
 
-		for(int8_t i = 0; i < 5; i++) column[i] = pgm_read_byte(font + (c * 5) + i);
+		for(int8_t i = 0; i < 5; i++) column[i] = pgm_read_byte(::font + (c * 5) + i);
 		column[5] = 0;
 
 		int8_t j, k;

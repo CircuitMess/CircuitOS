@@ -1,5 +1,4 @@
 #include "GIF.h"
-#include <esp_heap_caps.h>
 
 GIF::GIF(){ }
 

@@ -27,7 +27,9 @@ IS31FL3731::IS31FL3731(TwoWire& Wire, uint8_t addr) : MatrixOutput(16, 9), Wire(
 void IS31FL3731::init(){
 	Wire.beginTransmission(addr);
 	if(Wire.endTransmission() != 0){
+#ifdef ESP_LOGE
 		ESP_LOGE(TAG, "I2C com error");
+#endif
 		return;
 	}
 

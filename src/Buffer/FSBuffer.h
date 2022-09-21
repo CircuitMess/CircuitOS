@@ -6,7 +6,7 @@
 
 class FSBuffer {
 public:
-	FSBuffer(File file, const size_t size);
+	FSBuffer(fs::File file, const size_t size);
 	virtual ~FSBuffer();
 
 	size_t available();

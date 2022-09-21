@@ -1,5 +1,5 @@
 #include "Timer.h"
-
+#ifdef ESP32
 struct hw_timer_reg_s {
 	union {
 		struct {
@@ -59,3 +59,5 @@ uint64_t IRAM_ATTR CM::timerRead(hw_timer_t* timer){
 	uint64_t l = timer->dev->cnt_low;
 	return (h << 32) | l;
 }
+
+#endif

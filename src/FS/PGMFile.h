@@ -5,6 +5,13 @@
 #include <FS.h>
 #include <FSImpl.h>
 
+#ifdef ESP8266
+#define RETURN_TYPE int
+#elif defined(ESP32)
+#define RETURN_TYPE size_t
+#endif
+
+
 class PGMFile : public fs::FileImpl {
 public:
 #ifdef ESP32
@@ -22,7 +29,7 @@ public:
 	static fs::File open(const uint8_t* data, size_t size);
 
 	size_t write(const uint8_t* buf, size_t size) override;
-	size_t read(uint8_t* buf, size_t size) override;
+	RETURN_TYPE read(uint8_t* buf, size_t size) override;
 	void flush() override;
 	bool seek(uint32_t pos, fs::SeekMode mode) override;
 	size_t position() const override;

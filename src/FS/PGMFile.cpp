@@ -58,7 +58,7 @@ bool PGMFile::seek(uint32_t pos){
 	return seek(pos, SeekSet);
 }
 
-size_t PGMFile::read(uint8_t* buf, size_t size){
+RETURN_TYPE PGMFile::read(uint8_t* buf, size_t size){
 	if(cursor >= dataSize) return 0;
 
 	size_t availableSize;

@@ -61,7 +61,7 @@ public:
 	void drawMonochromeIcon(const byte* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, uint16_t color = TFT_BLACK);
 	void drawIcon(const unsigned short* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, int32_t maskingColor = -1);
 	void drawIcon(const Pixel* icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, int32_t maskingColor = -1);
-	void drawIcon(File icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, int32_t maskingColor = -1);
+	void drawIcon(fs::File icon, int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t scale = 1, int32_t maskingColor = -1);
 	void printCenter(const char* text);
 	void printCenter(String text);
 	void printCenter(uint32_t text);

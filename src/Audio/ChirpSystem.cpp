@@ -1,4 +1,5 @@
 #include "ChirpSystem.h"
+#ifdef CIRCUITOS_TASK
 #include "Piezo.h"
 
 ChirpSystem::ChirpSystem() : task("ChirpSystem", [](Task* task){ static_cast<ChirpSystem*>(task->arg)->playbackFunc(); }, 2048, this){
@@ -70,3 +71,4 @@ void ChirpSystem::playbackFunc(){
 	}
 	Piezo.noTone();
 }
+#endif

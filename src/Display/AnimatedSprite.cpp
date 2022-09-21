@@ -33,7 +33,7 @@ AnimatedSprite::AnimatedSprite(Sprite* canvas, fs::File file, bool compressed) :
 	reset();
 }
 
-AnimatedSprite::Table::Table(File file){
+AnimatedSprite::Table::Table(fs::File file){
 	file.read(&noColors, sizeof(noColors));
 	colors = static_cast<Color*>(malloc(sizeof(Color) * noColors));
 	file.read(reinterpret_cast<uint8_t*>(colors), sizeof(Color) * noColors);

@@ -1,6 +1,8 @@
 #ifndef CIRCUITOS_TIMER_H
 #define CIRCUITOS_TIMER_H
 
+#ifdef ESP32
+
 #include <Arduino.h>
 
 #define dis(timer) do { CM::timerAlarmDisable(timer); CM::timerStop(timer); CM::timerWrite(timer, 0); } while(0)
@@ -24,5 +26,7 @@ void IRAM_ATTR timerAlarmDisable(hw_timer_t* timer);
 
 uint64_t IRAM_ATTR timerRead(hw_timer_t* timer);
 }
+
+#endif
 
 #endif //CIRCUITOS_TIMER_H

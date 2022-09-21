@@ -1,6 +1,6 @@
 #include "FSBuffer.h"
 
-FSBuffer::FSBuffer(File file, const size_t size) : file(file), size(size){
+FSBuffer::FSBuffer(fs::File file, const size_t size) : file(file), size(size){
 #ifdef CONFIG_SPIRAM_SUPPORT
 	if(psramFound()){
 		buffer = static_cast<uint8_t*>(ps_malloc(size));

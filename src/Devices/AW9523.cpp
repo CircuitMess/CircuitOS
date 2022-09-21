@@ -31,7 +31,9 @@ AW9523::AW9523(TwoWire& Wire, uint8_t addr) : Wire(Wire), addr(addr){
 bool AW9523::begin(){
 	Wire.beginTransmission(addr);
 	if(Wire.endTransmission() != 0){
+#ifdef ESP_LOGE
 		ESP_LOGE(TAG, "Transmission error");
+#endif
 		return false;
 	}
 
@@ -39,7 +41,9 @@ bool AW9523::begin(){
 
 	uint8_t id = readReg(REG_ID);
 	if(id != VAL_ID){
+#ifdef ESP_LOGE
 		ESP_LOGE(TAG, "ID missmatch: expected %d, got %d", VAL_ID, id);
+#endif
 		return false;
 	}
 

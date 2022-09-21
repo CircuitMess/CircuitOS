@@ -96,7 +96,7 @@ bool RamFile::seek(uint32_t pos){
 	return seek(pos, SeekSet);
 }
 
-size_t RamFile::read(uint8_t* buf, size_t size){
+RETURN_TYPE RamFile::read(uint8_t* buf, size_t size){
 	if(cursor >= dataSize) return 0;
 
 	size_t availableSize;

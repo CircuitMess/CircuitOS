@@ -1,6 +1,8 @@
 #ifndef CIRCUITMESS_AUDIO_AUDIOSYSTEM_H
 #define CIRCUITMESS_AUDIO_AUDIOSYSTEM_H
 
+#ifdef CIRCUITOS_TASK
+
 #include "../Util/Task.h"
 #include "../Sync/Mutex.h"
 
@@ -42,5 +44,7 @@ private:
 	volatile uint32_t currentMillis = 0;
 	volatile uint32_t chirpID = 0;
 };
+
+#endif
 
 #endif //CIRCUITMESS_AUDIO_AUDIOSYSTEM_H

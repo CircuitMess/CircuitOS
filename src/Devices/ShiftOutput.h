@@ -1,6 +1,8 @@
 #ifndef CIRCUITOS_SHIFTOUTPUT_H
 #define CIRCUITOS_SHIFTOUTPUT_H
 
+#ifdef ESP32
+
 #include <Arduino.h>
 #include <vector>
 #include <array>
@@ -39,5 +41,5 @@ public:
 
 };
 
-
+#endif
 #endif //CIRCUITOS_SHIFTOUTPUT_H
