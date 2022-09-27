@@ -11,7 +11,7 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 								   btnHoldOver(pinNumber, 0), anyKeyCallback(nullptr), anyKeyCallbackReturn(0){
 	instance = this;
 
-	listeners.reserve(8);
+	listeners.reserve(16);
 	addedListeners.reserve(4);
 	removedListeners.reserve(4);
 }
