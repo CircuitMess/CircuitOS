@@ -16,6 +16,12 @@ Input::Input(uint8_t _pinNumber) : pinNumber(_pinNumber), btnPressCallback(pinNu
 	removedListeners.reserve(4);
 }
 
+void Input::reserve(size_t listeners, size_t transient){
+	this->listeners.reserve(listeners);
+	addedListeners.reserve(transient);
+	removedListeners.reserve(transient);
+}
+
 void Input::setBtnPressCallback(uint8_t pin, void (* callback)()){
 	if(pin >= pinNumber) return;
 	registerButton(pin);
