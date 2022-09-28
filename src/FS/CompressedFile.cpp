@@ -52,7 +52,9 @@ bool CompressedFile::seek(uint32_t pos, fs::SeekMode mode){
 		f.seek(0);
 		fileBuffer.clear();
 		heatshrink_decoder_reset(decoder);
+		return true;
 	}
+	return false;
 }
 
 size_t CompressedFile::position() const{

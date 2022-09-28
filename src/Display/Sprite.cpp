@@ -278,7 +278,7 @@ Sprite& Sprite::setPos(int32_t x, int32_t y){
 }
 
 Sprite& Sprite::resize(uint width, uint height){
-	if(!(_img != nullptr)){
+	if(_img == nullptr){
 		createSprite(width, height);
 		return *this;
 	}
@@ -289,18 +289,21 @@ Sprite& Sprite::resize(uint width, uint height){
 		logln("CreateSprite failed");
 	}
 
-	if((_img != nullptr) == false){
+	if(_img == nullptr){
 		logln("Sprite not cretaed");
 	}
+	return *this;
 }
 
 Sprite& Sprite::setTransparent(bool transparent){
 	chroma = transparent;
+	return *this;
 }
 
 Sprite& Sprite::setChroma(Color color){
 	chromaKey = color;
 	chroma = true;
+	return *this;
 }
 
 void Sprite::pushData(uint width, uint height, uint16_t* data){

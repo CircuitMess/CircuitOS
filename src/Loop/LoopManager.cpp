@@ -22,6 +22,8 @@ void LoopManager::reserve(size_t count){
 }
 
 void LoopManager::addListener(LoopListener* listener){
+	Serial.printf("listeners present: %d\n", listeners.size());
+
 	if(!iterating){
 		listeners.insert(listener);
 		addedListeners.erase(listener);

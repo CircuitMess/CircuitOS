@@ -58,7 +58,7 @@ ContextTransition* Context::pop(){
 ContextTransition* Context::pop(void* data){
 	if(parent == nullptr) return nullptr;
 	parent->returned(data);
-	pop();
+	return pop();
 }
 
 ContextTransition* Context::push(Context* parent){

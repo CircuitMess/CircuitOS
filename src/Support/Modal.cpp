@@ -43,7 +43,7 @@ ContextTransition* Modal::push(Context* parent){
 
 ContextTransition* Modal::pop(){
 	if(parent == nullptr) return nullptr;
-	ModalTransition* transition = new ModalTransition(*screen.getDisplay(), parent, this, true);
+	auto transition = new ModalTransition(*screen.getDisplay(), parent, this, true);
 	parent = nullptr;
 	return static_cast<ContextTransition*>((void*)transition);
 }
@@ -51,7 +51,7 @@ ContextTransition* Modal::pop(){
 ContextTransition* Modal::pop(void* data){
 	if(parent == nullptr) return nullptr;
 	parent->returned(data);
-	pop();
+	return pop();
 }
 
 int Modal::getPosX() const{

@@ -52,6 +52,7 @@ bool PGMFile::seek(uint32_t pos, fs::SeekMode mode){
 			cursor += pos;
 			break;
 	}
+	return true;
 }
 
 bool PGMFile::seek(uint32_t pos){

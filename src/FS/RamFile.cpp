@@ -90,6 +90,7 @@ bool RamFile::seek(uint32_t pos, fs::SeekMode mode){
 	}else if(mode == fs::SeekCur){
 		cursor += pos;
 	}
+	return true;
 }
 
 bool RamFile::seek(uint32_t pos){
