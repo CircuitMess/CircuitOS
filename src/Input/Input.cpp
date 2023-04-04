@@ -55,7 +55,12 @@ void Input::registerButton(uint8_t pin){
 	btnState.push_back(0);
 }
 
-void Input::btnPress(uint i){
+void Input::btnPress(uint i, bool inverseHandled){
+	if(inverseLogic && !inverseHandled){
+		btnRelease(i, true);
+		return;
+	}
+
 	if(btnCount[i] < DEBOUNCE_COUNT){
 		btnCount[i]++;
 
@@ -95,7 +100,12 @@ void Input::btnPress(uint i){
 	clearListeners();
 }
 
-void Input::btnRelease(uint i){
+void Input::btnRelease(uint i, bool inverseHandled){
+	if(inverseLogic && !inverseHandled){
+		btnPress(i, true);
+		return;
+	}
+
 	if(btnCount[i] > 0){
 		btnCount[i]--;
 
@@ -281,4 +291,8 @@ void Input::addMask(InputListener* listener){
 
 void Input::removeMask(InputListener* listener){
 	mask.erase(listener);
+}
+
+void Input::setInverseLogic(bool inverse){
+	inverseLogic = inverse;
 }
