@@ -96,6 +96,8 @@ public:
 
 	void reserve(size_t listeners, size_t transient = 4);
 
+	void setInverseLogic(bool inverse);
+
 protected:
 	uint8_t pinNumber = 0;
 
@@ -122,9 +124,9 @@ protected:
 
 	bool anyKeyCallbackReturn;
 
-	void btnPress(uint i);
+	void btnPress(uint i, bool inverseHandled = false);
 
-	void btnRelease(uint);
+	void btnRelease(uint i, bool inverseHandled = false);
 
 	Vector<InputListener*> listeners;
 	std::unordered_set<InputListener*> removedListeners;
@@ -133,6 +135,8 @@ protected:
 	void clearListeners();
 
 	std::unordered_set<InputListener*> mask;
+
+	bool inverseLogic = false;
 };
 
 
