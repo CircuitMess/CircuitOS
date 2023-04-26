@@ -77,7 +77,7 @@ void LoopManager::loop(){
 	LoopManager::deferred.clear();
 
 	for(auto listener : listeners){
-		if(removedListeners.empty() || removedListeners.find(listener) != removedListeners.end()){
+		if(!removedListeners.empty() && removedListeners.find(listener) != removedListeners.end()){
 			continue;
 		}
 		listener->loop(delta);
