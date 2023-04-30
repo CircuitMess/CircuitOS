@@ -35,6 +35,7 @@ ElementContainer& ScrollLayout::addChild(Element* element){
 	}else{
 		children[0] = element;
 	}
+	return *this;
 }
 
 void ScrollLayout::setScroll(uint scrollX, uint scrollY){
