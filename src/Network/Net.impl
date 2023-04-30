@@ -51,6 +51,7 @@ void NetImpl::connect(NetImpl::NetStateCallback* resultCallback){
 void NetImpl::tryConnect(){
 	WiFi.disconnect(true);
 	WiFi.persistent(false);
+	WiFi.setHostname(SPENCER_HOSTNAME);
 	WiFi.begin(ssid, pass);
 	WiFi.setSleep(false);
 
