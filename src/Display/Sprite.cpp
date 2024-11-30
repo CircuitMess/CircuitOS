@@ -292,15 +292,18 @@ Sprite& Sprite::resize(uint width, uint height){
 	if((_img != nullptr) == false){
 		logln("Sprite not cretaed");
 	}
+	return *this;
 }
 
 Sprite& Sprite::setTransparent(bool transparent){
 	chroma = transparent;
+	return *this;
 }
 
 Sprite& Sprite::setChroma(Color color){
 	chromaKey = color;
 	chroma = true;
+	return *this;
 }
 
 void Sprite::pushData(uint width, uint height, uint16_t* data){
