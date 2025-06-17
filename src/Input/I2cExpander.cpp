@@ -17,10 +17,22 @@ I2cExpander::~I2cExpander()
 bool I2cExpander::begin(uint8_t _address, uint8_t _sda, uint8_t _scl)
 {
 	address = _address;
-	Wire.begin(_sda, _scl);
+	i2c->begin(_sda, _scl);
 
-	Wire.beginTransmission(address);
-	if(Wire.endTransmission() != 0){
+	return init();
+}
+
+bool I2cExpander::begin(uint8_t _address, TwoWire& wire)
+{
+	address = _address;
+	i2c = &wire;
+
+	return init();
+}
+
+bool I2cExpander::init(){
+	i2c->beginTransmission(address);
+	if(i2c->endTransmission() != 0){
 		return false;
 	}
 
@@ -30,35 +42,36 @@ bool I2cExpander::begin(uint8_t _address, uint8_t _sda, uint8_t _scl)
 
 	return true;
 }
+
 void I2cExpander::_write(uint16_t _portData, uint8_t reg)
 {
-	Wire.beginTransmission(address);
-	Wire.write(reg);
-	// Wire.write(_portData);
-	Wire.write(_portData & 0x00FF);
-	Wire.write(_portData >> 8);
-	Wire.endTransmission();
+	i2c->beginTransmission(address);
+	i2c->write(reg);
+	// i2c->write(_portData);
+	i2c->write(_portData & 0x00FF);
+	i2c->write(_portData >> 8);
+	i2c->endTransmission();
 }
 uint16_t I2cExpander::portRead()
 {
-	Wire.beginTransmission(address);
-	Wire.write(INPUT_REG);
-	Wire.endTransmission();
-	Wire.requestFrom((uint8_t) address, (uint8_t) 2);
-	uint16_t readValue = Wire.read();
-	readValue |= Wire.read() << 8;
-	// Wire.readBytes((uint8_t*)readValue, 2);
+	i2c->beginTransmission(address);
+	i2c->write(INPUT_REG);
+	i2c->endTransmission();
+	i2c->requestFrom((uint8_t) address, (uint8_t) 2);
+	uint16_t readValue = i2c->read();
+	readValue |= i2c->read() << 8;
+	// i2c->readBytes((uint8_t*)readValue, 2);
 	portState = readValue;
 	return readValue;
 }
 
 bool I2cExpander::portRead(uint16_t& state){
-	Wire.beginTransmission(address);
-	Wire.write(INPUT_REG);
-	if(Wire.endTransmission() != 0) return false;
+	i2c->beginTransmission(address);
+	i2c->write(INPUT_REG);
+	if(i2c->endTransmission() != 0) return false;
 
-	Wire.requestFrom((uint8_t) address, (uint8_t) 2);
-	if(Wire.readBytes(reinterpret_cast<char*>(&state), 2) != 2){
+	i2c->requestFrom((uint8_t) address, (uint8_t) 2);
+	if(i2c->readBytes(reinterpret_cast<char*>(&state), 2) != 2){
 		state = 0;
 		return false;
 	}

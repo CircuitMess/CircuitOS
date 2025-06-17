@@ -14,6 +14,7 @@ public:
 	I2cExpander();
 	~I2cExpander();
 	bool begin(uint8_t _address = 0x74, uint8_t _sda = 27, uint8_t _scl = 14);
+	bool begin(uint8_t _address = 0x74, TwoWire& wire = Wire);
 	uint16_t portRead();
 	bool portRead(uint16_t& state);
 	void pinMode(uint8_t pin, uint8_t mode);
@@ -26,6 +27,9 @@ public:
 	static I2cExpander* getInstance();
 
 private:
+	TwoWire* i2c;
+	bool init();
+
 	void _write(uint16_t port, uint8_t reg);
 	uint8_t address = 0;
 	uint16_t configState = 0;
