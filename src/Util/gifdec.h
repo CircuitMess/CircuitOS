@@ -50,6 +50,7 @@ void gd_render_frame(gd_GIF *gif, uint8_t *buffer, bool monochrome = 1);
 int gd_is_bgcolor(gd_GIF *gif, uint8_t color[3]);
 void gd_rewind(gd_GIF *gif);
 void gd_close_gif(gd_GIF *gif);
+void gd_set_old_transparency(bool old);
 
 };
 

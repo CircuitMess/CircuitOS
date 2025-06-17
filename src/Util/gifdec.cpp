@@ -17,6 +17,11 @@ namespace CircuitOS {
 		Entry *entries;
 	} Table;
 
+	static bool old_transp = false;
+
+	void gd_set_old_transparency(bool old){
+		old_transp = old;
+	}
 
 	static uint16_t
 	read_num(fs::File& fd)
@@ -419,7 +424,7 @@ namespace CircuitOS {
 					}else{
 						memcpy(&buffer[(i + k) * 3], color, 3);
 					}
-				}else if(!monochrome){
+				}else if(!monochrome && !old_transp){
 					uint8_t c[3]{ 0, 0x24, 0 };
 					color = c;
 					memcpy(&buffer[(i + k) * 3], color, 3);
@@ -475,10 +480,12 @@ namespace CircuitOS {
 		if(monochrome){
 			memcpy(buffer, gif->canvas, gif->width * gif->height);
 		}else{
-			for(int i = 0; i < gif->width * gif->height; i++){
-				uint8_t* pixel = &gif->canvas[i * 3];
-				pixel[0] = pixel[2] = 0;
-				pixel[1] = 0x24;
+			if(!old_transp){
+				for(int i = 0; i < gif->width * gif->height; i++){
+					uint8_t* pixel = &gif->canvas[i * 3];
+					pixel[0] = pixel[2] = 0;
+					pixel[1] = 0x24;
+				}
 			}
 
 			memcpy(buffer, gif->canvas, gif->width * gif->height * 3);
