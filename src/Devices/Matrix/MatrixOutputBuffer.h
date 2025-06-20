@@ -7,6 +7,9 @@
 class MatrixOutputBuffer : public MatrixOutput {
 public:
 	MatrixOutputBuffer(MatrixOutput* output);
+	MatrixOutputBuffer(uint16_t width, uint16_t height);
+
+	void setOutput(MatrixOutput* output); // For use with non-output constructor
 
 	void init() override;
 	void push(const MatrixPixelData& data) override;
@@ -17,7 +20,7 @@ public:
 	const MatrixPixelData& getData();
 
 private:
-	MatrixOutput* output;
+	MatrixOutput* output = nullptr;
 	MatrixPixelData data;
 
 };
